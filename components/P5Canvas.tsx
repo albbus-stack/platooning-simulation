@@ -8,13 +8,16 @@ interface P5CanvasProps {
   setData: Dispatch<SetStateAction<{ x: number; time: number }[]>>;
 }
 
-let x = 0;
-let y = 0;
+let roadMarkerX = 0;
+let oscillationY = 0;
 let distance = 10;
 let carPoints: number[] = [];
 let previousSliverHeight = 0;
 let isPlaying = false;
 let button: p5Types.Element;
+
+let initialDate: number;
+let isFirstPlay = true;
 
 let intervalRef: NodeJS.Timeout;
 
@@ -22,8 +25,6 @@ const CAR_WIDTH = 100;
 const CAR_NUMBER = 8;
 
 const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
-  const initialDate = Date.now();
-
   useEffect(() => {
     return () => {
       clearInterval(intervalRef);
@@ -38,8 +39,9 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     for (let i = 0; i < CAR_NUMBER; i++) {
       carPoints.push(50 + i * 150);
     }
-    x = p5.width;
+    roadMarkerX = p5.width - 50;
 
+    // The function that toggles the play/pause button and the interval
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
@@ -47,6 +49,11 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         button.style("background-color", "green");
         isPlaying = false;
       } else {
+        // This is the initial date that is used to calculate the time
+        if (isFirstPlay) {
+          initialDate = Date.now();
+          isFirstPlay = false;
+        }
         // This is the interval that updates the data for the graphs
         intervalRef = setInterval(() => {
           setData((prev) => [
@@ -62,6 +69,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         isPlaying = true;
       }
     };
+
+    // Setup of the play/pause button
     button = p5.createButton("⏵︎");
     button.position(p5.width - 50, 15);
     button.addClass("p5-button");
@@ -85,20 +94,26 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
 
     // Road marking
     p5.fill(254);
-    p5.rect(x, -50, 15, 100);
+    p5.rect(roadMarkerX, -50, 15, 100);
 
     if (isPlaying) {
-      x -= 3;
-      if (x < 0) {
-        x = p5.width;
+      roadMarkerX -= 3;
+      if (roadMarkerX < 0) {
+        roadMarkerX = p5.width;
       }
     }
 
+    // Cars loop
     p5.textSize(16);
     for (let i = 0; i < CAR_NUMBER; i++) {
       //Car
       p5.fill(0);
-      p5.rect(carPoints[i], -25 + Math.sin(y + i) * 1.5, CAR_WIDTH, 50);
+      p5.rect(
+        carPoints[i],
+        -25 + Math.sin(oscillationY + i) * 1.5,
+        CAR_WIDTH,
+        50
+      );
 
       // Car number
       p5.textAlign(p5.CENTER);
@@ -106,7 +121,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       p5.text(
         Math.abs(i - CAR_NUMBER),
         carPoints[i] + CAR_WIDTH / 2,
-        5 + Math.sin(y + i) * 1.5
+        5 + Math.sin(oscillationY + i) * 1.5
       );
 
       if (i !== 0) {
@@ -143,12 +158,13 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       }
     }
 
+    // Stop the animation if the play button is not pressed
     if (!isPlaying) return;
-    y = y + 0.1;
+    oscillationY += 0.1;
 
     // Update car positions
     for (let i = 0; i < 7; i++) {
-      if (x > p5.width / 2) {
+      if (roadMarkerX > p5.width / 2) {
         carPoints[i] -= 0.03 * i;
       } else {
         carPoints[i] += 0.03 * i;

@@ -21,6 +21,7 @@ const useResize = ({ minHeight, maxHeight }: Props): ReturnProps => {
     setHeightFromSize("M");
   }, []);
 
+  // Set height based on a certain size
   const setHeightFromSize = useCallback(
     (size: "S" | "M" | "L") => {
       switch (size) {
@@ -49,6 +50,7 @@ const useResize = ({ minHeight, maxHeight }: Props): ReturnProps => {
     setIsResizing(false);
   }, [setIsResizing]);
 
+  // Resize the height of the element considering the boundaries
   const resize = useCallback(
     (e: MouseEvent) => {
       if (isResizing) {

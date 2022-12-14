@@ -12,6 +12,7 @@ import {
 import { Line } from "react-chartjs-2";
 import GraphSliverButton from "./GraphSliverButton";
 
+// Register the chart.js plugins
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,8 +28,8 @@ interface GraphSliverProps {
   setOpen: (open: boolean) => void;
   height: number;
   enableResize: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  setSize: (size: "S" | "M" | "L") => void;
   size: "S" | "M" | "L";
+  setSize: (size: "S" | "M" | "L") => void;
   data: { x: number; time: number }[];
 }
 
@@ -37,8 +38,8 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
   setOpen,
   height,
   enableResize,
-  setSize,
   size,
+  setSize,
   data,
 }: GraphSliverProps) => {
   return (
