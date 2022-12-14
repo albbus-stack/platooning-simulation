@@ -10,13 +10,13 @@ const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
 export default function Home() {
   const [open, setOpen] = useState(false);
 
-  const [data, setData] = useState([
-    { distance: 10, velocity: 0.01, time: 0 },
-  ] as {
-    distance: number;
-    velocity: number;
-    time: number;
-  }[]);
+  const [data, setData] = useState(
+    [] as {
+      distance: number;
+      velocity: number;
+      time: number;
+    }[]
+  );
 
   const { height, enableResize, setHeightFromSize, size } = useResize({});
 

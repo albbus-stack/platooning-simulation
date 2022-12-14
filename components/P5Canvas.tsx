@@ -64,7 +64,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
             ...prev,
             {
               distance: distance,
-              velocity: Math.round(Math.random() * 100),
+              velocity: velocity,
               time: Math.round((Date.now() - initialDate) / 1000),
             },
           ]);
@@ -149,7 +149,11 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
             Math.round(
               Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
             ) / 10;
-          velocity = Math.round(distance / 0.1);
+          if (roadMarkerX > p5.width / 2) {
+            velocity = 0.03 * i;
+          } else {
+            velocity = -0.03 * i;
+          }
         }
 
         // Distance indicators

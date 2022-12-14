@@ -121,6 +121,20 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                     display: false,
                   },
                 },
+                scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: "time (s)",
+                    },
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: "distance (m)",
+                    },
+                  },
+                },
               }}
             />
           </div>
@@ -150,6 +164,20 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                 plugins: {
                   legend: {
                     display: false,
+                  },
+                },
+                scales: {
+                  x: {
+                    title: {
+                      display: true,
+                      text: "time (s)",
+                    },
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: "velocity (m/s)",
+                    },
                   },
                 },
               }}
