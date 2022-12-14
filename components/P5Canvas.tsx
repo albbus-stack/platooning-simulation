@@ -43,11 +43,10 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
-        // p5.noLoop();
-        button.html("Play");
+        button.html("⏵︎");
+        button.style("background-color", "green");
         isPlaying = false;
       } else {
-        // p5.loop();
         // This is the interval that updates the data for the graphs
         intervalRef = setInterval(() => {
           setData((prev) => [
@@ -58,15 +57,15 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
             },
           ]);
         }, 1000);
-        button.html("Pause");
+        button.html("⏸");
+        button.style("background-color", "#f44336");
         isPlaying = true;
       }
     };
-    button = p5.createButton("Play");
-    button.position(p5.width - 65, 15);
+    button = p5.createButton("⏵︎");
+    button.position(p5.width - 50, 15);
+    button.addClass("p5-button");
     button.mousePressed(togglePlay);
-
-    // p5.noLoop();
   };
 
   // The p5.js draw function
