@@ -5,12 +5,15 @@ import { useEffect } from "react";
 
 interface P5CanvasProps {
   sliverHeight: number;
-  setData: Dispatch<SetStateAction<{ x: number; time: number }[]>>;
+  setData: Dispatch<
+    SetStateAction<{ distance: number; velocity: number; time: number }[]>
+  >;
 }
 
 let roadMarkerX = 0;
 let oscillationY = 0;
 let distance = 10;
+let velocity = 0;
 let carPoints: number[] = [];
 let previousSliverHeight = 0;
 let isPlaying = false;
@@ -23,6 +26,7 @@ let intervalRef: NodeJS.Timeout;
 
 const CAR_WIDTH = 100;
 const CAR_NUMBER = 8;
+const SCALE_FACTOR = 0.9;
 
 const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
   useEffect(() => {
@@ -59,7 +63,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
           setData((prev) => [
             ...prev,
             {
-              x: distance,
+              distance: distance,
+              velocity: Math.round(Math.random() * 100),
               time: Math.round((Date.now() - initialDate) / 1000),
             },
           ]);
@@ -90,7 +95,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     // Road
     p5.background(226, 232, 240);
     p5.fill(100, 116, 139);
-    p5.rect(0, -50, p5.width, 100);
+    p5.rect(0, -50, p5.width * 2, 100).scale(SCALE_FACTOR, 1);
 
     // Road marking
     p5.fill(254);
@@ -99,7 +104,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     if (isPlaying) {
       roadMarkerX -= 3;
       if (roadMarkerX < 0) {
-        roadMarkerX = p5.width;
+        roadMarkerX = p5.width * (2 - SCALE_FACTOR);
       }
     }
 
@@ -138,11 +143,13 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
           -77
         );
 
+        // Distance and velocity calculation
         if (i === CAR_NUMBER - 1) {
           distance =
             Math.round(
               Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
             ) / 10;
+          velocity = Math.round(distance / 0.1);
         }
 
         // Distance indicators
@@ -178,6 +185,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       draw={draw}
       windowResized={(p5) => {
         p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
+        button.position(p5.width - 50, 15);
       }}
     />
   );
