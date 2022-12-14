@@ -14,7 +14,10 @@ export default function Home() {
 
   const { draw } = useSimulation();
 
-  const [data, setData] = useState([] as { x: number; time: number }[]);
+  const [data, setData] = useState([{ x: 10, time: 0 }] as {
+    x: number;
+    time: number;
+  }[]);
 
   const { height, enableResize, setHeightFromSize, size } = useResize({});
 

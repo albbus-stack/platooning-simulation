@@ -13,23 +13,24 @@ let y = 0;
 let distance = 10;
 let carPoints: number[] = [];
 let previousSliverHeight = 0;
+let isPlaying = false;
+let button: p5Types.Element;
+
+let intervalRef: NodeJS.Timeout;
 
 const CAR_WIDTH = 100;
 const CAR_NUMBER = 8;
 
 const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
-  // This is the interval that updates the data for the graphs
   const initialDate = Date.now();
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setData((prev) => [
-        ...prev,
-        { x: distance, time: Math.round((Date.now() - initialDate) / 1000) },
-      ]);
-    }, 1000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(intervalRef);
+    };
   }, []);
 
+  // The p5.js setup function
   const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(window.innerWidth, window.innerHeight).parent(
       canvasParentRef
@@ -38,8 +39,37 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       carPoints.push(50 + i * 150);
     }
     x = p5.width;
+
+    const togglePlay = () => {
+      if (isPlaying) {
+        clearInterval(intervalRef);
+        // p5.noLoop();
+        button.html("Play");
+        isPlaying = false;
+      } else {
+        // p5.loop();
+        // This is the interval that updates the data for the graphs
+        intervalRef = setInterval(() => {
+          setData((prev) => [
+            ...prev,
+            {
+              x: distance,
+              time: Math.round((Date.now() - initialDate) / 1000),
+            },
+          ]);
+        }, 1000);
+        button.html("Pause");
+        isPlaying = true;
+      }
+    };
+    button = p5.createButton("Play");
+    button.position(p5.width - 65, 15);
+    button.mousePressed(togglePlay);
+
+    // p5.noLoop();
   };
 
+  // The p5.js draw function
   const draw = (p5: p5Types) => {
     // Resize the canvas if the sliver height changes
     if (previousSliverHeight !== sliverHeight)
@@ -57,9 +87,12 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     // Road marking
     p5.fill(254);
     p5.rect(x, -50, 15, 100);
-    x -= 3;
-    if (x < 0) {
-      x = p5.width;
+
+    if (isPlaying) {
+      x -= 3;
+      if (x < 0) {
+        x = p5.width;
+      }
     }
 
     p5.textSize(16);
@@ -110,6 +143,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         p5.line(carPoints[i - 1] + CAR_WIDTH, -60, carPoints[i], -60);
       }
     }
+
+    if (!isPlaying) return;
     y = y + 0.1;
 
     // Update car positions
