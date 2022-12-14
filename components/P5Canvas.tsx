@@ -8,7 +8,7 @@ interface P5CanvasProps {
   setData: Dispatch<SetStateAction<{ x: number; time: number }[]>>;
 }
 
-let x = 50;
+let x = 0;
 let y = 0;
 let distance = 10;
 let carPoints: number[] = [];
@@ -37,6 +37,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     for (let i = 0; i < CAR_NUMBER; i++) {
       carPoints.push(50 + i * 150);
     }
+    x = p5.width;
   };
 
   const draw = (p5: p5Types) => {
@@ -56,9 +57,9 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     // Road marking
     p5.fill(254);
     p5.rect(x, -50, 15, 100);
-    x += 3;
-    if (x > p5.width) {
-      x = 0;
+    x -= 3;
+    if (x < 0) {
+      x = p5.width;
     }
 
     p5.textSize(16);
