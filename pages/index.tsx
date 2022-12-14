@@ -14,6 +14,8 @@ export default function Home() {
 
   const { draw } = useSimulation();
 
+  const [data, setData] = useState([] as { x: number; time: number }[]);
+
   const { height, enableResize, setHeightFromSize, size } = useResize({});
 
   return (
@@ -22,7 +24,7 @@ export default function Home() {
         Platooning simulation
       </div>
       {/* <Canvas className="z-0" draw={draw} sliverHeight={open ? height : 0} /> */}
-      <P5Canvas sliverHeight={open ? height : 0} />
+      <P5Canvas sliverHeight={open ? height : 0} setData={setData} />
       <button
         onClick={() => setOpen(!open)}
         className="absolute z-10 bottom-0 pb-3 right-[50%] translate-x-[50%] ml-auto bg-slate-800 text-white hover:bg-slate-300 hover:text-slate-800 transition-all duration-300 px-4 py-2 rounded-md rounded-b-none"
@@ -36,6 +38,7 @@ export default function Home() {
         enableResize={enableResize}
         setSize={setHeightFromSize}
         size={size}
+        data={data}
       />
     </div>
   );

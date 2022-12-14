@@ -1,22 +1,40 @@
 import Sketch from "react-p5";
-import p5Types from "p5"; //Import this for typechecking and intellisense
+import p5Types from "p5";
+import { Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 
 interface P5CanvasProps {
   sliverHeight: number;
+  setData: Dispatch<SetStateAction<{ x: number; time: number }[]>>;
 }
 
 let x = 50;
 let y = 0;
+let distance = 10;
 let carPoints: number[] = [];
 let previousSliverHeight = 0;
-const CAR_WIDTH = 100;
 
-const P5Canvas = ({ sliverHeight }: P5CanvasProps) => {
+const CAR_WIDTH = 100;
+const CAR_NUMBER = 8;
+
+const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
+  // This is the interval that updates the data for the graphs
+  const initialDate = Date.now();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setData((prev) => [
+        ...prev,
+        { x: distance, time: Math.round((Date.now() - initialDate) / 1000) },
+      ]);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const setup = (p5: p5Types, canvasParentRef: Element) => {
     p5.createCanvas(window.innerWidth, window.innerHeight).parent(
       canvasParentRef
     );
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < CAR_NUMBER; i++) {
       carPoints.push(50 + i * 150);
     }
   };
@@ -43,14 +61,24 @@ const P5Canvas = ({ sliverHeight }: P5CanvasProps) => {
       x = 0;
     }
 
-    p5.fill(0);
     p5.textSize(16);
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < CAR_NUMBER; i++) {
       //Car
+      p5.fill(0);
       p5.rect(carPoints[i], -25 + Math.sin(y + i) * 1.5, CAR_WIDTH, 50);
+
+      // Car number
+      p5.textAlign(p5.CENTER);
+      p5.fill(255);
+      p5.text(
+        Math.abs(i - CAR_NUMBER),
+        carPoints[i] + CAR_WIDTH / 2,
+        5 + Math.sin(y + i) * 1.5
+      );
 
       if (i !== 0) {
         // Distance text
+        p5.fill(0);
         p5.textAlign(p5.CENTER);
         p5.text(
           Math.round(
@@ -62,7 +90,15 @@ const P5Canvas = ({ sliverHeight }: P5CanvasProps) => {
           -77
         );
 
+        if (i === CAR_NUMBER - 1) {
+          distance =
+            Math.round(
+              Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
+            ) / 10;
+        }
+
         // Distance indicators
+        p5.fill(0);
         p5.line(
           carPoints[i - 1] + CAR_WIDTH,
           -70,

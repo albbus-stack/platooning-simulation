@@ -29,6 +29,7 @@ interface GraphSliverProps {
   enableResize: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   setSize: (size: "S" | "M" | "L") => void;
   size: "S" | "M" | "L";
+  data: { x: number; time: number }[];
 }
 
 const GraphSliver: React.FC<GraphSliverProps> = ({
@@ -38,6 +39,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
   enableResize,
   setSize,
   size,
+  data,
 }: GraphSliverProps) => {
   return (
     <div
@@ -92,29 +94,35 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
       )}
 
       <div className="flex flex-row w-full justify-between h-full">
-        <div className="h-full w-1/2 my-auto">
-          <Line
-            data={{
-              labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-              datasets: [
-                {
-                  label: "My First Dataset",
-                  data: [65, 59, 80, 81, 56, 55, 40],
-                  fill: false,
-                  borderColor: "rgb(75, 192, 192)",
-                  tension: 0.1,
+        <div className="h-full w-1/2 flex flex-col justify-center items-center">
+          <select className="bg-transparent mt-2 text-center">
+            <option value="actual value 1">Distance 1-2</option>
+            <option value="actual value 2">Display Text 2</option>
+            <option value="actual value 3">Display Text 3</option>
+          </select>
+          <div className="w-full h-full">
+            <Line
+              data={{
+                labels: data.map((d) => d.time),
+                datasets: [
+                  {
+                    data: data.map((d) => d.x),
+                    fill: false,
+                    borderColor: "rgb(118, 136, 163)",
+                    tension: 0.4,
+                  },
+                ],
+              }}
+              options={{
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
                 },
-              ],
-            }}
-            options={{
-              scales: {
-                y: {
-                  beginAtZero: true,
-                },
-              },
-              maintainAspectRatio: false,
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
 
         <div className="h-full w-1/2 my-auto">
@@ -126,7 +134,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                   label: "My First Dataset",
                   data: [65, 59, 80, 81, 56, 55, 40],
                   fill: false,
-                  borderColor: "rgb(75, 192, 192)",
+                  borderColor: "rgb(63, 73, 87)",
                   tension: 0.1,
                 },
               ],
