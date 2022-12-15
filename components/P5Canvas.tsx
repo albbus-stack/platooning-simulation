@@ -1,6 +1,6 @@
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 
 interface P5CanvasProps {

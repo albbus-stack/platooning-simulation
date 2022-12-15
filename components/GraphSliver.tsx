@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import GraphSliverButton from "./GraphSliverButton";
+import { SliverContext } from "./SliverProvider";
 
 // Register the chart.js plugins
 ChartJS.register(
@@ -24,24 +25,21 @@ ChartJS.register(
 );
 
 interface GraphSliverProps {
-  isOpen: boolean;
-  setOpen: (open: boolean) => void;
-  height: number;
-  enableResize: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  size: "S" | "M" | "L";
-  setSize: (size: "S" | "M" | "L") => void;
   data: { distance: number; velocity: number; time: number }[][];
 }
 
 const GraphSliver: React.FC<GraphSliverProps> = ({
-  isOpen,
-  setOpen,
-  height,
-  enableResize,
-  size,
-  setSize,
   data,
 }: GraphSliverProps) => {
+  const {
+    height,
+    enableResize,
+    setHeightFromSize,
+    size,
+    isSliverOpen,
+    setIsSliverOpen,
+  } = useContext(SliverContext);
+
   const [distanceChartCar, setDistanceChartCar] = useState(0);
   const [velocityChartCar, setVelocityChartCar] = useState(0);
 
@@ -54,11 +52,11 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
     <div
       style={{
         height: height,
-        transform: isOpen ? "translateY(0)" : "translateY(100%)",
+        transform: isSliverOpen ? "translateY(0)" : "translateY(100%)",
       }}
       className="fixed flex flex-col justify-center align-center bottom-0 left-0 w-full bg-slate-3 bg-slate-300 z-20 border-t-2 border-black p-4"
     >
-      {isOpen && (
+      {isSliverOpen && (
         <>
           <div
             className="absolute top-[-0.2rem] h-9 w-full translate-y-[-50%] cursor-row-resize select-none"
@@ -70,7 +68,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                 size={size}
                 label="S"
                 onClick={() => {
-                  setSize("S");
+                  setHeightFromSize("S");
                 }}
               />
 
@@ -78,7 +76,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                 size={size}
                 label="M"
                 onClick={() => {
-                  setSize("M");
+                  setHeightFromSize("M");
                 }}
               />
 
@@ -86,14 +84,14 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                 size={size}
                 label="L"
                 onClick={() => {
-                  setSize("L");
+                  setHeightFromSize("L");
                 }}
               />
             </div>
             <div>
               <button
                 className="font-bold mr-2 border border-slate-800 border-b-0 p-1 hover:text-slate-500 hover:bg-slate-300 transition-all duration-300 rounded-md rounded-b-none w-10 pb-1"
-                onClick={() => setOpen(false)}
+                onClick={() => setIsSliverOpen(false)}
               >
                 ✕
               </button>
