@@ -1,26 +1,26 @@
 import Sketch from "react-p5";
 import p5Types from "p5";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useEffect } from "react";
 
 interface P5CanvasProps {
   sliverHeight: number;
   setData: Dispatch<
-    SetStateAction<{ distance: number; velocity: number; time: number }[]>
+    SetStateAction<{ distance: number; velocity: number; time: number }[][]>
   >;
 }
 
 let roadMarkerX = 0;
 let oscillationY = 0;
-let distance = 10;
-let velocity = 0;
+let distance: number[] = [];
+let velocity: number[] = [];
 let carPoints: number[] = [];
 let previousSliverHeight = 0;
 let isPlaying = false;
 let button: p5Types.Element;
 
-let initialDate: number;
-let isFirstPlay = true;
+let initialTime = -1;
+let lastTime = -1;
 
 let intervalRef: NodeJS.Timeout;
 
@@ -42,6 +42,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     );
     for (let i = 0; i < CAR_NUMBER; i++) {
       carPoints.push(50 + i * 150);
+      distance.push(0);
+      velocity.push(0);
     }
     roadMarkerX = p5.width - 50;
 
@@ -49,25 +51,34 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
+        lastTime = initialTime;
         button.html("⏵︎");
         button.style("background-color", "green");
         isPlaying = false;
       } else {
-        // This is the initial date that is used to calculate the time
-        if (isFirstPlay) {
-          initialDate = Date.now();
-          isFirstPlay = false;
-        }
         // This is the interval that updates the data for the graphs
         intervalRef = setInterval(() => {
-          setData((prev) => [
-            ...prev,
-            {
-              distance: distance,
-              velocity: velocity,
-              time: Math.round((Date.now() - initialDate) / 1000),
-            },
-          ]);
+          initialTime++;
+
+          setData((car) => {
+            if (car.length === 1) {
+              car = [[], [], [], [], [], [], [], []] as {
+                distance: number;
+                velocity: number;
+                time: number;
+              }[][];
+            }
+            return car.map((prev, i) => {
+              return [
+                ...prev,
+                {
+                  distance: distance[i],
+                  velocity: velocity[i],
+                  time: initialTime,
+                },
+              ];
+            });
+          });
         }, 1000);
         button.html("⏸");
         button.style("background-color", "#f44336");
@@ -144,16 +155,14 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         );
 
         // Distance and velocity calculation
-        if (i === CAR_NUMBER - 1) {
-          distance =
-            Math.round(
-              Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
-            ) / 10;
-          if (roadMarkerX > p5.width / 2) {
-            velocity = 0.03 * i;
-          } else {
-            velocity = -0.03 * i;
-          }
+        distance[i] =
+          Math.round(
+            Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
+          ) / 10;
+        if (roadMarkerX > p5.width / 2) {
+          velocity[i] = 0.03 * i;
+        } else {
+          velocity[i] = -0.03 * i;
         }
 
         // Distance indicators

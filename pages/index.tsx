@@ -2,6 +2,7 @@ import GraphSliver from "../components/GraphSliver";
 import { useState } from "react";
 import useResize from "../hooks/useResize";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 
 const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
   ssr: false,
@@ -10,13 +11,11 @@ const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
 export default function Home() {
   const [open, setOpen] = useState(false);
 
-  const [data, setData] = useState(
-    [] as {
-      distance: number;
-      velocity: number;
-      time: number;
-    }[]
-  );
+  const [data, setData] = useState([[]] as {
+    distance: number;
+    velocity: number;
+    time: number;
+  }[][]);
 
   const { height, enableResize, setHeightFromSize, size } = useResize({});
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,7 +30,7 @@ interface GraphSliverProps {
   enableResize: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   size: "S" | "M" | "L";
   setSize: (size: "S" | "M" | "L") => void;
-  data: { distance: number; velocity: number; time: number }[];
+  data: { distance: number; velocity: number; time: number }[][];
 }
 
 const GraphSliver: React.FC<GraphSliverProps> = ({
@@ -42,6 +42,14 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
   setSize,
   data,
 }: GraphSliverProps) => {
+  const [distanceChartCar, setDistanceChartCar] = useState(0);
+  const [velocityChartCar, setVelocityChartCar] = useState(0);
+
+  const distanceChartIndex =
+    (-distanceChartCar + data.length - 1) % data.length;
+  const velocityChartIndex =
+    (-velocityChartCar + data.length - 1) % data.length;
+
   return (
     <div
       style={{
@@ -96,18 +104,26 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
 
       <div className="flex flex-row w-full justify-between h-full">
         <div className="h-full w-1/2 flex flex-col justify-center items-center">
-          <select className="bg-transparent mt-2 text-center">
-            <option value="actual value 1">Distance 1-2</option>
-            <option value="actual value 2">Display Text 2</option>
-            <option value="actual value 3">Display Text 3</option>
+          <select
+            className="bg-transparent mt-2 text-center"
+            onChange={(e) => setDistanceChartCar(parseInt(e.target.value))}
+          >
+            {data.map((_, i) => {
+              if (i !== data.length - 1 || i === 0)
+                return (
+                  <option key={i} value={i}>{`Distance ${i + 1}-${
+                    i + 2
+                  }`}</option>
+                );
+            })}
           </select>
           <div className="w-full h-full">
             <Line
               data={{
-                labels: data.map((d) => d.time),
+                labels: data[distanceChartIndex]?.map((d) => d.time),
                 datasets: [
                   {
-                    data: data.map((d) => d.distance),
+                    data: data[distanceChartIndex]?.map((d) => d.distance),
                     fill: false,
                     borderColor: "rgb(118, 136, 163)",
                     tension: 0.4,
@@ -141,18 +157,21 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
         </div>
 
         <div className="h-full w-1/2 flex flex-col justify-center items-center">
-          <select className="bg-transparent mt-2 text-center">
-            <option value="actual value 1">Velocity 1</option>
-            <option value="actual value 2">Display Text 2</option>
-            <option value="actual value 3">Display Text 3</option>
+          <select
+            className="bg-transparent mt-2 text-center"
+            onChange={(e) => setVelocityChartCar(parseInt(e.target.value))}
+          >
+            {data.map((_, i) => (
+              <option key={i} value={i}>{`Velocity ${i + 1}`}</option>
+            ))}
           </select>
           <div className="w-full h-full">
             <Line
               data={{
-                labels: data.map((d) => d.time),
+                labels: data[velocityChartIndex].map((d) => d.time),
                 datasets: [
                   {
-                    data: data.map((d) => d.velocity),
+                    data: data[velocityChartIndex].map((d) => d.velocity),
                     fill: false,
                     borderColor: "rgb(63, 73, 87)",
                     tension: 0.4,
