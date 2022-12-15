@@ -21,8 +21,8 @@ export default function Home() {
 
   return (
     <div className="h-screen w-screen bg-slate-200">
-      <div className="absolute top-5 left-5 text-lg font-mono tracking-wider select-none text-slate-800">
-        Platooning simulation
+      <div className="absolute top-5 left-[4.2rem] text-lg font-mono tracking-wider select-none text-slate-800">
+        platooning simulation
       </div>
 
       <P5Canvas sliverHeight={open ? height : 0} setData={setData} />

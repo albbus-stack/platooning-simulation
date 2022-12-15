@@ -88,7 +88,6 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
 
     // Setup of the play/pause button
     button = p5.createButton("⏵︎");
-    button.position(p5.width - 50, 15);
     button.addClass("p5-button");
     button.mousePressed(togglePlay);
   };
@@ -198,7 +197,6 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       draw={draw}
       windowResized={(p5) => {
         p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
-        button.position(p5.width - 50, 15);
       }}
     />
   );

@@ -22,10 +22,11 @@ a {
 
 .p5-button {
   position: absolute;
-  left: 1314px;
-  top: 15px;
-  height: 30px;
-  width: 30px;
+  left: 18px;
+  top: 18px;
+  height: 33px;
+  width: 33px;
+  font-size: 20px;
   padding-bottom: 4px;
   border-radius: 4px;
   color: white;
