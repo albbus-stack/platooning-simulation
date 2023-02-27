@@ -1,5 +1,6 @@
-import Sketch from "react-p5";
+//@ts-ignore
 import p5Types from "p5";
+import Sketch from "react-p5";
 import { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 
