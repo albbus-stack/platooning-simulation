@@ -19,8 +19,7 @@ let previousSliverHeight = 0;
 let isPlaying = false;
 let button: p5Types.Element;
 
-let initialTime = -1;
-let lastTime = -1;
+let timeTick = -1;
 
 let intervalRef: NodeJS.Timeout;
 
@@ -41,7 +40,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       canvasParentRef
     );
     for (let i = 0; i < CAR_NUMBER; i++) {
-      carPoints.push(50 + i * 150);
+      carPoints.push(50 + (CAR_NUMBER - i) * 150);
       distance.push(0);
       velocity.push(0);
     }
@@ -51,14 +50,13 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
-        lastTime = initialTime;
         button.html("⏵︎");
         button.style("background-color", "green");
         isPlaying = false;
       } else {
         // This is the interval that updates the data for the graphs
         intervalRef = setInterval(() => {
-          initialTime++;
+          timeTick++;
 
           setData((car) => {
             if (car.length === 1) {
@@ -68,13 +66,15 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
                 time: number;
               }[][];
             }
+
+            console.log(velocity[0]);
             return car.map((prev, i) => {
               return [
                 ...prev,
                 {
                   distance: distance[i],
                   velocity: velocity[i],
-                  time: initialTime,
+                  time: timeTick,
                 },
               ];
             });
@@ -134,46 +134,42 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       p5.textAlign(p5.CENTER);
       p5.fill(255);
       p5.text(
-        Math.abs(i - CAR_NUMBER),
+        i + 1,
         carPoints[i] + CAR_WIDTH / 2,
         5 + Math.sin(oscillationY + i) * 1.5
       );
 
-      if (i !== 0) {
+      if (i !== CAR_NUMBER - 1) {
         // Distance text
         p5.fill(0);
         p5.textAlign(p5.CENTER);
         p5.text(
-          Math.round(
-            Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
-          ) /
-            10 +
-            "m",
-          (carPoints[i - 1] + CAR_WIDTH + carPoints[i]) / 2,
+          Math.round(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH)) / 10 + "m",
+          (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
           -77
         );
 
         // Distance and velocity calculation
         distance[i] =
-          Math.round(
-            Math.abs(carPoints[i] - (carPoints[i - 1] + CAR_WIDTH / 2))
-          ) / 10;
-        if (roadMarkerX > p5.width / 2) {
-          velocity[i] = 0.03 * i;
-        } else {
-          velocity[i] = -0.03 * i;
-        }
+          Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) /
+          10;
 
         // Distance indicators
         p5.fill(0);
         p5.line(
-          carPoints[i - 1] + CAR_WIDTH,
+          carPoints[i + 1] + CAR_WIDTH,
           -70,
-          carPoints[i - 1] + CAR_WIDTH,
+          carPoints[i + 1] + CAR_WIDTH,
           -50
         );
         p5.line(carPoints[i], -70, carPoints[i], -50);
-        p5.line(carPoints[i - 1] + CAR_WIDTH, -60, carPoints[i], -60);
+        p5.line(carPoints[i + 1] + CAR_WIDTH, -60, carPoints[i], -60);
+      }
+
+      if (roadMarkerX > p5.width / 2) {
+        velocity[i] = 0.03 * i + 1;
+      } else {
+        velocity[i] = -0.03 * i + 1;
       }
     }
 
@@ -182,7 +178,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     oscillationY += 0.1;
 
     // Update car positions
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 8; i++) {
       if (roadMarkerX > p5.width / 2) {
         carPoints[i] -= 0.03 * i;
       } else {

@@ -43,10 +43,8 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
   const [distanceChartCar, setDistanceChartCar] = useState(0);
   const [velocityChartCar, setVelocityChartCar] = useState(0);
 
-  const distanceChartIndex =
-    (-distanceChartCar + data.length - 1) % data.length;
-  const velocityChartIndex =
-    (-velocityChartCar + data.length - 1) % data.length;
+  const distanceChartIndex = distanceChartCar;
+  const velocityChartIndex = velocityChartCar;
 
   return (
     <div
