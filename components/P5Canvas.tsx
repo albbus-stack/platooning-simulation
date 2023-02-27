@@ -51,7 +51,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
-        button.html("⏵︎");
+        button.html("\u25B6");
         button.style("background-color", "green");
         isPlaying = false;
       } else {
@@ -88,7 +88,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     };
 
     // Setup of the play/pause button
-    button = p5.createButton("⏵︎");
+    button = p5.createButton("\u25B6");
     button.addClass("p5-button");
     button.mousePressed(togglePlay);
   };
