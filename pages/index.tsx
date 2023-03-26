@@ -29,12 +29,12 @@ export default function Home() {
         />
       </Head>
       <div className="w-screen h-screen bg-slate-200">
-        <div className="absolute font-mono text-lg tracking-wider select-none top-5 left-16 text-slate-800">
+        <div className="absolute font-mono text-lg tracking-wider select-none top-6 left-[4.5rem] text-slate-800">
           platooning simulation
         </div>
 
         <Link href="/about" className="z-20">
-          <div className="absolute p-1 text-white transition-all duration-300 rounded-md cursor-pointer select-none top-5 right-5 bg-slate-800 hover:bg-slate-300 hover:text-slate-800">
+          <div className="absolute p-1 text-white transition-all duration-300 rounded-md cursor-pointer select-none top-5 left-[19.5rem] bg-slate-800 hover:bg-slate-300 hover:text-slate-800">
             <InfoIcon />
           </div>
         </Link>

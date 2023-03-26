@@ -52,7 +52,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
         height: height,
         transform: isSliverOpen ? "translateY(0)" : "translateY(100%)",
       }}
-      className="fixed flex flex-col justify-center align-center bottom-0 left-0 w-full bg-slate-3 bg-slate-300 z-20 border-t-2 border-black p-4"
+      className="fixed bottom-0 left-0 z-30 flex flex-col justify-center w-full p-4 border-t-2 border-black align-center bg-slate-3 bg-slate-300"
     >
       {isSliverOpen && (
         <>
@@ -88,7 +88,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
             </div>
             <div>
               <button
-                className="font-bold mr-2 border border-slate-800 border-b-0 p-1 hover:text-slate-500 hover:bg-slate-300 transition-all duration-300 rounded-md rounded-b-none w-10 pb-1"
+                className="w-10 p-1 pb-1 mr-2 font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
                 onClick={() => setIsSliverOpen(false)}
               >
                 ✕
@@ -98,10 +98,10 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
         </>
       )}
 
-      <div className="flex flex-row w-full justify-between h-full">
-        <div className="h-full w-1/2 flex flex-col justify-center items-center">
+      <div className="flex flex-row justify-between w-full h-full">
+        <div className="flex flex-col items-center justify-center w-1/2 h-full">
           <select
-            className="bg-transparent mt-2 text-center"
+            className="mt-2 text-center bg-transparent"
             onChange={(e) => setDistanceChartCar(parseInt(e.target.value))}
           >
             {data.map((_, i) => {
@@ -152,9 +152,9 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
           </div>
         </div>
 
-        <div className="h-full w-1/2 flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center w-1/2 h-full">
           <select
-            className="bg-transparent mt-2 text-center"
+            className="mt-2 text-center bg-transparent"
             onChange={(e) => setVelocityChartCar(parseInt(e.target.value))}
           >
             {data.map((_, i) => (

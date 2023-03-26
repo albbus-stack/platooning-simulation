@@ -1,5 +1,5 @@
-//@ts-ignore
-import p5Types from "p5";
+// @ts-ignore
+import { p5Types } from "p5";
 import Sketch from "react-p5";
 import { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
@@ -19,13 +19,15 @@ let carPoints: number[] = [];
 let previousSliverHeight = 0;
 let isPlaying = false;
 let button: p5Types.Element;
+let slider: p5Types.Element;
+let sliderText: p5Types.Element;
 
 let timeTick = -1;
 
 let intervalRef: NodeJS.Timeout;
 
 const CAR_WIDTH = 100;
-const CAR_NUMBER = 8;
+let CAR_NUMBER = 6;
 const SCALE_FACTOR = 0.9;
 
 const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
@@ -40,19 +42,51 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     p5.createCanvas(window.innerWidth, window.innerHeight).parent(
       canvasParentRef
     );
-    for (let i = 0; i < CAR_NUMBER; i++) {
-      carPoints.push(50 + (CAR_NUMBER - i) * 150);
-      distance.push(0);
-      velocity.push(0);
-    }
-    roadMarkerX = p5.width - 50;
+
+    sliderText = p5.createP("8");
+    sliderText.addClass("p5-slider-text");
+
+    slider = p5.createSlider(2, 10, 6);
+    slider.addClass("p5-slider");
+
+    const setupCars = () => {
+      carPoints = [];
+      distance = [];
+      velocity = [];
+      CAR_NUMBER = slider.value();
+
+      for (let i = 0; i < CAR_NUMBER; i++) {
+        carPoints.push(p5.width - 100 - i * 150);
+        distance.push(0);
+        velocity.push(0);
+      }
+      roadMarkerX = p5.width + 25;
+
+      setData((car) => {
+        let carList = [] as {
+          distance: number;
+          velocity: number;
+          time: number;
+        }[][];
+        for (let i = 0; i < CAR_NUMBER; i++) {
+          carList.push([]);
+        }
+        car = carList;
+        return car;
+      });
+
+      sliderText.html(CAR_NUMBER);
+    };
+
+    slider.input(setupCars);
+    setupCars();
 
     // The function that toggles the play/pause button and the interval
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
         button.html(
-          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
         );
         isPlaying = false;
       } else {
@@ -62,11 +96,16 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
 
           setData((car) => {
             if (car.length === 1) {
-              car = [[], [], [], [], [], [], [], []] as {
+              let carList = [] as {
                 distance: number;
                 velocity: number;
                 time: number;
               }[][];
+              for (let i = 0; i < CAR_NUMBER; i++) {
+                carList.push([]);
+              }
+              car = carList;
+              return car;
             }
 
             return car.map((prev, i) => {
@@ -82,7 +121,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
           });
         }, 1000);
         button.html(
-          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
         );
         isPlaying = true;
       }
@@ -90,7 +129,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
 
     // Setup of the play/pause button
     button = p5.createButton(
-      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
     );
     button.addClass("p5-button");
     button.mousePressed(togglePlay);
@@ -107,7 +146,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     p5.translate(0, p5.height / 2 + 25);
 
     // Road
-    p5.background(226, 232, 240);
+    p5.background(226, 232, 260);
     p5.fill(100, 116, 139);
     p5.rect(0, -50, p5.width * 2, 100).scale(SCALE_FACTOR, 1);
 
@@ -182,12 +221,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     oscillationY += 0.1;
 
     // Update car positions
-    for (let i = 0; i < 8; i++) {
-      if (roadMarkerX > p5.width / 2) {
-        carPoints[i] -= 0.03 * i;
-      } else {
-        carPoints[i] += 0.03 * i;
-      }
+    for (let i = 0; i < CAR_NUMBER; i++) {
+      carPoints[i] -= velocity[i] - 1;
     }
   };
 
