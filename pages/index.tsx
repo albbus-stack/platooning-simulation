@@ -29,7 +29,7 @@ export default function Home() {
         />
       </Head>
       <div className="w-screen h-screen bg-slate-200">
-        <div className="absolute font-mono text-lg tracking-wider select-none top-6 left-[4.5rem] text-slate-800">
+        <div className="absolute text-lg tracking-wider select-none top-6 left-[4.5rem] text-slate-800">
           platooning simulation
         </div>
 
