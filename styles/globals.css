@@ -21,16 +21,7 @@ a {
 }
 
 .p5-button {
-  position: absolute;
-  left: 18px;
-  top: 18px;
-  height: 33px;
-  width: 33px;
-  font-size: 20px;
-  padding-bottom: 2px;
-  border-radius: 4px;
-  color: white;
-  background-color: green;
+  @apply absolute z-20 p-1 text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 top-5 left-5;
 }
 
 @tailwind base;

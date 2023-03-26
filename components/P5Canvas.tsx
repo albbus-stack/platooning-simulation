@@ -51,8 +51,9 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     const togglePlay = () => {
       if (isPlaying) {
         clearInterval(intervalRef);
-        button.html("\u25B6");
-        button.style("background-color", "green");
+        button.html(
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+        );
         isPlaying = false;
       } else {
         // This is the interval that updates the data for the graphs
@@ -68,7 +69,6 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
               }[][];
             }
 
-            console.log(velocity[0]);
             return car.map((prev, i) => {
               return [
                 ...prev,
@@ -81,14 +81,17 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
             });
           });
         }, 1000);
-        button.html("⏸");
-        button.style("background-color", "#f44336");
+        button.html(
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
+        );
         isPlaying = true;
       }
     };
 
     // Setup of the play/pause button
-    button = p5.createButton("\u25B6");
+    button = p5.createButton(
+      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+    );
     button.addClass("p5-button");
     button.mousePressed(togglePlay);
   };
@@ -122,7 +125,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     // Cars loop
     p5.textSize(16);
     for (let i = 0; i < CAR_NUMBER; i++) {
-      //Car
+      // Car illustration
       p5.fill(0);
       p5.rect(
         carPoints[i],
