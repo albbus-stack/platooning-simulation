@@ -56,20 +56,20 @@ const About: NextPage = () => {
             How do I use this?
           </h1>
           <p className="text-lg text-slate-800">
-            You can use this by clicking the "Graphs" button at the bottom of
-            the screen. This will open a sliver at the bottom of the screen,
-            which will show you the graphs of the simulation. You can close the
-            sliver by clicking the "Graphs" button again.
+            You can use this by clicking the Graphs button at the bottom of the
+            screen. This will open a sliver at the bottom of the screen, which
+            will show you the graphs of the simulation. You can close the sliver
+            by clicking the Graphs button again.
           </p>
 
           <h1 className="text-2xl font-bold text-slate-800">
             How do I change the settings?
           </h1>
           <p className="text-lg text-slate-800">
-            You can change the settings by clicking the "Settings" button at the
+            You can change the settings by clicking the Settings button at the
             bottom of the screen. This will open a sliver at the bottom of the
             screen, which will show you the settings of the simulation. You can
-            close the sliver by clicking the "Settings" button again.
+            close the sliver by clicking the Settings button again.
           </p>
         </section>
       </main>
