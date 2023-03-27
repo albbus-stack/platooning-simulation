@@ -250,7 +250,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       isPlaying = false;
       setIsSliverOpen(false);
     };
-  }, []);
+  }, [setIsSliverOpen]);
 
   return (
     <PageVisibility onChange={onPageVisibilityChange}>
