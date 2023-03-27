@@ -1,7 +1,13 @@
 // @ts-ignore
 import { p5Types } from "p5";
 import Sketch from "react-p5";
-import { Dispatch, SetStateAction, useEffect, useContext } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { SliverContext } from "../components/SliverProvider";
 import PageVisibility from "react-page-visibility";
 
@@ -33,7 +39,7 @@ const SCALE_FACTOR = 0.9;
 
 const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
   // This toggles the play/pause button and the interval
-  const togglePlay = () => {
+  const togglePlay = useCallback(() => {
     if (isPlaying) {
       clearInterval(intervalRef);
       button.html(
@@ -76,7 +82,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       );
       isPlaying = true;
     }
-  };
+  }, [setData]);
 
   // The p5.js setup function
   const setup = (p5: p5Types, canvasParentRef: Element) => {
