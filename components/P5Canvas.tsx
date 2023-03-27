@@ -115,6 +115,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         return carList;
       });
 
+      timeTick = -1;
+
       sliderText.html(CAR_NUMBER);
     };
 
@@ -245,6 +247,8 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       clearInterval(intervalRef);
+      isPlaying = false;
+      setIsSliverOpen(false);
     };
   }, []);
 

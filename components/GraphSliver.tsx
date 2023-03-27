@@ -47,7 +47,7 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
   const velocityChartIndex = velocityChartCar;
 
   return (
-    <div
+    <aside
       style={{
         height: height,
         transform: isSliverOpen ? "translateY(0)" : "translateY(100%)",
@@ -59,8 +59,8 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
           <div
             className="absolute top-[-0.2rem] h-9 w-full translate-y-[-50%] cursor-row-resize select-none"
             onMouseDown={enableResize}
-          ></div>
-          <div className="absolute z-30 top-[-2.2rem] px-3 left-0 w-full flex flex-row justify-between select-none">
+          />
+          <nav className="absolute z-30 top-[-2.2rem] px-3 left-0 w-full flex flex-row justify-between select-none">
             <div>
               <GraphSliverButton
                 size={size}
@@ -86,20 +86,18 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
                 }}
               />
             </div>
-            <div>
-              <button
-                className="w-10 p-1 pb-1 mr-2 font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
-                onClick={() => setIsSliverOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-          </div>
+            <button
+              className="w-10 p-1 pb-1 mr-2 font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
+              onClick={() => setIsSliverOpen(false)}
+            >
+              ✕
+            </button>
+          </nav>
         </>
       )}
 
-      <div className="flex flex-row justify-between w-full h-full">
-        <div className="flex flex-col items-center justify-center w-1/2 h-full">
+      <main className="flex flex-row justify-between w-full h-full">
+        <section className="flex flex-col items-center justify-center w-1/2 h-full">
           <select
             className="mt-2 text-center bg-transparent"
             onChange={(e) => setDistanceChartCar(parseInt(e.target.value))}
@@ -150,9 +148,9 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
               }}
             />
           </div>
-        </div>
+        </section>
 
-        <div className="flex flex-col items-center justify-center w-1/2 h-full">
+        <section className="flex flex-col items-center justify-center w-1/2 h-full">
           <select
             className="mt-2 text-center bg-transparent"
             onChange={(e) => setVelocityChartCar(parseInt(e.target.value))}
@@ -198,9 +196,9 @@ const GraphSliver: React.FC<GraphSliverProps> = ({
               }}
             />
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      </main>
+    </aside>
   );
 };
 

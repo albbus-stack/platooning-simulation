@@ -4,13 +4,14 @@ import dynamic from "next/dynamic";
 import { SliverContext } from "../components/SliverProvider";
 import Head from "next/head";
 import Link from "next/link";
-import InfoIcon from "../components/InfoIcon";
+import InfoIcon from "../components/icons/InfoIcon";
+import { NextPage } from "next";
 
 const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
   ssr: false,
 });
 
-export default function Home() {
+const Home: NextPage = () => {
   const [data, setData] = useState([[]] as {
     distance: number;
     velocity: number;
@@ -28,15 +29,16 @@ export default function Home() {
           content="A platooning simulation made using react and p5.js"
         />
       </Head>
-      <div className="w-screen h-screen bg-slate-200">
-        <div className="absolute flex flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[4.5rem] text-slate-800">
+
+      <main className="w-full h-screen overflow-hidden bg-slate-200">
+        <nav className="absolute flex flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[4.5rem] text-slate-800">
           <Link href="/about" className="z-20">
             <div className="p-1 text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800">
               <InfoIcon />
             </div>
           </Link>
           <h1>platooning simulation</h1>
-        </div>
+        </nav>
 
         <P5Canvas sliverHeight={isSliverOpen ? height : 0} setData={setData} />
 
@@ -48,7 +50,9 @@ export default function Home() {
         </button>
 
         <GraphSliver data={data} />
-      </div>
+      </main>
     </>
   );
-}
+};
+
+export default Home;
