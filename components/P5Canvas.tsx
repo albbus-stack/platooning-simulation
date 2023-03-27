@@ -1,8 +1,9 @@
 // @ts-ignore
 import { p5Types } from "p5";
 import Sketch from "react-p5";
-import { Dispatch, SetStateAction } from "react";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useContext } from "react";
+import { SliverContext } from "../components/SliverProvider";
+import PageVisibility from "react-page-visibility";
 
 interface P5CanvasProps {
   sliverHeight: number;
@@ -31,11 +32,51 @@ let CAR_NUMBER = 6;
 const SCALE_FACTOR = 0.9;
 
 const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
-  useEffect(() => {
-    return () => {
+  // This toggles the play/pause button and the interval
+  const togglePlay = () => {
+    if (isPlaying) {
       clearInterval(intervalRef);
-    };
-  }, []);
+      button.html(
+        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+      );
+      isPlaying = false;
+    } else {
+      // This is the interval that updates the data for the graphs
+      intervalRef = setInterval(() => {
+        timeTick++;
+
+        setData((car) => {
+          if (car.length === 1) {
+            let carList = [] as {
+              distance: number;
+              velocity: number;
+              time: number;
+            }[][];
+            for (let i = 0; i < CAR_NUMBER; i++) {
+              carList.push([]);
+            }
+            car = carList;
+            return car;
+          }
+
+          return car.map((prev, i) => {
+            return [
+              ...prev,
+              {
+                distance: distance[i],
+                velocity: velocity[i],
+                time: timeTick,
+              },
+            ];
+          });
+        });
+      }, 1000);
+      button.html(
+        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
+      );
+      isPlaying = true;
+    }
+  };
 
   // The p5.js setup function
   const setup = (p5: p5Types, canvasParentRef: Element) => {
@@ -56,13 +97,13 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       CAR_NUMBER = slider.value();
 
       for (let i = 0; i < CAR_NUMBER; i++) {
-        carPoints.push(p5.width - 100 - i * 150);
+        carPoints.push(p5.width - 50 - i * 150);
         distance.push(0);
         velocity.push(0);
       }
-      roadMarkerX = p5.width + 25;
+      roadMarkerX = p5.width + 100;
 
-      setData((car) => {
+      setData(() => {
         let carList = [] as {
           distance: number;
           velocity: number;
@@ -71,8 +112,7 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         for (let i = 0; i < CAR_NUMBER; i++) {
           carList.push([]);
         }
-        car = carList;
-        return car;
+        return carList;
       });
 
       sliderText.html(CAR_NUMBER);
@@ -80,52 +120,6 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
 
     slider.input(setupCars);
     setupCars();
-
-    // The function that toggles the play/pause button and the interval
-    const togglePlay = () => {
-      if (isPlaying) {
-        clearInterval(intervalRef);
-        button.html(
-          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
-        );
-        isPlaying = false;
-      } else {
-        // This is the interval that updates the data for the graphs
-        intervalRef = setInterval(() => {
-          timeTick++;
-
-          setData((car) => {
-            if (car.length === 1) {
-              let carList = [] as {
-                distance: number;
-                velocity: number;
-                time: number;
-              }[][];
-              for (let i = 0; i < CAR_NUMBER; i++) {
-                carList.push([]);
-              }
-              car = carList;
-              return car;
-            }
-
-            return car.map((prev, i) => {
-              return [
-                ...prev,
-                {
-                  distance: distance[i],
-                  velocity: velocity[i],
-                  time: timeTick,
-                },
-              ];
-            });
-          });
-        }, 1000);
-        button.html(
-          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
-        );
-        isPlaying = true;
-      }
-    };
 
     // Setup of the play/pause button
     button = p5.createButton(
@@ -208,32 +202,62 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
         p5.line(carPoints[i], -70, carPoints[i], -50);
         p5.line(carPoints[i + 1] + CAR_WIDTH, -60, carPoints[i], -60);
       }
+    }
 
+    // Don't compute any value if the simulation is paused
+    if (!isPlaying) return;
+    oscillationY += 0.1;
+
+    // Update car velocities and positions
+    for (let i = 0; i < CAR_NUMBER; i++) {
       if (roadMarkerX > p5.width / 2) {
         velocity[i] = 0.03 * i + 1;
       } else {
         velocity[i] = -0.03 * i + 1;
       }
-    }
-
-    // Stop the animation if the play button is not pressed
-    if (!isPlaying) return;
-    oscillationY += 0.1;
-
-    // Update car positions
-    for (let i = 0; i < CAR_NUMBER; i++) {
       carPoints[i] -= velocity[i] - 1;
     }
   };
 
+  const onPageVisibilityChange = (isVisible: boolean) => {
+    if (!isVisible) {
+      clearInterval(intervalRef);
+      button.html(
+        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+      );
+      isPlaying = false;
+    }
+  };
+
+  const { setIsSliverOpen } = useContext(SliverContext);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        togglePlay();
+      } else if (e.key === "g") {
+        setIsSliverOpen((isOpen) => !isOpen);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      clearInterval(intervalRef);
+    };
+  }, []);
+
   return (
-    <Sketch
-      setup={setup}
-      draw={draw}
-      windowResized={(p5) => {
-        p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
-      }}
-    />
+    <PageVisibility onChange={onPageVisibilityChange}>
+      <Sketch
+        setup={setup}
+        draw={draw}
+        windowResized={(p5) => {
+          p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
+        }}
+      />
+    </PageVisibility>
   );
 };
 
