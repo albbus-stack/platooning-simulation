@@ -3,7 +3,7 @@ import GraphSliver from "./GraphSliver";
 import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
 import { SliverContext } from "./SliverProvider";
-import XMark from "../icons/XMark";
+import XIcon from "../icons/XIcon";
 
 const Sliver: React.FC = () => {
   const {
@@ -60,7 +60,7 @@ const Sliver: React.FC = () => {
               className="flex items-center justify-center w-10 pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
               onClick={() => setIsSliverOpen(false)}
             >
-              <XMark />
+              <XIcon />
             </button>
           </nav>
         </>
