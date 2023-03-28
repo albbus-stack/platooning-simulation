@@ -1,14 +1,14 @@
-interface GraphSliverButtonProps {
+interface SliverButtonProps {
   size: "S" | "M" | "L";
   label: "S" | "M" | "L";
   onClick: () => void;
 }
 
-const GraphSliverButton = ({
+const SliverButton: React.FC<SliverButtonProps> = ({
   size,
   label,
   onClick,
-}: GraphSliverButtonProps) => {
+}) => {
   const buttonClassName =
     "border border-slate-800 border-b-0 font-mono mr-4 p-1 hover:text-slate-500 hover:bg-slate-300 transition-all duration-300 rounded-md rounded-b-none w-10 pb-1";
 
@@ -25,4 +25,4 @@ const GraphSliverButton = ({
   );
 };
 
-export default GraphSliverButton;
+export default SliverButton;

@@ -1,13 +1,17 @@
-import { createContext, useState, Dispatch, SetStateAction } from "react";
-import useResize from "../hooks/useResize";
+import { createContext, Dispatch, SetStateAction, useState } from "react";
+import useResize from "../../hooks/useResize";
+
+type Size = "S" | "M" | "L";
 
 export const SliverContext = createContext({
   height: 0,
   enableResize: () => {},
-  setHeightFromSize: (size: "S" | "M" | "L") => {},
-  size: "M" as "S" | "M" | "L",
+  setHeightFromSize: (size: Size) => {},
+  size: "M" as Size,
   isSliverOpen: false,
   setIsSliverOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
+  isGraphSliver: false,
+  setIsGraphSliver: (() => {}) as Dispatch<SetStateAction<boolean>>,
 });
 
 interface SliverProviderProps {
@@ -18,6 +22,7 @@ export const SliverProvider: React.FC<SliverProviderProps> = ({ children }) => {
   const { height, enableResize, setHeightFromSize, size } = useResize({});
 
   const [isSliverOpen, setIsSliverOpen] = useState(false);
+  const [isGraphSliver, setIsGraphSliver] = useState(false);
 
   return (
     <SliverContext.Provider
@@ -28,6 +33,8 @@ export const SliverProvider: React.FC<SliverProviderProps> = ({ children }) => {
         size,
         isSliverOpen,
         setIsSliverOpen,
+        isGraphSliver,
+        setIsGraphSliver,
       }}
     >
       {children}

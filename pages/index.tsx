@@ -1,11 +1,11 @@
-import GraphSliver from "../components/GraphSliver";
-import { useContext, useState } from "react";
+import { NextPage } from "next";
 import dynamic from "next/dynamic";
-import { SliverContext } from "../components/SliverProvider";
 import Head from "next/head";
 import Link from "next/link";
+import { useContext, useState } from "react";
 import InfoIcon from "../components/icons/InfoIcon";
-import { NextPage } from "next";
+import Sliver from "../components/sliver/Sliver";
+import { SliverContext } from "../components/sliver/SliverProvider";
 
 const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
   ssr: false,
@@ -18,7 +18,10 @@ const Home: NextPage = () => {
     time: number;
   }[][]);
 
-  const { height, isSliverOpen, setIsSliverOpen } = useContext(SliverContext);
+  const [carNumber, setCarNumber] = useState(6);
+
+  const { height, isSliverOpen, setIsSliverOpen, setIsGraphSliver } =
+    useContext(SliverContext);
 
   return (
     <>
@@ -40,16 +43,35 @@ const Home: NextPage = () => {
           <h1>platooning simulation</h1>
         </nav>
 
-        <P5Canvas sliverHeight={isSliverOpen ? height : 0} setData={setData} />
+        <P5Canvas
+          sliverHeight={isSliverOpen ? height : 0}
+          setData={setData}
+          carNumber={carNumber}
+        />
 
-        <button
-          onClick={() => setIsSliverOpen(true)}
-          className="absolute z-10 bottom-0 pb-3 right-[50%] translate-x-[50%] ml-auto bg-slate-800 text-white hover:bg-slate-300 hover:text-slate-800 transition-all duration-300 px-4 py-2 rounded-md rounded-b-none"
-        >
-          Graphs
-        </button>
+        <nav className="absolute bottom-0 z-10 flex flex-row gap-5 translate-x-1/2 right-1/2">
+          <button
+            onClick={() => {
+              setIsSliverOpen(true);
+              setIsGraphSliver(true);
+            }}
+            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
+          >
+            Graphs
+          </button>
 
-        <GraphSliver data={data} />
+          <button
+            onClick={() => {
+              setIsSliverOpen(true);
+              setIsGraphSliver(true);
+            }}
+            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
+          >
+            Settings
+          </button>
+        </nav>
+
+        <Sliver data={data} carNumber={carNumber} setCarNumber={setCarNumber} />
       </main>
     </>
   );

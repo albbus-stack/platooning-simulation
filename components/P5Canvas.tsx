@@ -1,18 +1,19 @@
 // @ts-ignore
 import { p5Types } from "p5";
-import Sketch from "react-p5";
 import {
   Dispatch,
   SetStateAction,
-  useEffect,
-  useContext,
   useCallback,
+  useContext,
+  useEffect,
 } from "react";
-import { SliverContext } from "../components/SliverProvider";
+import Sketch from "react-p5";
 import PageVisibility from "react-page-visibility";
+import { SliverContext } from "../components/sliver/SliverProvider";
 
 interface P5CanvasProps {
   sliverHeight: number;
+  carNumber: number;
   setData: Dispatch<
     SetStateAction<{ distance: number; velocity: number; time: number }[][]>
   >;
@@ -24,10 +25,9 @@ let distance: number[] = [];
 let velocity: number[] = [];
 let carPoints: number[] = [];
 let previousSliverHeight = 0;
+let previousCarNumber = 0;
 let isPlaying = false;
 let button: p5Types.Element;
-let slider: p5Types.Element;
-let sliderText: p5Types.Element;
 
 let timeTick = -1;
 
@@ -37,8 +37,8 @@ const CAR_WIDTH = 100;
 let CAR_NUMBER = 6;
 const SCALE_FACTOR = 0.9;
 
-const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
-  // This toggles the play/pause button and the interval
+const P5Canvas = ({ sliverHeight, carNumber, setData }: P5CanvasProps) => {
+  // This function toggles the play/pause button and the interval
   const togglePlay = useCallback(() => {
     if (isPlaying) {
       clearInterval(intervalRef);
@@ -90,17 +90,22 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       canvasParentRef
     );
 
-    sliderText = p5.createP("8");
-    sliderText.addClass("p5-slider-text");
+    // Setup of the play/pause button
+    button = p5.createButton(
+      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+    );
+    button.addClass("p5-button");
+    button.mousePressed(togglePlay);
+  };
 
-    slider = p5.createSlider(2, 10, 6);
-    slider.addClass("p5-slider");
-
-    const setupCars = () => {
+  // The p5.js draw function
+  const draw = (p5: p5Types) => {
+    // Reset the canvas if the number of cars changes
+    if (carNumber !== previousCarNumber) {
       carPoints = [];
       distance = [];
       velocity = [];
-      CAR_NUMBER = slider.value();
+      CAR_NUMBER = carNumber;
 
       for (let i = 0; i < CAR_NUMBER; i++) {
         carPoints.push(p5.width - 50 - i * 150);
@@ -122,23 +127,9 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
       });
 
       timeTick = -1;
+    }
+    previousCarNumber = carNumber;
 
-      sliderText.html(CAR_NUMBER);
-    };
-
-    slider.input(setupCars);
-    setupCars();
-
-    // Setup of the play/pause button
-    button = p5.createButton(
-      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
-    );
-    button.addClass("p5-button");
-    button.mousePressed(togglePlay);
-  };
-
-  // The p5.js draw function
-  const draw = (p5: p5Types) => {
     // Resize the canvas if the sliver height changes
     if (previousSliverHeight !== sliverHeight)
       p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
@@ -219,11 +210,11 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     // Update car velocities and positions
     for (let i = 0; i < CAR_NUMBER; i++) {
       if (roadMarkerX > p5.width / 2) {
-        velocity[i] = 0.03 * i + 1;
+        velocity[i] = 0.03 * (i + 1);
       } else {
-        velocity[i] = -0.03 * i + 1;
+        velocity[i] = -0.03 * (i + 1);
       }
-      carPoints[i] -= velocity[i] - 1;
+      carPoints[i] -= velocity[i];
     }
   };
 
@@ -237,14 +228,34 @@ const P5Canvas = ({ sliverHeight, setData }: P5CanvasProps) => {
     }
   };
 
-  const { setIsSliverOpen } = useContext(SliverContext);
+  const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
         togglePlay();
       } else if (e.key === "g") {
-        setIsSliverOpen((isOpen) => !isOpen);
+        setIsGraphSliver((isGraph) => {
+          setIsSliverOpen((isSliverOpen) => {
+            if (!isGraph && isSliverOpen) {
+              return true;
+            } else {
+              return !isSliverOpen;
+            }
+          });
+          return true;
+        });
+      } else if (e.key === "s") {
+        setIsGraphSliver((isGraph) => {
+          setIsSliverOpen((isSliverOpen) => {
+            if (isGraph && isSliverOpen) {
+              return true;
+            } else {
+              return !isSliverOpen;
+            }
+          });
+          return false;
+        });
       }
     };
 
