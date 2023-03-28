@@ -1,13 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
+import { DataContext } from "../DataProvider";
 
-interface SettingsSliverProps {
-  carNumber: number;
-  setCarNumber: Dispatch<SetStateAction<number>>;
-}
-const SettingsSliver: React.FC<SettingsSliverProps> = ({
-  carNumber,
-  setCarNumber,
-}) => {
+const SettingsSliver: React.FC = () => {
+  const { carNumber, setCarNumber } = useContext(DataContext);
   return (
     <>
       <section className="flex flex-col items-center justify-center w-full h-full gap-5 text-lg">

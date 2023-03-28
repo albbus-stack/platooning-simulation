@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { DataContext } from "../DataProvider";
 
-interface GraphSliverProps {
-  data: { distance: number; velocity: number; time: number }[][];
-}
-
-const GraphSliver: React.FC<GraphSliverProps> = ({ data }) => {
+const GraphSliver: React.FC = () => {
   const [distanceChartCar, setDistanceChartCar] = useState(0);
   const [velocityChartCar, setVelocityChartCar] = useState(0);
 
   const distanceChartIndex = distanceChartCar;
   const velocityChartIndex = velocityChartCar;
+
+  const { data } = useContext(DataContext);
+
   return (
     <>
       <section className="flex flex-col items-center justify-center w-1/2 h-full">

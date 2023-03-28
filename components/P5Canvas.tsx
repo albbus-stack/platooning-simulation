@@ -1,23 +1,10 @@
 // @ts-ignore
 import { p5Types } from "p5";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useContext,
-  useEffect,
-} from "react";
+import { useCallback, useContext, useEffect } from "react";
 import Sketch from "react-p5";
 import PageVisibility from "react-page-visibility";
 import { SliverContext } from "../components/sliver/SliverProvider";
-
-interface P5CanvasProps {
-  sliverHeight: number;
-  carNumber: number;
-  setData: Dispatch<
-    SetStateAction<{ distance: number; velocity: number; time: number }[][]>
-  >;
-}
+import { DataContext } from "./DataProvider";
 
 let roadMarkerX = 0;
 let oscillationY = 0;
@@ -37,7 +24,13 @@ const CAR_WIDTH = 100;
 let CAR_NUMBER = 6;
 const SCALE_FACTOR = 0.9;
 
-const P5Canvas = ({ sliverHeight, carNumber, setData }: P5CanvasProps) => {
+const P5Canvas: React.FC = () => {
+  const { carNumber, setData } = useContext(DataContext);
+  const { height, setIsSliverOpen, isSliverOpen, setIsGraphSliver } =
+    useContext(SliverContext);
+
+  const sliverHeight = isSliverOpen ? height : 0;
+
   // This function toggles the play/pause button and the interval
   const togglePlay = useCallback(() => {
     if (isPlaying) {
@@ -227,8 +220,6 @@ const P5Canvas = ({ sliverHeight, carNumber, setData }: P5CanvasProps) => {
       isPlaying = false;
     }
   };
-
-  const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {

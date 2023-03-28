@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "chart.js";
 import React, { useContext } from "react";
+import { DataContext } from "../DataProvider";
 import GraphSliver from "./GraphSliver";
 import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
@@ -25,13 +26,7 @@ ChartJS.register(
   Legend
 );
 
-interface SliverProps {
-  data: { distance: number; velocity: number; time: number }[][];
-  carNumber: number;
-  setCarNumber: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const Sliver: React.FC<SliverProps> = ({ data, carNumber, setCarNumber }) => {
+const Sliver: React.FC = () => {
   const {
     height,
     enableResize,
@@ -93,11 +88,7 @@ const Sliver: React.FC<SliverProps> = ({ data, carNumber, setCarNumber }) => {
       )}
 
       <main className="flex flex-row justify-between w-full h-full">
-        {isGraphSliver ? (
-          <GraphSliver data={data} />
-        ) : (
-          <SettingsSliver carNumber={carNumber} setCarNumber={setCarNumber} />
-        )}
+        {isGraphSliver ? <GraphSliver /> : <SettingsSliver />}
       </main>
     </aside>
   );

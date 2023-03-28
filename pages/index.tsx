@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import InfoIcon from "../components/icons/InfoIcon";
 import Sliver from "../components/sliver/Sliver";
 import { SliverContext } from "../components/sliver/SliverProvider";
@@ -12,16 +12,7 @@ const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
 });
 
 const Home: NextPage = () => {
-  const [data, setData] = useState([[]] as {
-    distance: number;
-    velocity: number;
-    time: number;
-  }[][]);
-
-  const [carNumber, setCarNumber] = useState(6);
-
-  const { height, isSliverOpen, setIsSliverOpen, setIsGraphSliver } =
-    useContext(SliverContext);
+  const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
 
   return (
     <>
@@ -43,11 +34,7 @@ const Home: NextPage = () => {
           <h1>platooning simulation</h1>
         </nav>
 
-        <P5Canvas
-          sliverHeight={isSliverOpen ? height : 0}
-          setData={setData}
-          carNumber={carNumber}
-        />
+        <P5Canvas />
 
         <nav className="absolute bottom-0 z-10 flex flex-row gap-5 translate-x-1/2 right-1/2">
           <button
@@ -71,7 +58,7 @@ const Home: NextPage = () => {
           </button>
         </nav>
 
-        <Sliver data={data} carNumber={carNumber} setCarNumber={setCarNumber} />
+        <Sliver />
       </main>
     </>
   );

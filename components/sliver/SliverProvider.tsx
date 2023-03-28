@@ -6,7 +6,7 @@ type Size = "S" | "M" | "L";
 export const SliverContext = createContext({
   height: 0,
   enableResize: () => {},
-  setHeightFromSize: (size: Size) => {},
+  setHeightFromSize: (_: Size) => {},
   size: "M" as Size,
   isSliverOpen: false,
   setIsSliverOpen: (() => {}) as Dispatch<SetStateAction<boolean>>,
