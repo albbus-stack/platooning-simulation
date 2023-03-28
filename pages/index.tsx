@@ -63,7 +63,7 @@ const Home: NextPage = () => {
           <button
             onClick={() => {
               setIsSliverOpen(true);
-              setIsGraphSliver(true);
+              setIsGraphSliver(false);
             }}
             className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
           >

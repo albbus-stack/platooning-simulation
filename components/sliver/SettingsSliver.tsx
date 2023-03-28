@@ -24,7 +24,7 @@ const SettingsSliver: React.FC<SettingsSliverProps> = ({
           <p className="font-bold">{carNumber}</p>
         </div>
       </section>
-      <section className="flex items-center justify-center w-full gap-5 text-lg flex-coln">
+      <section className="flex flex-col items-center justify-center w-full gap-5 text-lg">
         <p>Other settings...</p>
       </section>
     </>
