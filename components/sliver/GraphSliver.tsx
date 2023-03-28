@@ -2,12 +2,31 @@ import { useContext, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { DataContext } from "../DataProvider";
 
-const GraphSliver: React.FC = () => {
-  const [distanceChartCar, setDistanceChartCar] = useState(0);
-  const [velocityChartCar, setVelocityChartCar] = useState(0);
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
 
-  const distanceChartIndex = distanceChartCar;
-  const velocityChartIndex = velocityChartCar;
+// Register the chart.js plugins
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const GraphSliver: React.FC = () => {
+  const [distanceChartIndex, setDistanceChartIndex] = useState(0);
+  const [velocityChartIndex, setVelocityChartIndex] = useState(0);
 
   const { data } = useContext(DataContext);
 
@@ -16,7 +35,7 @@ const GraphSliver: React.FC = () => {
       <section className="flex flex-col items-center justify-center w-1/2 h-full">
         <select
           className="mt-2 text-center bg-transparent"
-          onChange={(e) => setDistanceChartCar(parseInt(e.target.value))}
+          onChange={(e) => setDistanceChartIndex(parseInt(e.target.value))}
         >
           {data.map((_, i) => {
             if (i !== data.length - 1 || i === 0)
@@ -69,7 +88,7 @@ const GraphSliver: React.FC = () => {
       <section className="flex flex-col items-center justify-center w-1/2 h-full">
         <select
           className="mt-2 text-center bg-transparent"
-          onChange={(e) => setVelocityChartCar(parseInt(e.target.value))}
+          onChange={(e) => setVelocityChartIndex(parseInt(e.target.value))}
         >
           {data.map((_, i) => (
             <option key={i} value={i}>{`Velocity ${i + 1}`}</option>

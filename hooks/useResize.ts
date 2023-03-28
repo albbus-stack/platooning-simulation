@@ -1,21 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
+import { Size } from "../components/sliver/SliverProvider";
 
-interface Props {
-  minHeight?: number;
-  maxHeight?: number;
-}
-
-interface ReturnProps {
+interface ResizeReturnProps {
   height: number;
   enableResize: () => void;
-  setHeightFromSize: (size: "S" | "M" | "L") => void;
-  size: "S" | "M" | "L";
+  setHeightFromSize: (size: Size) => void;
+  size: Size;
 }
 
-const useResize = ({ minHeight, maxHeight }: Props): ReturnProps => {
+const useResize = (): ResizeReturnProps => {
   const [isResizing, setIsResizing] = useState(false);
   const [height, setHeight] = useState(0);
-  const [size, setSize] = useState<"S" | "M" | "L">("M");
+  const [size, setSize] = useState<Size>("M");
 
   useEffect(() => {
     setHeightFromSize("M");
@@ -23,7 +19,7 @@ const useResize = ({ minHeight, maxHeight }: Props): ReturnProps => {
 
   // Set height based on a certain size
   const setHeightFromSize = useCallback(
-    (size: "S" | "M" | "L") => {
+    (size: Size) => {
       switch (size) {
         case "S":
           setSize("S");
@@ -63,7 +59,7 @@ const useResize = ({ minHeight, maxHeight }: Props): ReturnProps => {
         }
       }
     },
-    [minHeight, isResizing, setHeight]
+    [isResizing, setHeight]
   );
 
   useEffect(() => {

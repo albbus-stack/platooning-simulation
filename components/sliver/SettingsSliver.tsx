@@ -3,6 +3,7 @@ import { DataContext } from "../DataProvider";
 
 const SettingsSliver: React.FC = () => {
   const { carNumber, setCarNumber } = useContext(DataContext);
+
   return (
     <>
       <section className="flex flex-col items-center justify-center w-full h-full gap-5 text-lg">

@@ -1,30 +1,8 @@
-import {
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-} from "chart.js";
 import React, { useContext } from "react";
-import { DataContext } from "../DataProvider";
 import GraphSliver from "./GraphSliver";
 import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
 import { SliverContext } from "./SliverProvider";
-
-// Register the chart.js plugins
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 const Sliver: React.FC = () => {
   const {

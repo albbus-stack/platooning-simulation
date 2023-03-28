@@ -221,6 +221,7 @@ const P5Canvas: React.FC = () => {
     }
   };
 
+  // This effect takes care of the keyboard shortcuts
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
