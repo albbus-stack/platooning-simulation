@@ -23,7 +23,7 @@ const About: NextPage = () => (
         <h1>about this project</h1>
       </nav>
 
-      <section className="flex flex-col gap-5 px-16 pt-8 pb-16">
+      <section className="flex flex-col gap-5 px-10 pt-8 pb-16 md:px-16">
         <h1 className="text-2xl font-bold text-slate-800">What is this?</h1>
         <p className="text-lg text-slate-800">
           This is a platooning simulation made using react and p5.js

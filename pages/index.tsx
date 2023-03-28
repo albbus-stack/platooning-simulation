@@ -44,7 +44,7 @@ const Home: NextPage = () => {
             }}
             className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
           >
-            Graphs
+            Graphs <span className="text-sm text-gray-300">(G)</span>
           </button>
 
           <button
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
             }}
             className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
           >
-            Settings
+            Settings <span className="text-sm text-gray-300">(S)</span>
           </button>
         </nav>
 
