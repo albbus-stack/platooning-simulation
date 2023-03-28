@@ -9,8 +9,10 @@ interface DataType {
 export const DataContext = createContext({
   data: [[]] as DataType[][],
   setData: (() => {}) as Dispatch<SetStateAction<DataType[][]>>,
-  carNumber: 6,
+  carNumber: 0,
   setCarNumber: (() => {}) as Dispatch<SetStateAction<number>>,
+  carSpacing: 0,
+  setCarSpacing: (() => {}) as Dispatch<SetStateAction<number>>,
 });
 
 interface DataProviderProps {
@@ -25,6 +27,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   }[][]);
 
   const [carNumber, setCarNumber] = useState(6);
+  const [carSpacing, setCarSpacing] = useState(150);
 
   return (
     <DataContext.Provider
@@ -33,6 +36,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setData,
         carNumber,
         setCarNumber,
+        carSpacing,
+        setCarSpacing,
       }}
     >
       {children}

@@ -12,9 +12,6 @@ let distance: number[] = [];
 let velocity: number[] = [];
 let carPoints: number[] = [];
 
-let previousSliverHeight = 0;
-let previousCarNumber = 0;
-
 let isPlaying = false;
 let button: p5Types.Element;
 
@@ -23,10 +20,15 @@ let intervalRef: NodeJS.Timeout;
 
 const CAR_WIDTH = 100;
 const SCALE_FACTOR = 0.9;
+let CAR_SPACING = 200;
 let CAR_NUMBER = 6;
 
+let previousSliverHeight = 0;
+let previousCarNumber = 0;
+let previousCarSpacing = 0;
+
 const P5Canvas: React.FC = () => {
-  const { carNumber, setData } = useContext(DataContext);
+  const { carNumber, setData, carSpacing } = useContext(DataContext);
   const { height, setIsSliverOpen, isSliverOpen, setIsGraphSliver } =
     useContext(SliverContext);
 
@@ -78,31 +80,17 @@ const P5Canvas: React.FC = () => {
     }
   }, [setData]);
 
-  // The p5.js setup function
-  const setup = (p5: p5Types, canvasParentRef: Element) => {
-    p5.createCanvas(window.innerWidth, window.innerHeight).parent(
-      canvasParentRef
-    );
-
-    // Setup of the play/pause button
-    button = p5.createButton(
-      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
-    );
-    button.addClass("p5-button");
-    button.mousePressed(togglePlay);
-  };
-
-  // The p5.js draw function
-  const draw = (p5: p5Types) => {
-    // Reset the canvas if the number of cars changes
-    if (carNumber !== previousCarNumber) {
+  // This function resets the canvas and the data
+  const resetCanvas = useCallback(
+    (p5: p5Types) => {
       carPoints = [];
       distance = [];
       velocity = [];
       CAR_NUMBER = carNumber;
+      CAR_SPACING = carSpacing;
 
       for (let i = 0; i < CAR_NUMBER; i++) {
-        carPoints.push(p5.width - 50 - i * 150);
+        carPoints.push(p5.width - 50 - i * CAR_SPACING);
         distance.push(0);
         velocity.push(0);
       }
@@ -121,7 +109,31 @@ const P5Canvas: React.FC = () => {
       });
 
       timeTick = -1;
+    },
+    [setData, carNumber, carSpacing]
+  );
+
+  // The p5.js setup function
+  const setup = (p5: p5Types, canvasParentRef: Element) => {
+    p5.createCanvas(window.innerWidth, window.innerHeight).parent(
+      canvasParentRef
+    );
+
+    // Setup of the play/pause button
+    button = p5.createButton(
+      '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+    );
+    button.addClass("p5-button");
+    button.mousePressed(togglePlay);
+  };
+
+  // The p5.js draw function
+  const draw = (p5: p5Types) => {
+    // Reset the canvas if the car spacing changes or the number of cars changes
+    if (carSpacing !== previousCarSpacing || carNumber !== previousCarNumber) {
+      resetCanvas(p5);
     }
+    previousCarSpacing = carSpacing;
     previousCarNumber = carNumber;
 
     // Resize the canvas if the sliver height changes
