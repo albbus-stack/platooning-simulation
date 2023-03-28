@@ -259,7 +259,7 @@ const P5Canvas: React.FC = () => {
       isPlaying = false;
       setIsSliverOpen(false);
     };
-  }, [setIsSliverOpen, togglePlay]);
+  }, [setIsSliverOpen, setIsGraphSliver, togglePlay]);
 
   return (
     <PageVisibility onChange={onPageVisibilityChange}>
