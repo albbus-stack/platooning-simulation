@@ -21,7 +21,7 @@ const Sliver: React.FC = () => {
         height: height,
         transform: isSliverOpen ? "translateY(0)" : "translateY(100%)",
       }}
-      className="fixed bottom-0 left-0 z-30 flex flex-col justify-center w-full p-4 border-t-2 border-black align-center bg-slate-3 bg-slate-300"
+      className="fixed bottom-0 left-0 z-30 flex flex-col justify-center w-full p-4 border-t-2 border-black bg-slate-300 align-center"
     >
       {isSliverOpen && (
         <>

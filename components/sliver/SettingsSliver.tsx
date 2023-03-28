@@ -31,7 +31,7 @@ const SettingsSliver: React.FC = () => {
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
           <p className="font-bold">
-            {(1 + (carSpacing - 110) / 10).toFixed(2)}
+            {(1 + (carSpacing - 110) / 10).toFixed(1)}
           </p>
         </div>
       </section>
