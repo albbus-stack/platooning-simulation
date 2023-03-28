@@ -1,5 +1,4 @@
-// @ts-ignore
-import { p5Types } from "p5";
+import type p5Types from "p5";
 import { useCallback, useContext, useEffect } from "react";
 import Sketch from "react-p5";
 import PageVisibility from "react-page-visibility";
@@ -8,21 +7,23 @@ import { DataContext } from "./DataProvider";
 
 let roadMarkerX = 0;
 let oscillationY = 0;
+
 let distance: number[] = [];
 let velocity: number[] = [];
 let carPoints: number[] = [];
+
 let previousSliverHeight = 0;
 let previousCarNumber = 0;
+
 let isPlaying = false;
 let button: p5Types.Element;
 
 let timeTick = -1;
-
 let intervalRef: NodeJS.Timeout;
 
 const CAR_WIDTH = 100;
-let CAR_NUMBER = 6;
 const SCALE_FACTOR = 0.9;
+let CAR_NUMBER = 6;
 
 const P5Canvas: React.FC = () => {
   const { carNumber, setData } = useContext(DataContext);
@@ -264,7 +265,9 @@ const P5Canvas: React.FC = () => {
   return (
     <PageVisibility onChange={onPageVisibilityChange}>
       <Sketch
+        // @ts-expect-error
         setup={setup}
+        // @ts-expect-error
         draw={draw}
         windowResized={(p5) => {
           p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
