@@ -13,6 +13,8 @@ export const DataContext = createContext({
   setCarNumber: (() => {}) as Dispatch<SetStateAction<number>>,
   carSpacing: 0,
   setCarSpacing: (() => {}) as Dispatch<SetStateAction<number>>,
+  timeHeadway: 0,
+  setTimeHeadway: (() => {}) as Dispatch<SetStateAction<number>>,
 });
 
 interface DataProviderProps {
@@ -27,7 +29,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   }[][]);
 
   const [carNumber, setCarNumber] = useState(6);
-  const [carSpacing, setCarSpacing] = useState(150);
+  const [carSpacing, setCarSpacing] = useState(5.0);
+  const [timeHeadway, setTimeHeadway] = useState(1.5);
 
   return (
     <DataContext.Provider
@@ -38,6 +41,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setCarNumber,
         carSpacing,
         setCarSpacing,
+        timeHeadway,
+        setTimeHeadway,
       }}
     >
       {children}

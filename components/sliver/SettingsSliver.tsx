@@ -2,14 +2,20 @@ import { useContext } from "react";
 import { DataContext } from "../DataProvider";
 
 const SettingsSliver: React.FC = () => {
-  const { carNumber, setCarNumber, carSpacing, setCarSpacing } =
-    useContext(DataContext);
+  const {
+    carNumber,
+    setCarNumber,
+    carSpacing,
+    setCarSpacing,
+    timeHeadway,
+    setTimeHeadway,
+  } = useContext(DataContext);
 
   return (
     <>
       <section className="flex flex-col items-center justify-center w-full h-full gap-5 text-lg">
-        <div className="flex flex-row items-center justify-center w-full gap-10 px-20">
-          <p>Car number</p>
+        <div className="flex flex-row items-center w-full gap-10 px-20">
+          <p className="w-28">Car number</p>
           <input
             type="range"
             min="2"
@@ -18,21 +24,33 @@ const SettingsSliver: React.FC = () => {
             onChange={(e) => setCarNumber(parseInt(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
-          <p className="font-bold">{carNumber}</p>
+          <p className="w-10 font-bold text-center">{carNumber}</p>
         </div>
-        <div className="flex flex-row items-center justify-center w-full gap-10 px-20">
-          <p>Car spacing</p>
+        <div className="flex flex-row items-center w-full gap-10 px-20">
+          <p className="w-28">Car spacing</p>
           <input
             type="range"
-            min="110"
-            max="300"
+            step="0.1"
+            min="2"
+            max="20.0"
             value={carSpacing}
-            onChange={(e) => setCarSpacing(parseInt(e.target.value))}
+            onChange={(e) => setCarSpacing(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
-          <p className="font-bold">
-            {(1 + (carSpacing - 110) / 10).toFixed(1)}
-          </p>
+          <p className="w-10 font-bold text-center">{carSpacing}</p>
+        </div>
+        <div className="flex flex-row items-center w-full gap-10 px-20">
+          <p className="w-28">Time headway</p>
+          <input
+            type="range"
+            step="0.1"
+            min="1.0"
+            max="5"
+            value={timeHeadway}
+            onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
+            className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
+          />
+          <p className="w-10 font-bold text-center">{timeHeadway}</p>
         </div>
       </section>
       <section className="flex flex-col items-center justify-center w-full gap-10 text-lg">
