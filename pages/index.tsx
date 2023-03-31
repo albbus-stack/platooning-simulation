@@ -42,9 +42,12 @@ const Home: NextPage = () => {
               setIsSliverOpen(true);
               setIsGraphSliver(true);
             }}
-            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
+            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 group"
           >
-            Graphs <span className="text-sm text-gray-300">(G)</span>
+            Graphs{" "}
+            <span className="text-sm text-gray-300 group-hover:text-slate-500">
+              (G)
+            </span>
           </button>
 
           <button
@@ -52,9 +55,12 @@ const Home: NextPage = () => {
               setIsSliverOpen(true);
               setIsGraphSliver(false);
             }}
-            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
+            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 group"
           >
-            Settings <span className="text-sm text-gray-300">(S)</span>
+            Settings{" "}
+            <span className="text-sm text-gray-300 group-hover:text-slate-500">
+              (S)
+            </span>
           </button>
         </nav>
 
