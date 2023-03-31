@@ -211,19 +211,22 @@ const P5Canvas: React.FC = () => {
 
     // Don't compute any value if the simulation is paused
     if (!isPlaying) return;
-    oscillationY += 0.1;
 
     // Update car velocities and positions
-    for (let i = 0; i < CAR_NUMBER; i++) {
-      if (roadMarkerX > p5.width / 2) {
-        velocity[i] = 0.03 * (i + 1);
-      } else {
-        velocity[i] = -0.03 * (i + 1);
-      }
-      carPoints[i] -= velocity[i];
+    if (roadMarkerX > p5.width / 2) {
+      velocity[0] = 0.03;
+    } else {
+      velocity[0] = -0.03;
     }
+
+    for (let i = 1; i < CAR_NUMBER; i++) {
+      velocity[i] = velocity[i - 1] + distance[i - 1] * velocity[i - 1] * 0.01;
+      carPoints[i] -= velocity[i - 1];
+    }
+    oscillationY += 0.1;
   };
 
+  // This takes care of pausing when the page is not visible
   const onPageVisibilityChange = (isVisible: boolean) => {
     if (!isVisible) {
       clearInterval(intervalRef);
@@ -277,9 +280,9 @@ const P5Canvas: React.FC = () => {
   return (
     <PageVisibility onChange={onPageVisibilityChange}>
       <Sketch
-        // @ts-expect-error
+        // @ts-expect-error - This is a bug in the p5Types
         setup={setup}
-        // @ts-expect-error
+        // @ts-expect-error - This is a bug in the p5Types
         draw={draw}
         windowResized={(p5) => {
           p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);

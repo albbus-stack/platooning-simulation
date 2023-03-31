@@ -12,7 +12,7 @@ const SettingsSliver: React.FC = () => {
           <p>Car number</p>
           <input
             type="range"
-            min="1"
+            min="2"
             max="10"
             value={carNumber}
             onChange={(e) => setCarNumber(parseInt(e.target.value))}
@@ -35,7 +35,7 @@ const SettingsSliver: React.FC = () => {
           </p>
         </div>
       </section>
-      <section className="flex flex-col items-center justify-center w-full gap-5 text-lg">
+      <section className="flex flex-col items-center justify-center w-full gap-10 text-lg">
         <p>Other settings...</p>
       </section>
     </>
