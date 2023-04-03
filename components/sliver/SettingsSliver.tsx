@@ -1,7 +1,37 @@
 import { useContext } from "react";
 import { DataContext } from "../DataProvider";
+import { Line } from "react-chartjs-2";
+import "chartjs-plugin-dragdata";
 
-const SettingsSliver: React.FC = () => {
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import React from "react";
+import UpIcon from "../icons/UpIcon";
+import DownIcon from "../icons/DownIcon";
+
+// Register the chart.js plugins
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const MAX_VELOCITY = 50;
+const VELOCITY_STEP = 5;
+
+const SettingsSliver = () => {
   const {
     carNumber,
     setCarNumber,
@@ -9,6 +39,8 @@ const SettingsSliver: React.FC = () => {
     setCarSpacing,
     timeHeadway,
     setTimeHeadway,
+    leadingCarChart,
+    setLeadingCarChart,
   } = useContext(DataContext);
 
   return (
@@ -53,11 +85,109 @@ const SettingsSliver: React.FC = () => {
           <p className="w-10 font-bold text-center">{timeHeadway}</p>
         </div>
       </section>
-      <section className="flex flex-col items-center justify-center w-full gap-10 text-lg">
-        <p>Other settings...</p>
+      <section className="flex flex-col items-center justify-center w-full h-full gap-2 py-10 text-lg">
+        <div className="flex flex-row justify-between w-full pl-10">
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => {
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  setLeadingCarChart((l) =>
+                    l.map((entry) => {
+                      if (entry.time === i) {
+                        return {
+                          time: i,
+                          velocity:
+                            entry.velocity === MAX_VELOCITY
+                              ? MAX_VELOCITY
+                              : entry.velocity + VELOCITY_STEP,
+                        };
+                      } else {
+                        return entry;
+                      }
+                    })
+                  );
+                  console.log(leadingCarChart);
+                }}
+                className="transition-colors duration-300 rounded-lg cursor-pointer text-slate-800 hover:text-slate-500 disabled:text-slate-400 disabled:cursor-not-allowed"
+                disabled={leadingCarChart[i].velocity === MAX_VELOCITY}
+              >
+                <UpIcon />
+              </button>
+            );
+          })}
+        </div>
+        <div className="w-full h-full pt-2 pr-1">
+          <Line
+            data={{
+              labels: leadingCarChart.map((entry) => entry.time),
+              datasets: [
+                {
+                  data: leadingCarChart.map((entry) => entry.velocity),
+                  fill: false,
+                  borderColor: "rgb(118, 136, 163)",
+                  tension: 0.4,
+                },
+              ],
+            }}
+            options={{
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: "time (s)",
+                  },
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: "velocity (m/s)",
+                  },
+                  beginAtZero: true,
+                },
+              },
+            }}
+          />
+        </div>
+        <div className="flex flex-row justify-between w-full pl-10">
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => {
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  setLeadingCarChart((l) =>
+                    l.map((entry) => {
+                      if (entry.time === i) {
+                        return {
+                          time: i,
+                          velocity:
+                            entry.velocity === 0
+                              ? 0
+                              : entry.velocity - VELOCITY_STEP,
+                        };
+                      } else {
+                        return entry;
+                      }
+                    })
+                  );
+                  console.log(leadingCarChart);
+                }}
+                className="transition-colors duration-300 cursor-pointer text-slate-800 hover:text-slate-500 disabled:text-slate-400 disabled:cursor-not-allowed"
+                disabled={leadingCarChart[i].velocity === 0}
+              >
+                <DownIcon />
+              </button>
+            );
+          })}
+        </div>
       </section>
     </>
   );
 };
-
 export default SettingsSliver;

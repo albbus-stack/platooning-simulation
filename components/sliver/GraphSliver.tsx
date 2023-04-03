@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import React from "react";
 
 // Register the chart.js plugins
 ChartJS.register(
