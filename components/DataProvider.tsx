@@ -39,7 +39,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [carSpacing, setCarSpacing] = useState(5.0);
   const [timeHeadway, setTimeHeadway] = useState(1.5);
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => {
+    [0, 1, 2, 3, 4].map((i) => {
       return {
         time: i,
         velocity: i * 5,
