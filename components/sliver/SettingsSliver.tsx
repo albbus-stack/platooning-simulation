@@ -44,7 +44,7 @@ const SettingsSliver: React.FC = () => {
           <input
             type="range"
             step="0.1"
-            min="1.0"
+            min="1.1"
             max="5"
             value={timeHeadway}
             onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
