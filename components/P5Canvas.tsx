@@ -30,9 +30,11 @@ let previousSliverHeight = 0;
 let previousCarNumber = 0;
 let previousCarSpacing = 0;
 let previousTimeHeadway = 0;
+let previousLeadingCarChart = [{} as { time: number; velocity: number }];
+let leadingCarChartIndex = 0;
 
 const P5Canvas: React.FC = () => {
-  const { carNumber, setData, carSpacing, timeHeadway } =
+  const { carNumber, setData, carSpacing, timeHeadway, leadingCarChart } =
     useContext(DataContext);
   const { height, setIsSliverOpen, isSliverOpen, setIsGraphSliver } =
     useContext(SliverContext);
@@ -139,13 +141,15 @@ const P5Canvas: React.FC = () => {
     if (
       carSpacing !== previousCarSpacing ||
       carNumber !== previousCarNumber ||
-      timeHeadway !== previousTimeHeadway
+      timeHeadway !== previousTimeHeadway ||
+      leadingCarChart !== previousLeadingCarChart
     ) {
       resetCanvas(p5);
     }
     previousCarSpacing = carSpacing;
     previousCarNumber = carNumber;
     previousTimeHeadway = timeHeadway;
+    previousLeadingCarChart = leadingCarChart;
 
     // Resize the canvas if the sliver height changes
     if (previousSliverHeight !== sliverHeight)
@@ -224,12 +228,11 @@ const P5Canvas: React.FC = () => {
     if (!isPlaying) return;
 
     // Update car velocities and positions
-    if (roadMarkerX > p5.width / 2) {
-      velocity[0] = 0.03;
-      //externalInputs[0] = (-1 / TIME_HEADWAY) * 1 + (1 / TIME_HEADWAY) * 1;
-    } else {
-      velocity[0] = -0.03;
+    if (leadingCarChartIndex === 5) {
+      leadingCarChartIndex = 0;
     }
+    velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 50;
+    leadingCarChartIndex++;
 
     for (let i = 1; i < CAR_NUMBER; i++) {
       // externalInputs[i] =

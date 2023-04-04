@@ -84,7 +84,8 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{timeHeadway}</p>
         </div>
       </section>
-      <section className="flex flex-col items-center justify-center w-full h-full pt-2">
+      <section className="flex flex-col items-center justify-center w-full h-full gap-2 py-5">
+        <h2 className="text-lg">Leading car velocity</h2>
         <Line
           data={{
             labels: leadingCarChart
@@ -100,7 +101,7 @@ const SettingsSliver = () => {
                 tension: 0.4,
                 pointRadius: (ctx) => (ctx.dataIndex === 5 ? 0 : 5),
                 pointHoverRadius: 10,
-                pointHitRadius: 20,
+                pointHitRadius: (ctx) => (ctx.dataIndex === 5 ? 0 : 20),
               },
             ],
           }}
