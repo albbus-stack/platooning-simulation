@@ -169,7 +169,10 @@ const P5Canvas: React.FC = () => {
     p5.rect(roadMarkerX, -50, 15, 100);
 
     if (isPlaying) {
-      roadMarkerX -= 3;
+      console.log(leadingCarChartIndex % leadingCarChart.length);
+      roadMarkerX -=
+        leadingCarChart[leadingCarChartIndex % leadingCarChart.length]
+          .velocity / 2;
       if (roadMarkerX < 0) {
         roadMarkerX = p5.width * (2 - SCALE_FACTOR);
       }
@@ -206,6 +209,11 @@ const P5Canvas: React.FC = () => {
           -77
         );
 
+        // The simulation fails if the distance between two cars is negative
+        if (carPoints[i] - (carPoints[i + 1] + CAR_WIDTH) < 0) {
+          isPlaying = false;
+        }
+
         // Distance calculation
         distance[i] =
           Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) /
@@ -224,14 +232,17 @@ const P5Canvas: React.FC = () => {
       }
     }
 
-    // Don't compute any value if the simulation is paused
+    // Don't compute any value if the simulation is paused or if the simulation failed
     if (!isPlaying) return;
 
     // Update car velocities and positions
     if (leadingCarChartIndex === 5) {
       leadingCarChartIndex = 0;
     }
-    velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 50;
+    velocity[0] =
+      (Math.sign(Math.random() - 0.5) *
+        leadingCarChart[leadingCarChartIndex].velocity) /
+      50;
     leadingCarChartIndex++;
 
     for (let i = 1; i < CAR_NUMBER; i++) {
@@ -302,9 +313,9 @@ const P5Canvas: React.FC = () => {
   return (
     <PageVisibility onChange={onPageVisibilityChange}>
       <Sketch
-        // @ts-expect-error - This is a bug in the p5Types
+        // @ts-expect-error - This is a bug in p5Types
         setup={setup}
-        // @ts-expect-error - This is a bug in the p5Types
+        // @ts-expect-error - This is a bug in p5Types
         draw={draw}
         windowResized={(p5) => {
           p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
