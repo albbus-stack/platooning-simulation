@@ -44,7 +44,7 @@ const SettingsSliver = () => {
 
   return (
     <>
-      <section className="flex flex-col items-center justify-center w-full h-full gap-5 text-lg">
+      <section className="flex flex-col items-center justify-center w-full h-full gap-10 text-lg">
         <div className="flex flex-row items-center w-full gap-10 px-20">
           <p className="w-28">Car number</p>
           <input

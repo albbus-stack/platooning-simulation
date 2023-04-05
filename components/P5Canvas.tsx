@@ -190,7 +190,8 @@ const P5Canvas: React.FC = () => {
         carPoints[i],
         -25 + Math.sin(oscillationY + i) * 1.5,
         CAR_WIDTH,
-        50
+        50,
+        5
       );
 
       // Car number

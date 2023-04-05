@@ -2,8 +2,9 @@ import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import InfoIcon from "../components/icons/InfoIcon";
+import RotateIcon from "../components/icons/RotateIcon";
 import Sliver from "../components/sliver/Sliver";
 import { SliverContext } from "../components/sliver/SliverProvider";
 
@@ -13,6 +14,21 @@ const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
 
 const Home: NextPage = () => {
   const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
+  const [isMobilePortrait, setIsMobilePortrait] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobilePortrait(
+        window.matchMedia("(orientation: portrait)").matches &&
+          window.innerWidth < 500
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -24,8 +40,13 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      <main className="w-full h-screen overflow-hidden bg-slate-200">
-        <nav className="absolute flex flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[4.5rem] text-slate-800">
+      <main className="flex flex-col items-center w-full h-screen overflow-hidden bg-slate-200">
+        <nav
+          className={
+            "absolute flex flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[4.5rem] text-slate-800" +
+            (isMobilePortrait ? " relative top-0 left-0 mt-10 gap-5 px-5" : "")
+          }
+        >
           <Link href="/about" className="z-20">
             <div className="p-1 text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800">
               <InfoIcon />
@@ -34,37 +55,56 @@ const Home: NextPage = () => {
           <h1>platooning simulation</h1>
         </nav>
 
-        <P5Canvas />
+        {isMobilePortrait && (
+          <div className="flex flex-col items-center justify-center w-full h-full gap-8 px-8 text-lg text-slate-800">
+            <RotateIcon />
+            <p className="text-lg text-center">
+              This simulation is best viewed on a{" "}
+              <b className="text-bold">desktop</b> or{" "}
+              <b className="text-bold">laptop</b>. <br />
+              <br />
+              Please rotate your device to{" "}
+              <b className="text-bold">landscape mode</b> or visit this site on
+              a pc.
+            </p>
+          </div>
+        )}
 
-        <nav className="absolute bottom-0 z-10 flex flex-row gap-5 translate-x-1/2 right-1/2">
-          <button
-            onClick={() => {
-              setIsSliverOpen(true);
-              setIsGraphSliver(true);
-            }}
-            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 group"
-          >
-            Graphs{" "}
-            <span className="text-sm text-gray-300 group-hover:text-slate-500">
-              (G)
-            </span>
-          </button>
+        {!isMobilePortrait && (
+          <>
+            <P5Canvas />
 
-          <button
-            onClick={() => {
-              setIsSliverOpen(true);
-              setIsGraphSliver(false);
-            }}
-            className="px-4 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 group"
-          >
-            Settings{" "}
-            <span className="text-sm text-gray-300 group-hover:text-slate-500">
-              (S)
-            </span>
-          </button>
-        </nav>
+            <nav className="absolute bottom-0 z-10 flex flex-row gap-5 translate-x-1/2 right-1/2">
+              <button
+                onClick={() => {
+                  setIsSliverOpen(true);
+                  setIsGraphSliver(true);
+                }}
+                className="px-5 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 group"
+              >
+                Graphs{" "}
+                <span className="text-sm text-gray-300 group-hover:text-slate-500">
+                  (G)
+                </span>
+              </button>
 
-        <Sliver />
+              <button
+                onClick={() => {
+                  setIsSliverOpen(true);
+                  setIsGraphSliver(false);
+                }}
+                className="px-5 py-2 text-white transition-all duration-300 rounded-md rounded-b-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 group"
+              >
+                Settings{" "}
+                <span className="text-sm text-gray-300 group-hover:text-slate-500">
+                  (S)
+                </span>
+              </button>
+            </nav>
+
+            <Sliver />
+          </>
+        )}
       </main>
     </>
   );
