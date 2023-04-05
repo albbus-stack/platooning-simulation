@@ -321,8 +321,10 @@ const P5Canvas: React.FC = () => {
         setup={setup}
         // @ts-expect-error - This is a bug in p5Types
         draw={draw}
-        windowResized={(p5) => {
+        // @ts-expect-error - This is a bug in p5Types
+        windowResized={(p5: p5Types) => {
           p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
+          resetCanvas(p5);
         }}
       />
     </PageVisibility>
