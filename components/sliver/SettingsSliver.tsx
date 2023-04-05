@@ -74,7 +74,7 @@ const SettingsSliver = () => {
           <p className="w-28">Time headway</p>
           <input
             type="range"
-            step="0.1"
+            step="0.05"
             min="1.1"
             max="5"
             value={timeHeadway}

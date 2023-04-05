@@ -37,12 +37,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
   const [carNumber, setCarNumber] = useState(6);
   const [carSpacing, setCarSpacing] = useState(5.0);
-  const [timeHeadway, setTimeHeadway] = useState(1.5);
+  const [timeHeadway, setTimeHeadway] = useState(1.25);
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
     [0, 1, 2, 3, 4].map((i) => {
       return {
         time: i,
-        velocity: i * 5,
+        velocity: i * 5 + 5,
       };
     })
   );

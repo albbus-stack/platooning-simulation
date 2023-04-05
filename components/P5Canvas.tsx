@@ -172,10 +172,10 @@ const P5Canvas: React.FC = () => {
     p5.rect(roadMarkerX, -50, 15, 100);
 
     if (isPlaying) {
-      console.log(leadingCarChartIndex % leadingCarChart.length);
       roadMarkerX -=
-        leadingCarChart[leadingCarChartIndex % leadingCarChart.length]
-          .velocity / 2;
+        leadingCarChart[
+          Math.floor(leadingCarChartIndex / 10) % leadingCarChart.length
+        ].velocity / 2;
       if (roadMarkerX < 0) {
         roadMarkerX = p5.width * (2 - SCALE_FACTOR);
       }
@@ -244,7 +244,7 @@ const P5Canvas: React.FC = () => {
     }
     velocity[0] =
       (Math.sign(Math.random() - 0.5) *
-        leadingCarChart[leadingCarChartIndex].velocity) /
+        leadingCarChart[Math.floor(leadingCarChartIndex / 10)].velocity) /
       50;
     leadingCarChartIndex++;
 
