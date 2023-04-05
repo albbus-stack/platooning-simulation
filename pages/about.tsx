@@ -20,13 +20,13 @@ const About: NextPage = () => (
             <HomeIcon />
           </div>
         </Link>
-        <h1>about this project</h1>
+        <h1>About this project</h1>
       </nav>
 
       <section className="flex flex-col gap-5 px-10 pt-8 pb-16 md:px-16">
         <h1 className="text-2xl font-bold text-slate-800">What is this?</h1>
         <p className="text-lg text-slate-800">
-          This is a platooning simulation made using react and p5.js
+          This is a platooning simulation made using React and P5.js
         </p>
 
         <h1 className="text-2xl font-bold text-slate-800">
@@ -36,7 +36,7 @@ const About: NextPage = () => (
           Platooning is a method of driving where a group of vehicles drive in a
           line, with the vehicles in the front of the line controlling the speed
           of the vehicles behind them. This is done to reduce fuel consumption
-          and increase safety.
+          and increase safety by adjusting the space between the vehicles.
         </p>
 
         <h1 className="text-2xl font-bold text-slate-800">
