@@ -35,7 +35,7 @@ const GraphSliver: React.FC = () => {
     <>
       <section className="flex flex-col items-center justify-center w-1/2 h-full">
         <select
-          className="mt-2 text-center bg-transparent"
+          className="pr-2 my-2 text-lg text-center bg-transparent"
           onChange={(e) => setDistanceChartIndex(parseInt(e.target.value))}
         >
           {data.map((_, i) => {
@@ -88,7 +88,7 @@ const GraphSliver: React.FC = () => {
 
       <section className="flex flex-col items-center justify-center w-1/2 h-full">
         <select
-          className="mt-2 text-center bg-transparent"
+          className="pr-2 my-2 text-lg text-center bg-transparent"
           onChange={(e) => setVelocityChartIndex(parseInt(e.target.value))}
         >
           {data.map((_, i) => (

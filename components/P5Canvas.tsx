@@ -42,50 +42,53 @@ const P5Canvas: React.FC = () => {
   const sliverHeight = isSliverOpen ? height : 0;
 
   // This function toggles the play/pause button and the interval
-  const togglePlay = useCallback(() => {
-    if (isPlaying) {
-      clearInterval(intervalRef);
-      button.html(
-        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
-      );
-      isPlaying = false;
-    } else {
-      // This is the interval that updates the data for the graphs
-      intervalRef = setInterval(() => {
-        timeTick++;
+  const togglePlay = useCallback(
+    (isFailed: boolean = false) => {
+      if (isPlaying) {
+        clearInterval(intervalRef);
+        button.html(
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /> </svg>'
+        );
+        isPlaying = false;
+      } else if (!isFailed) {
+        // This is the interval that updates the data for the graphs
+        intervalRef = setInterval(() => {
+          timeTick++;
 
-        setData((car) => {
-          if (car.length === 1) {
-            let carList = [] as {
-              distance: number;
-              velocity: number;
-              time: number;
-            }[][];
-            for (let i = 0; i < CAR_NUMBER; i++) {
-              carList.push([]);
+          setData((car) => {
+            if (car.length === 1) {
+              let carList = [] as {
+                distance: number;
+                velocity: number;
+                time: number;
+              }[][];
+              for (let i = 0; i < CAR_NUMBER; i++) {
+                carList.push([]);
+              }
+              car = carList;
+              return car;
             }
-            car = carList;
-            return car;
-          }
 
-          return car.map((prev, i) => {
-            return [
-              ...prev,
-              {
-                distance: distance[i],
-                velocity: velocity[i],
-                time: timeTick,
-              },
-            ];
+            return car.map((prev, i) => {
+              return [
+                ...prev,
+                {
+                  distance: distance[i],
+                  velocity: velocity[i],
+                  time: timeTick,
+                },
+              ];
+            });
           });
-        });
-      }, 1000);
-      button.html(
-        '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
-      );
-      isPlaying = true;
-    }
-  }, [setData]);
+        }, 1000);
+        button.html(
+          '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"> <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /> </svg>'
+        );
+        isPlaying = true;
+      }
+    },
+    [setData]
+  );
 
   // This function resets the canvas and the data
   const resetCanvas = useCallback(
@@ -211,7 +214,7 @@ const P5Canvas: React.FC = () => {
 
         // The simulation fails if the distance between two cars is negative
         if (carPoints[i] - (carPoints[i + 1] + CAR_WIDTH) < 0) {
-          isPlaying = false;
+          togglePlay(true);
         }
 
         // Distance calculation
