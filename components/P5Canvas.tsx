@@ -1,8 +1,8 @@
 import type p5Types from "p5";
-import { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import Sketch from "react-p5";
 import PageVisibility from "react-page-visibility";
-import { SliverContext } from "../components/sliver/SliverProvider";
+import { SliverContext } from "./sliver/SliverProvider";
 import { DataContext } from "./DataProvider";
 
 let roadMarkerX = 0;
@@ -11,7 +11,7 @@ let oscillationY = 0;
 let distance: number[] = [];
 let velocity: number[] = [];
 let acceleration: number[] = [];
-let externalInputs: number[] = [];
+let externalInputs: number[] = [];      // famous "u" variable to introduce
 let carPoints: number[] = [];
 
 let isPlaying = false;

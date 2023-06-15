@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import React, { createContext, Dispatch, SetStateAction, useState } from "react";
 
 interface DataType {
   distance: number;
@@ -35,6 +35,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     time: number;
   }[][]);
 
+  // Default values
   const [carNumber, setCarNumber] = useState(6);
   const [carSpacing, setCarSpacing] = useState(5.0);
   const [timeHeadway, setTimeHeadway] = useState(1.25);

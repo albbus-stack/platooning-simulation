@@ -5,10 +5,10 @@
 @tailwind utilities;
 
 body {
-  font-family: "Inconsolata", monospace;
-  @apply bg-slate-200;
+    font-family: "Inconsolata", monospace;
+    @apply bg-slate-200;
 }
 
 .p5-button {
-  @apply absolute z-20 p-1 text-white transition-colors duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 top-5 left-5;
+    @apply absolute z-20 p-1 text-white transition-colors duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800 top-5 left-5;
 }

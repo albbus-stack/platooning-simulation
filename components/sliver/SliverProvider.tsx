@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import React, { createContext, Dispatch, SetStateAction, useState } from "react";
 import useResize from "../../hooks/useResize";
 
 export type Size = "S" | "M" | "L";

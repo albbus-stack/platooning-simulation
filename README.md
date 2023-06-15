@@ -8,3 +8,4 @@
 This is a simulation aimed at visualizing a platooning system with interactive conditions and providing graphs for analysis.
 
 This has been developed using [Next.js](https://nextjs.org/) for server side rendering, [p5.js](https://p5js.org/) for the simulation itself and [Chart.js](https://www.chartjs.org/) for the graphs.
+

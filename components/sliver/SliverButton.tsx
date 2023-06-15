@@ -1,4 +1,5 @@
 import { Size } from "./SliverProvider";
+import React from "react";
 
 interface SliverButtonProps {
   size: Size;
