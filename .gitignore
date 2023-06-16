@@ -20,6 +20,9 @@
 .idea
 *.pem
 
+# local env files
+project-icon-platooning.pxd
+
 # debug
 npm-debug.log*
 yarn-debug.log*
