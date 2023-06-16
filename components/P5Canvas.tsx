@@ -219,9 +219,7 @@ const P5Canvas: React.FC = () => {
         }
 
         // Distance calculation
-        distance[i] =
-          Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) /
-          10;
+        distance[i] = Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) / 10;
 
         // Distance indicators
         p5.fill(0);
@@ -277,9 +275,9 @@ const P5Canvas: React.FC = () => {
   // This effect takes care of the keyboard shortcuts
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      if (e.code === "Space") {         //Start the simulation
         togglePlay();
-      } else if (e.key === "g") {
+      } else if (e.key === "g") {       //Open the Graphs
         setIsGraphSliver((isGraph) => {
           setIsSliverOpen((isSliverOpen) => {
             if (!isGraph && isSliverOpen) {
@@ -290,7 +288,7 @@ const P5Canvas: React.FC = () => {
           });
           return true;
         });
-      } else if (e.key === "s") {
+      } else if (e.key === "s") {       //Open the Settings
         setIsGraphSliver((isGraph) => {
           setIsSliverOpen((isSliverOpen) => {
             if (isGraph && isSliverOpen) {
