@@ -68,7 +68,7 @@ const SettingsSliver = () => {
             onChange={(e) => setCarSpacing(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
-          <p className="w-10 font-bold text-center">{carSpacing} m</p>
+          <p className="w-10 font-bold text-center">{carSpacing}<span className="ml-1">m</span></p>
         </div>
         <div className="flex flex-row items-center w-full gap-10 px-20">
           <p className="w-28">Time headway</p>
