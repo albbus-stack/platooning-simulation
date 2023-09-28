@@ -28,7 +28,7 @@ ChartJS.register(
   DragPlugin
 );
 
-const MAX_VELOCITY = 50;
+const MAX_VELOCITY = 20;
 
 const SettingsSliver = () => {
   const {
@@ -127,9 +127,6 @@ const SettingsSliver = () => {
               },
               dragData: {
                 round: 0,
-                magnet: {
-                  to: (value) => Math.round(value / 5) * 5,
-                },
                 onDragStart: function (_, __, index) {
                   if (index === 5) {
                     return false;

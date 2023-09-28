@@ -172,10 +172,7 @@ const P5Canvas: React.FC = () => {
     p5.rect(roadMarkerX, -50, 15, 100);
 
     if (isPlaying) {
-      roadMarkerX -=
-        leadingCarChart[
-          Math.floor(leadingCarChartIndex / 10) % leadingCarChart.length
-        ].velocity / 2;
+      roadMarkerX -= leadingCarChart[leadingCarChartIndex].velocity / 2;
       if (roadMarkerX < 0) {
         roadMarkerX = p5.width * (2 - SCALE_FACTOR);
       }
@@ -212,14 +209,14 @@ const P5Canvas: React.FC = () => {
           (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
           -77
         );
-
+        
+        // Distance calculation
+        distance[i] = Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) / 10;
+        
         // The simulation fails if the distance between two cars is negative
         if (carPoints[i] - (carPoints[i + 1] + CAR_WIDTH) < 0) {
           togglePlay(true);
         }
-
-        // Distance calculation
-        distance[i] = Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) / 10;
 
         // Distance indicators
         p5.fill(0);
@@ -238,14 +235,13 @@ const P5Canvas: React.FC = () => {
     if (!isPlaying) return;
 
     // Update car velocities and positions
-    if (leadingCarChartIndex === 5) {
+    velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
+    if (p5.frameCount % 60 === 0) {  
+      leadingCarChartIndex++;
+    }
+    if (leadingCarChartIndex === leadingCarChart.length - 1) {
       leadingCarChartIndex = 0;
     }
-    velocity[0] =
-      (Math.sign(Math.random() - 0.5) *
-        leadingCarChart[Math.floor(leadingCarChartIndex / 10)].velocity) /
-      50;
-    leadingCarChartIndex++;
 
     for (let i = 1; i < CAR_NUMBER; i++) {
       // externalInputs[i] =
@@ -256,7 +252,7 @@ const P5Canvas: React.FC = () => {
         (-1 / TIME_HEADWAY) * (velocity[i - 1] - velocity[i]) +
         (1 / TIME_HEADWAY) * (distance[i - 1] - distance[i]);
       velocity[i] = velocity[i - 1] + acceleration[i];
-      carPoints[i] -= velocity[i - 1];
+      carPoints[i] -= velocity[i - 1] - velocity[0];
     }
     oscillationY += 0.1;
   };

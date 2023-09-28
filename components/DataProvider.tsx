@@ -43,7 +43,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     [0, 1, 2, 3, 4].map((i) => {
       return {
         time: i,
-        velocity: i * 5 + 5,
+        velocity: i * 2 + 2,
       };
     })
   );
