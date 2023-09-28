@@ -75,8 +75,8 @@ const SettingsSliver = () => {
           <input
             type="range"
             step="0.05"
-            min="1.1"
-            max="5"
+            min="1.05"
+            max="2"
             value={timeHeadway}
             onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
