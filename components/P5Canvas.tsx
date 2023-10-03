@@ -5,36 +5,46 @@ import PageVisibility from "react-page-visibility";
 import { SliverContext } from "./sliver/SliverProvider";
 import { DataContext } from "./DataProvider";
 
+// Constants
+const CAR_WIDTH = 100;
+const ROAD_WIDTH = 150;
+const ROAD_MARKER_WIDTH = 15;
+const SCALE_FACTOR = 0.9;
+
+// Settings
+let carNumber = 6;
+let carSpacing = 200;
+
+// Simulation variables
 let roadMarkerX = 0;
+let secondRoadMarkerX = 0
 let oscillationY = 0;
 
 let distance: number[] = [];
 let velocity: number[] = [];
 let acceleration: number[] = [];
-let externalInputs: number[] = [];      // famous "u" variable to introduce
 let carPoints: number[] = [];
+let leadingCarChartIndex = 0;
+
+// "u" variable to introduce
+let externalInputs: number[] = []; 
+
+// Timing variables
+let timeTick = -1;
+let intervalRef: NodeJS.Timeout;
 
 let isPlaying = false;
 let button: p5Types.Element;
 
-let timeTick = -1;
-let intervalRef: NodeJS.Timeout;
-
-const CAR_WIDTH = 100;
-const SCALE_FACTOR = 0.9;
-let TIME_HEADWAY = 1.5;
-let CAR_SPACING = 200;
-let CAR_NUMBER = 6;
-
+// Tracking variables
 let previousSliverHeight = 0;
 let previousCarNumber = 0;
 let previousCarSpacing = 0;
 let previousTimeHeadway = 0;
 let previousLeadingCarChart = [{} as { time: number; velocity: number }];
-let leadingCarChartIndex = 0;
 
 const P5Canvas: React.FC = () => {
-  const { carNumber, setData, carSpacing, timeHeadway, leadingCarChart } =
+  const { carNumber: carNumberSetting, setGraphData, carSpacing: carSpacingSetting, timeHeadway, leadingCarChart } =
     useContext(DataContext);
   const { height, setIsSliverOpen, isSliverOpen, setIsGraphSliver } =
     useContext(SliverContext);
@@ -55,14 +65,14 @@ const P5Canvas: React.FC = () => {
         intervalRef = setInterval(() => {
           timeTick++;
 
-          setData((car) => {
+          setGraphData((car) => {
             if (car.length === 1) {
               let carList = [] as {
                 distance: number;
                 velocity: number;
                 time: number;
               }[][];
-              for (let i = 0; i < CAR_NUMBER; i++) {
+              for (let i = 0; i < carNumber; i++) {
                 carList.push([]);
               }
               car = carList;
@@ -87,7 +97,7 @@ const P5Canvas: React.FC = () => {
         isPlaying = true;
       }
     },
-    [setData]
+    [setGraphData]
   );
 
   // This function resets the canvas and the data
@@ -96,24 +106,28 @@ const P5Canvas: React.FC = () => {
       carPoints = [];
       distance = [];
       velocity = [];
-      CAR_NUMBER = carNumber;
-      CAR_SPACING = (carSpacing - 1) * 10 + 110;
-      TIME_HEADWAY = timeHeadway;
+      carNumber = carNumberSetting;
+      carSpacing = carSpacingSetting * 10 + CAR_WIDTH;
 
-      for (let i = 0; i < CAR_NUMBER; i++) {
-        carPoints.push(p5.width - 50 - i * CAR_SPACING);
+      // Initialize cars
+      for (let i = 0; i < carNumber; i++) {
+        carPoints.push(p5.width - CAR_WIDTH / 2 - i * carSpacing);
         distance.push(0);
         velocity.push(0);
       }
-      roadMarkerX = p5.width + 100;
 
-      setData(() => {
+      // Initialize road markings
+      secondRoadMarkerX = p5.width / 2
+      roadMarkerX = p5.width + 100;
+      
+      // Initialize graph data
+      setGraphData(() => {
         let carList = [] as {
           distance: number;
           velocity: number;
           time: number;
         }[][];
-        for (let i = 0; i < CAR_NUMBER; i++) {
+        for (let i = 0; i < carNumber; i++) {
           carList.push([]);
         }
         return carList;
@@ -121,7 +135,7 @@ const P5Canvas: React.FC = () => {
 
       timeTick = -1;
     },
-    [setData, carNumber, carSpacing, timeHeadway]
+    [setGraphData, carNumberSetting, carSpacingSetting]
   );
 
   // The p5.js setup function
@@ -140,17 +154,17 @@ const P5Canvas: React.FC = () => {
 
   // The p5.js draw function
   const draw = (p5: p5Types) => {
-    // Reset the canvas if the car spacing changes or the number of cars changes
-    if (
-      carSpacing !== previousCarSpacing ||
-      carNumber !== previousCarNumber ||
+    // Reset the canvas if some of the settings change
+    if ( 
+      carSpacingSetting !== previousCarSpacing ||
+      carNumberSetting !== previousCarNumber ||
       timeHeadway !== previousTimeHeadway ||
       leadingCarChart !== previousLeadingCarChart
     ) {
       resetCanvas(p5);
     }
-    previousCarSpacing = carSpacing;
-    previousCarNumber = carNumber;
+    previousCarSpacing = carSpacingSetting;
+    previousCarNumber = carNumberSetting;
     previousTimeHeadway = timeHeadway;
     previousLeadingCarChart = leadingCarChart;
 
@@ -159,28 +173,38 @@ const P5Canvas: React.FC = () => {
       p5.resizeCanvas(window.innerWidth, window.innerHeight - sliverHeight);
     previousSliverHeight = sliverHeight;
 
-    // Offset the canvas
-    p5.translate(0, p5.height / 2 + 25);
+    // Center the coordinates
+    p5.translate(0, p5.height / 2);
 
     // Road
+    const roadThird = ROAD_WIDTH / 3;
     p5.background(226, 232, 260);
     p5.fill(100, 116, 139);
-    p5.rect(0, -50, p5.width * 2, 100).scale(SCALE_FACTOR, 1);
+    p5.rect(0, -roadThird, p5.width * 2, 2 * roadThird);
 
-    // Road marking
+    // Scale all the next drawings
+    p5.scale(SCALE_FACTOR, 1);
+
+    // Road markings
     p5.fill(254);
-    p5.rect(roadMarkerX, -50, 15, 100);
+    p5.rect(roadMarkerX, -roadThird, ROAD_MARKER_WIDTH, 2 * roadThird);
+    p5.rect(secondRoadMarkerX, -roadThird, ROAD_MARKER_WIDTH, 2 * roadThird);
 
     if (isPlaying) {
-      roadMarkerX -= leadingCarChart[leadingCarChartIndex].velocity / 2;
-      if (roadMarkerX < 0) {
+      const delta = leadingCarChart[leadingCarChartIndex].velocity / 2;
+      roadMarkerX -= delta
+      secondRoadMarkerX -= delta;
+      if (roadMarkerX < -ROAD_MARKER_WIDTH) {
         roadMarkerX = p5.width * (2 - SCALE_FACTOR);
+      }
+      if (secondRoadMarkerX < -ROAD_MARKER_WIDTH) {
+        secondRoadMarkerX = p5.width * (2 - SCALE_FACTOR);
       }
     }
 
     // Cars loop
     p5.textSize(16);
-    for (let i = 0; i < CAR_NUMBER; i++) {
+    for (let i = 0; i < carNumber; i++) {
       // Car illustration
       p5.fill(0);
       p5.rect(
@@ -200,23 +224,23 @@ const P5Canvas: React.FC = () => {
         5 + Math.sin(oscillationY + i) * 1.5
       );
 
-      if (i !== CAR_NUMBER - 1) {
+      if (i !== carNumber - 1) {
+        // Distance calculation
+        distance[i] = Math.round(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH)) / 10;
+        
         // Distance text
         p5.fill(0);
         p5.textAlign(p5.CENTER);
         p5.text(
-          Math.round(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH)) / 10 + "m",
+          distance[i] + "m",
           (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
           -77
         );
-        
-        // Distance calculation
-        distance[i] = Math.round(Math.abs(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH))) / 10;
-        
+
         // The simulation fails if the distance between two cars is negative
-        if (carPoints[i] - (carPoints[i + 1] + CAR_WIDTH) < 0) {
+        if (distance[i] < 0) {
           togglePlay(true);
-        }
+        } 
 
         // Distance indicators
         p5.fill(0);
@@ -231,26 +255,27 @@ const P5Canvas: React.FC = () => {
       }
     }
 
-    // Don't compute any value if the simulation is paused or if the simulation failed
+    // Don't compute any dynamic value if the simulation is paused or if the simulation failed
     if (!isPlaying) return;
-
-    // Update car velocities and positions
-    velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
+    
+    // Cycle through the leading car chart points once every second
     if (p5.frameCount % 60 === 0) {  
       leadingCarChartIndex++;
     }
     if (leadingCarChartIndex === leadingCarChart.length - 1) {
       leadingCarChartIndex = 0;
     }
-
-    for (let i = 1; i < CAR_NUMBER; i++) {
+    
+    // Update car velocities and positions
+    velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
+    for (let i = 1; i < carNumber; i++) {
       // externalInputs[i] =
       //   (-1 / TIME_HEADWAY) * velocity[i - 1] +
       //   (1 / TIME_HEADWAY) * distance[i - 1];
 
       acceleration[i] =
-        (-1 / TIME_HEADWAY) * (velocity[i - 1] - velocity[i]) +
-        (1 / TIME_HEADWAY) * (distance[i - 1] - distance[i]);
+        (-1 / timeHeadway) * (velocity[i - 1] - velocity[i]) +
+        (1 / timeHeadway) * (distance[i - 1] - distance[i]);
       velocity[i] = velocity[i - 1] + acceleration[i];
       carPoints[i] -= velocity[i - 1] - velocity[0];
     }
@@ -271,9 +296,11 @@ const P5Canvas: React.FC = () => {
   // This effect takes care of the keyboard shortcuts
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space") {         //Start the simulation
+      if (e.code === "Space") {
+        //Start the simulation
         togglePlay();
-      } else if (e.key === "g") {       //Open the Graphs
+      } else if (e.key === "g") {
+        //Open the Graphs      
         setIsGraphSliver((isGraph) => {
           setIsSliverOpen((isSliverOpen) => {
             if (!isGraph && isSliverOpen) {
@@ -284,7 +311,8 @@ const P5Canvas: React.FC = () => {
           });
           return true;
         });
-      } else if (e.key === "s") {       //Open the Settings
+      } else if (e.key === "s") {
+        //Open the Settings
         setIsGraphSliver((isGraph) => {
           setIsSliverOpen((isSliverOpen) => {
             if (isGraph && isSliverOpen) {

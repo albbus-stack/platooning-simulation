@@ -57,6 +57,7 @@ const SettingsSliver = () => {
           />
           <p className="w-10 font-bold text-center">{carNumber}</p>
         </div>
+
         <div className="flex flex-row items-center w-full gap-10 px-20">
           <p className="w-28">Car spacing</p>
           <input
@@ -70,6 +71,7 @@ const SettingsSliver = () => {
           />
           <p className="w-10 font-bold text-center">{carSpacing}<span className="ml-1">m</span></p>
         </div>
+
         <div className="flex flex-row items-center w-full gap-10 px-20">
           <p className="w-28">Time headway</p>
           <input
@@ -84,6 +86,7 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{timeHeadway}</p>
         </div>
       </section>
+      
       <section className="flex flex-col items-center justify-center w-full h-full gap-2 py-5">
         <h2 className="text-lg">Leading car velocity</h2>
         <Line

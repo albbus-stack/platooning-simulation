@@ -12,8 +12,8 @@ interface GraphPoints {
 }
 
 export const DataContext = createContext({
-  data: [[]] as DataType[][],
-  setData: (() => {}) as Dispatch<SetStateAction<DataType[][]>>,
+  graphData: [[]] as DataType[][],
+  setGraphData: (() => {}) as Dispatch<SetStateAction<DataType[][]>>,
   carNumber: 0,
   setCarNumber: (() => {}) as Dispatch<SetStateAction<number>>,
   carSpacing: 0,
@@ -29,7 +29,7 @@ interface DataProviderProps {
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
-  const [data, setData] = useState([[]] as {
+  const [graphData, setGraphData] = useState([[]] as {
     distance: number;
     velocity: number;
     time: number;
@@ -51,8 +51,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        data,
-        setData,
+        graphData,
+        setGraphData,
         carNumber,
         setCarNumber,
         carSpacing,

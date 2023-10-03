@@ -13,10 +13,6 @@ const useResize = (): ResizeReturnProps => {
   const [height, setHeight] = useState(0);
   const [size, setSize] = useState<Size>("M");
 
-  useEffect(() => {
-    setHeightFromSize("M");
-  }, []);
-
   // Set height based on a certain size
   const setHeightFromSize = useCallback(
     (size: Size) => {
@@ -71,6 +67,10 @@ const useResize = (): ResizeReturnProps => {
       document.removeEventListener("mouseup", disableResize);
     };
   }, [disableResize, resize]);
+
+  useEffect(() => {
+    setHeightFromSize("M");
+  }, [setHeightFromSize]);
 
   return { height, enableResize, setHeightFromSize, size };
 };

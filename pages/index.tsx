@@ -55,7 +55,7 @@ const Home: NextPage = () => {
           <h1>platooning simulation</h1>
         </nav>
 
-        {isMobilePortrait && (
+        {isMobilePortrait ? (
           <div className="flex flex-col items-center justify-center w-full h-full gap-8 px-8 text-lg text-slate-800">
             <RotateIcon />
             <p className="text-lg text-center">
@@ -68,9 +68,7 @@ const Home: NextPage = () => {
               a pc.
             </p>
           </div>
-        )}
-
-        {!isMobilePortrait && (
+        ) : (
           <>
             <P5Canvas />
 

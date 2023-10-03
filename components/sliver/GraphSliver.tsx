@@ -29,7 +29,7 @@ const GraphSliver: React.FC = () => {
   const [distanceChartIndex, setDistanceChartIndex] = useState(0);
   const [velocityChartIndex, setVelocityChartIndex] = useState(0);
 
-  const { data } = useContext(DataContext);
+  const { graphData } = useContext(DataContext);
 
   return (
     <>
@@ -38,8 +38,8 @@ const GraphSliver: React.FC = () => {
           className="pr-2 my-2 text-lg text-center bg-transparent"
           onChange={(e) => setDistanceChartIndex(parseInt(e.target.value))}
         >
-          {data.map((_, i) => {
-            if (i !== data.length - 1 || i === 0)
+          {graphData.map((_, i) => {
+            if (i !== graphData.length - 1 || i === 0)
               return (
                 <option key={i} value={i}>{`Distance ${i + 1}-${
                   i + 2
@@ -50,10 +50,10 @@ const GraphSliver: React.FC = () => {
         <div className="w-full h-full">
           <Line
             data={{
-              labels: data[distanceChartIndex]?.map((d) => d.time),
+              labels: graphData[distanceChartIndex]?.map((d) => d.time),
               datasets: [
                 {
-                  data: data[distanceChartIndex]?.map((d) => d.distance),
+                  data: graphData[distanceChartIndex]?.map((d) => d.distance),
                   fill: false,
                   borderColor: "rgb(118, 136, 163)",
                   tension: 0.4,
@@ -91,17 +91,17 @@ const GraphSliver: React.FC = () => {
           className="pr-2 my-2 text-lg text-center bg-transparent"
           onChange={(e) => setVelocityChartIndex(parseInt(e.target.value))}
         >
-          {data.map((_, i) => (
+          {graphData.map((_, i) => (
             <option key={i} value={i}>{`Velocity ${i + 1}`}</option>
           ))}
         </select>
         <div className="w-full h-full">
           <Line
             data={{
-              labels: data[velocityChartIndex].map((d) => d.time),
+              labels: graphData[velocityChartIndex].map((d) => d.time),
               datasets: [
                 {
-                  data: data[velocityChartIndex].map((d) => d.velocity),
+                  data: graphData[velocityChartIndex].map((d) => d.velocity),
                   fill: false,
                   borderColor: "rgb(63, 73, 87)",
                   tension: 0.4,
