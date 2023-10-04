@@ -37,6 +37,7 @@ const GraphSliver: React.FC = () => {
         <select
           className="pr-2 my-2 text-lg text-center bg-transparent"
           onChange={(e) => setDistanceChartIndex(parseInt(e.target.value))}
+          onKeyDown={(e) => e.preventDefault()}
         >
           {graphData.map((_, i) => {
             if (i !== graphData.length - 1 || i === 0)
@@ -90,6 +91,7 @@ const GraphSliver: React.FC = () => {
         <select
           className="pr-2 my-2 text-lg text-center bg-transparent"
           onChange={(e) => setVelocityChartIndex(parseInt(e.target.value))}
+          onKeyDown={(e) => e.preventDefault()}
         >
           {graphData.map((_, i) => (
             <option key={i} value={i}>{`Velocity ${i + 1}`}</option>
