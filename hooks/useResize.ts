@@ -10,7 +10,7 @@ interface ResizeReturnProps {
 
 const useResize = (): ResizeReturnProps => {
   const [isResizing, setIsResizing] = useState(false);
-  const [height, setHeight] = useState(0);
+  const [height, setHeight] = useState(500);
   const [size, setSize] = useState<Size>("M");
 
   // Set height based on a certain size

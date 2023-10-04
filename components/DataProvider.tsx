@@ -1,12 +1,12 @@
 import React, { createContext, Dispatch, SetStateAction, useState } from "react";
 
-interface DataType {
+export interface DataType {
   distance: number;
   velocity: number;
   time: number;
 }
 
-interface GraphPoints {
+export interface GraphPoints {
   time: number;
   velocity: number;
 }
