@@ -1,5 +1,4 @@
 import { NextPage } from "next";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -7,10 +6,7 @@ import InfoIcon from "../components/icons/InfoIcon";
 import RotateIcon from "../components/icons/RotateIcon";
 import Sliver from "../components/sliver/Sliver";
 import { SliverContext } from "../components/sliver/SliverProvider";
-
-const P5Canvas = dynamic(() => import("../components/P5Canvas"), {
-  ssr: false,
-});
+import P5Canvas from "../components/P5Canvas"
 
 const Home: NextPage = () => {
   const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
