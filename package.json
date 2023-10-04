@@ -10,6 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@p5-wrapper/next": "^0.2.0",
+    "@p5-wrapper/react": "^4.2.0",
     "@types/node": "18.11.14",
     "@types/p5": "^1.7.0",
     "@types/react": "18.0.26",

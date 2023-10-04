@@ -76,8 +76,8 @@ const SettingsSliver = () => {
           <p className="w-28">Time headway</p>
           <input
             type="range"
-            step="0.05"
-            min="1.05"
+            step="0.01"
+            min="1.01"
             max="2"
             value={timeHeadway}
             onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
