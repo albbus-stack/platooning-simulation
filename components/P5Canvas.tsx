@@ -69,6 +69,8 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
   // Initialize with mock function
   let togglePlay = (isFailed: boolean) => {};
 
+  let isFirstRender = true;
+
   // The p5.js setup function
   p5.setup = () => {
     p5.createCanvas(window.innerWidth, window.innerHeight);
@@ -80,9 +82,10 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       carSpacing !== props.carSpacing ||
       carNumber !== props.carNumber ||
       timeHeadway !== props.timeHeadway ||
-      leadingCarChart !== props.leadingCarChart
+      leadingCarChart !== props.leadingCarChart || isFirstRender
     ) {
       props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
+      isFirstRender = false
     }
     carSpacing = props.carSpacing;
     carNumber = props.carNumber;
