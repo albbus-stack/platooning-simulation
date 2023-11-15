@@ -249,6 +249,10 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
           (kd / timeHeadway) * prevV[i - 1] +
           (1 / timeHeadway) * prevU[i - 1];
         carPoints[i] -= velocity[i - 1] - velocity[0];
+        
+        // Update previous values
+        prevV[i] = velocity[i];
+        prevU[i] = controlU[i];
       }
     }
     oscillationY += 0.1;
