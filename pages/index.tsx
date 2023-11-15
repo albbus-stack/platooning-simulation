@@ -6,7 +6,7 @@ import InfoIcon from "../components/icons/InfoIcon";
 import RotateIcon from "../components/icons/RotateIcon";
 import Sliver from "../components/sliver/Sliver";
 import { SliverContext } from "../components/sliver/SliverProvider";
-import P5Canvas from "../components/P5Canvas"
+import P5Canvas from "../components/P5Canvas";
 
 const Home: NextPage = () => {
   const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
@@ -40,7 +40,9 @@ const Home: NextPage = () => {
         <nav
           className={
             "absolute flex flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[4.5rem] text-slate-800" +
-            (isMobilePortrait ? " relative top-0 left-0 mt-10 gap-5 px-5" : "")
+            (isMobilePortrait
+              ? " relative flex top-0 !left-0 mt-10 gap-5 px-5 self-center"
+              : "")
           }
         >
           <Link href="/about" className="z-20">

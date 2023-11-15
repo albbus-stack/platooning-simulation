@@ -34,7 +34,19 @@ let distance: number[] = [];
 let velocity: number[] = [];
 let acceleration: number[] = [];
 let carPoints: number[] = [];
+
+let controlU: number[] = []; // control
+let error: number[] = []; // error
+let prevV: number[] = []; // previous velocity at time t-1
+let prevU: number[] = []; // previous control at time t-1
+
 let leadingCarChartIndex = 0;
+
+// control constants
+let tau: number = 0.1;
+let kp: number = 0.2;
+let kd: number = 0.7;
+const TS: number = 60;
 
 // "u" variable to introduce
 let externalInputs: number[] = [];
@@ -185,18 +197,45 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       leadingCarChartIndex = 0;
     }
 
-    // Update car velocities and positions
-    velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
-    for (let i = 1; i < carNumber; i++) {
-      // externalInputs[i] =
-      //   (-1 / TIME_HEADWAY) * velocity[i - 1] +
-      //   (1 / TIME_HEADWAY) * distance[i - 1];
+    // FIXME: This is a hacky way to introduce the "u" variable
+    let autom: boolean = true;
 
-      acceleration[i] =
-        (-1 / timeHeadway) * (velocity[i - 1] - velocity[i]) +
-        (1 / timeHeadway) * (distance[i - 1] - distance[i]);
-      velocity[i] = velocity[i - 1] + acceleration[i];
-      carPoints[i] -= velocity[i - 1] - velocity[0];
+    if (autom) {
+      // Update car velocities and positions
+      velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
+      for (let i = 1; i < carNumber; i++) {
+        // Approximation that works well
+        acceleration[i] =
+          (-1 / timeHeadway) * (velocity[i - 1] - velocity[i]) +
+          (1 / timeHeadway) * (distance[i - 1] - distance[i]);
+        velocity[i] = velocity[i - 1] + acceleration[i];
+        carPoints[i] -= velocity[i - 1] - velocity[0];
+      }
+    } else {
+      // Settings for first car
+      error[0] = 0;
+      let v = velocity[0];
+      velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
+      acceleration[0] = (velocity[0] - v) / TS;
+      controlU[0] = acceleration[0];
+
+      for (let i = 1; i < carNumber; i++) {
+        let e: number = error[i];
+        let v: number = velocity[i];
+        let a: number = acceleration[i];
+        let u: number = controlU[i];
+        error[i] += velocity[i - 1] - v - timeHeadway * e;
+        velocity[i] += a;
+        acceleration[i] +=
+          (-1 / timeHeadway) * acceleration[i] + (1 / timeHeadway) * u;
+        controlU[i] +=
+          (kp / timeHeadway) * e +
+          (kd / timeHeadway) * (velocity[i - 1] - v) -
+          kd * a +
+          (kd / timeHeadway) * prevV[i - 1] +
+          (1 / timeHeadway) * prevU[i - 1];
+        carPoints[i] -= velocity[i - 1] - velocity[0];
+      }
     }
     oscillationY += 0.1;
   };
@@ -273,6 +312,8 @@ const P5Canvas: React.FC = () => {
       carPoints.push(width - CAR_WIDTH / 2 - i * (carSpacing * 10 + CAR_WIDTH));
       distance.push(0);
       velocity.push(0);
+      prevV.push(0);
+      prevU.push(0);
     }
 
     // Initialize road markings
