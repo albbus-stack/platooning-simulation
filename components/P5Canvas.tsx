@@ -67,13 +67,20 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
   let leadingCarChart = [{} as { time: number; velocity: number }];
 
   // Initialize with mock function
+  let resetCanvas = (
+    width: number,
+    carNumber: number,
+    carSpacing: number
+  ) => {};
   let togglePlay = (isFailed: boolean) => {};
-
-  let isFirstRender = true;
+  let firstRender = true;
 
   // The p5.js setup function
   p5.setup = () => {
-    p5.createCanvas(window.innerWidth, window.innerHeight);
+    if (!firstRender) {
+      p5.createCanvas(window.innerWidth, window.innerHeight);
+      resetCanvas(p5.width, carNumber, carSpacing);
+    }
   };
 
   p5.updateWithProps = (props) => {
@@ -82,10 +89,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       carSpacing !== props.carSpacing ||
       carNumber !== props.carNumber ||
       timeHeadway !== props.timeHeadway ||
-      leadingCarChart !== props.leadingCarChart || isFirstRender
+      leadingCarChart !== props.leadingCarChart
     ) {
       props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
-      isFirstRender = false
     }
     carSpacing = props.carSpacing;
     carNumber = props.carNumber;
@@ -93,7 +99,12 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     leadingCarChart = props.leadingCarChart;
 
     // Assign the correct functions before running the actual setup
+    resetCanvas = props.resetCanvas;
     togglePlay = props.togglePlay;
+    if (firstRender) {
+      firstRender = false;
+      p5.setup();
+    }
 
     // Resize the canvas if the sliver height changes
     if (sliverHeight !== props.sliverHeight)
