@@ -1,12 +1,9 @@
 import { NextPage } from "next";
-import { useEffect } from "react";
-import { setLanguageTag } from "../src/paraglide/runtime";
 import AboutPage from "../components/pages/about";
+import { setLanguageTag } from "../src/paraglide/runtime";
 
 const About: NextPage = () => {
-  useEffect(() => {
-    setLanguageTag("en");
-  }, []);
+  setLanguageTag("en");
 
   return <AboutPage />;
 };
