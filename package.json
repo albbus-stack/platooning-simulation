@@ -5,9 +5,10 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm lang && pnpm next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lang": "paraglide-js compile --project ./project.inlang.json"
   },
   "dependencies": {
     "@p5-wrapper/next": "^0.2.0",
@@ -25,7 +26,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-page-visibility": "^7.0.0",
-    "typescript": "4.9.4"
+    "typescript": "4.9.4",
+    "@inlang/paraglide-js": "1.0.0-prerelease.6"
   },
   "devDependencies": {
     "@types/react-page-visibility": "^6.4.1",
