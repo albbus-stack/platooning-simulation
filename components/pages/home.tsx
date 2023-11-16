@@ -49,7 +49,10 @@ const HomePage: NextPage = () => {
               : "")
           }
         >
-          <Link href={lang === "en" ? "/about" : "/it/about"} className="z-20">
+          <Link
+            href={lang === "en" ? "/about" : "/" + lang + "/about"}
+            className="z-20"
+          >
             <div className="p-1 text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800">
               <InfoIcon />
             </div>

@@ -20,7 +20,7 @@ const AboutPage: NextPage = () => {
 
       <main className="w-full bg-slate-200">
         <nav className="flex flex-row w-full items-center gap-4 p-5 text-lg tracking-wider select-none text-slate-800">
-          <Link href={lang === "en" ? "/" : "/it"} className="z-20">
+          <Link href={lang === "en" ? "/" : "/" + lang} className="z-20">
             <div className="p-[0.4rem] text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800">
               <HomeIcon />
             </div>
