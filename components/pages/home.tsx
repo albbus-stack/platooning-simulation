@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import InfoIcon from "../icons/InfoIcon";
 import RotateIcon from "../icons/RotateIcon";
 import Sliver from "../sliver/Sliver";
@@ -15,12 +15,18 @@ import {
 import { useMobile } from "../../hooks/useMobile";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 const HomePage: NextPage = () => {
   const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
   const isMobilePortrait = useMobile();
   const lang = languageTag();
   const router = useRouter();
+
+  const flagDropdownRef = useRef<HTMLDivElement>(null);
+  useClickOutside(flagDropdownRef, () => {
+    setiIsFlagDropdownOpen(false);
+  });
 
   const [isFlagDropdownOpen, setiIsFlagDropdownOpen] = useState(false);
 
@@ -50,6 +56,7 @@ const HomePage: NextPage = () => {
           </Link>
           <h1 className="text-center">{m.title()}</h1>
           <div
+            ref={flagDropdownRef}
             className={"relative ml-auto" + (isMobilePortrait ? " ml-0" : "")}
           >
             <div
