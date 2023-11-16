@@ -3,7 +3,16 @@
     "sourceLanguageTag": "en",
     "languageTags": [
       "en",
-      "it"
+      "it",
+      "es",
+      "fr",
+      "de",
+      "dk",
+      "nl",
+      "pt",
+      "in",
+      "cn",
+      "jp"
     ],
     "modules": [
       "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@latest/dist/index.js",
