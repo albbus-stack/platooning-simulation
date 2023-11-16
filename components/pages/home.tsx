@@ -60,7 +60,7 @@ const HomePage: NextPage = () => {
           <h1 className="text-center">{m.title()}</h1>
           <div
             ref={flagDropdownRef}
-            className={"relative ml-auto" + (isMobilePortrait ? " ml-0" : "")}
+            className={"relative ml-auto" + (isMobilePortrait ? " !ml-0" : "")}
           >
             <div
               onClick={() => setiIsFlagDropdownOpen((p) => !p)}
