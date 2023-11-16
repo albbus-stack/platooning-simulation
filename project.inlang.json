@@ -10,9 +10,17 @@
       "dk",
       "nl",
       "pt",
+      "gr",
+      "pl",
+      "tr",
+      "ua",
+      "ru",
       "in",
       "cn",
-      "jp"
+      "jp",
+      "kr",
+      "sa",
+      "il"
     ],
     "modules": [
       "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@latest/dist/index.js",
