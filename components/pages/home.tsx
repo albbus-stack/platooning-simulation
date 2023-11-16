@@ -25,10 +25,10 @@ const HomePage: NextPage = () => {
 
   const flagDropdownRef = useRef<HTMLDivElement>(null);
   useClickOutside(flagDropdownRef, () => {
-    setiIsFlagDropdownOpen(false);
+    setIsFlagDropdownOpen(false);
   });
 
-  const [isFlagDropdownOpen, setiIsFlagDropdownOpen] = useState(false);
+  const [isFlagDropdownOpen, setIsFlagDropdownOpen] = useState(false);
 
   return (
     <>
@@ -63,16 +63,16 @@ const HomePage: NextPage = () => {
             className={"relative ml-auto" + (isMobilePortrait ? " ml-0" : "")}
           >
             <div
-              onClick={() => setiIsFlagDropdownOpen((p) => !p)}
+              onClick={() => setIsFlagDropdownOpen((p) => !p)}
               className="p-1 px-2 w-[36px] h-[36px] flex justify-center items-center text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
             >
               <Image
-                className="h-10 w-10"
+                className="h-8 w-10"
                 src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/${
                   lang === "en" ? "us" : lang
                 }.svg`}
                 width={30}
-                height={10}
+                height={20}
                 alt={lang}
               />
             </div>
@@ -94,12 +94,12 @@ const HomePage: NextPage = () => {
                         className="w-full hover:bg-slate-300 transition-all duration-300 px-2 rounded-[0.30rem] cursor-pointer"
                       >
                         <Image
-                          className="h-10 w-10"
+                          className="h-8 w-10"
                           src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/${
                             tag === "en" ? "us" : tag
                           }.svg`}
                           width={30}
-                          height={10}
+                          height={20}
                           alt={tag}
                         />
                       </div>
