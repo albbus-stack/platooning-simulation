@@ -68,11 +68,11 @@ const HomePage: NextPage = () => {
             >
               <Image
                 className="h-10 w-10"
-                src={`https://hatscripts.github.io/circle-flags/flags/${
+                src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/${
                   lang === "en" ? "us" : lang
                 }.svg`}
                 width={30}
-                height={30}
+                height={10}
                 alt={lang}
               />
             </div>
@@ -95,11 +95,11 @@ const HomePage: NextPage = () => {
                       >
                         <Image
                           className="h-10 w-10"
-                          src={`https://hatscripts.github.io/circle-flags/flags/${
+                          src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/${
                             tag === "en" ? "us" : tag
                           }.svg`}
                           width={30}
-                          height={30}
+                          height={10}
                           alt={tag}
                         />
                       </div>
