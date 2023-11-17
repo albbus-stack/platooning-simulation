@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "title": "simulación de convoy",
+  "title": "Simulación de Platooning",
   "mobileAlert1": "Esta simulación se ve mejor en un",
   "mobileAlert2": "o en un",
   "mobileAlert3": "Gire su dispositivo a",
@@ -9,8 +9,8 @@
   "aboutTitle": "Acerca de este proyecto",
   "whatIsThis": "¿Qué es esto?",
   "whatIsThisParagraph": "Esta es una simulación de convoy realizada con React y P5.js",
-  "whatIsPlatooning": "¿Qué es el convoy?",
-  "whatIsPlatooningParagraph": "El convoy es un método de conducción en el que un grupo de vehículos circula en línea, con los vehículos al frente controlando la velocidad de los vehículos detrás de ellos. Esto se hace para reducir el consumo de combustible y aumentar la seguridad ajustando el espacio entre los vehículos.",
+  "whatIsPlatooning": "¿Qué es el platooning?",
+  "whatIsPlatooningParagraph": "El platooning (convoy) es un método de conducción en el que un grupo de vehículos circula en línea, con los vehículos al frente controlando la velocidad de los vehículos detrás de ellos. Esto se hace para reducir el consumo de combustible y aumentar la seguridad ajustando el espacio entre los vehículos.",
   "howSimulationWorks": "¿Cómo funciona esta simulación?",
   "howSimulationWorksParagraph": "Esta simulación utiliza un modelo simple de convoy para simular los vehículos. Los vehículos son controlados por un controlador PID, que utiliza la distancia entre el vehículo y el vehículo frente a él para calcular la velocidad del vehículo. El controlador PID está ajustado para dar a los vehículos una distancia cómoda entre ellos y mantener los vehículos a una velocidad constante.",
   "howToUse": "¿Cómo puedo usar esto?",

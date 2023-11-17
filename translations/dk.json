@@ -1,6 +1,6 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"title": "platooning simulation",
+	"title": "Platooning Simulation",
 	"mobileAlert1": "Denne simulation ser bedst ud på en",
 	"mobileAlert2": "eller en",
 	"mobileAlert3": "Venligst drej din enhed til",
