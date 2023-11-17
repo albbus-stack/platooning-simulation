@@ -210,11 +210,11 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     if (leadingCarChartIndex === leadingCarChart.length - 1) {
       leadingCarChartIndex = 0;
     }
+    
+    let platooningEquations: boolean = false;
 
-    // FIXME: This is a hacky way to introduce the "u" variable
-    let autom: boolean = true;
-
-    if (autom) {
+    if (!platooningEquations) {
+      // FIXME: This is a hacky way to approximate the platooning equations
       // Update car velocities and positions
       velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
       for (let i = 1; i < carNumber; i++) {
@@ -248,8 +248,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
           kd * a +
           (kd / timeHeadway) * prevV[i - 1] +
           (1 / timeHeadway) * prevU[i - 1];
+
+        // TODO: implement error[i], r[i] and update carPoints[i]
         carPoints[i] -= velocity[i - 1] - velocity[0];
-        
         // Update previous values
         prevV[i] = velocity[i];
         prevU[i] = controlU[i];
