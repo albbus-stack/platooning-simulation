@@ -210,7 +210,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     if (leadingCarChartIndex === leadingCarChart.length - 1) {
       leadingCarChartIndex = 0;
     }
-    
+
     let platooningEquations: boolean = false;
 
     if (!platooningEquations) {
@@ -224,6 +224,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
           (1 / timeHeadway) * (distance[i - 1] - distance[i]);
         velocity[i] = velocity[i - 1] + acceleration[i];
         carPoints[i] -= velocity[i - 1] - velocity[0];
+        // carPoints[i] -= velocity[i-2] + acceleration[i-1] - velocity[0];
       }
     } else {
       // Settings for first car
@@ -234,10 +235,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       controlU[0] = acceleration[0];
 
       for (let i = 1; i < carNumber; i++) {
+        // time = i-1
         let e: number = error[i];
         let v: number = velocity[i];
         let a: number = acceleration[i];
         let u: number = controlU[i];
+
+        // time = i
         error[i] += velocity[i - 1] - v - timeHeadway * e;
         velocity[i] += a;
         acceleration[i] +=
