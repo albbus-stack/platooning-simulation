@@ -6,8 +6,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'hatscripts.github.io',
-        pathname: '**',
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/hampusborgos/country-flags/**',
       },
     ],
   }

@@ -18,12 +18,7 @@
       "kr"
     ],
     "modules": [
-      "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@latest/dist/index.js",
-      "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-identical-pattern@latest/dist/index.js",
-      "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@latest/dist/index.js",
-      "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-without-source@latest/dist/index.js",
-      "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@latest/dist/index.js",
-      "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@latest/dist/index.js"
+      "./node_modules/@inlang/plugin-message-format/dist/index.js"
     ],
     "plugin.inlang.messageFormat": {
       "pathPattern": "./translations/{languageTag}.json"

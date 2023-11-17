@@ -11,6 +11,9 @@ importers:
       '@inlang/paraglide-js':
         specifier: 1.0.0-prerelease.6
         version: 1.0.0-prerelease.6
+      '@inlang/plugin-message-format':
+        specifier: 2.0.0
+        version: 2.0.0
       '@p5-wrapper/next':
         specifier: ^0.2.0
         version: 0.2.0(@p5-wrapper/react@4.2.0)(next@13.0.6)(react-dom@18.2.0)(react@18.2.0)
@@ -195,6 +198,10 @@ packages:
       json5: 2.2.3
     transitivePeerDependencies:
       - babel-plugin-macros
+    dev: false
+
+  /@inlang/plugin-message-format@2.0.0:
+    resolution: {integrity: sha512-w1lY5687C5oyEIeQzNqBJMRd4bqiY2sD4IsaibjlBiD0G2BxLuWVviaYJNob8ObWz3P/gWgGQffqcv/dGkdKbg==}
     dev: false
 
   /@inlang/plugin@2.4.0(@sinclair/typebox@0.31.25):
