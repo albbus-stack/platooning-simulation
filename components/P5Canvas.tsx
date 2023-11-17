@@ -21,10 +21,6 @@ const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
 
-// Settings
-let carNumber = 6;
-let carSpacing = 200;
-
 // Simulation variables
 let roadMarkerX = 0;
 let secondRoadMarkerX = 0;
@@ -35,25 +31,25 @@ let velocity: number[] = [];
 let acceleration: number[] = [];
 let carPoints: number[] = [];
 
-let controlU: number[] = []; // control
-let error: number[] = []; // error
-let prevV: number[] = []; // previous velocity at time t-1
-let prevU: number[] = []; // previous control at time t-1
+// Control variable & errors
+let controlU: number[] = [];
+let error: number[] = [];
 
-let leadingCarChartIndex = 0;
+// Previous velocity at time t-1
+let prevV: number[] = [];
+// Previous control at time t-1
+let prevU: number[] = [];
 
-// control constants
+// Control constants
 let tau: number = 0.1;
 let kp: number = 0.2;
 let kd: number = 0.7;
 const TS: number = 60;
 
-// "u" variable to introduce
-let externalInputs: number[] = [];
-
 // Timing variables
 let timeTick = -1;
 let intervalRef: NodeJS.Timeout;
+let leadingCarChartIndex = 0;
 
 // Play/Pause variables
 let isPlaying = false;
@@ -67,12 +63,8 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
   let leadingCarChart = [{} as { time: number; velocity: number }];
 
   // Initialize with mock function
-  let resetCanvas = (
-    width: number,
-    carNumber: number,
-    carSpacing: number
-  ) => {};
-  let togglePlay = (isFailed: boolean) => {};
+  let resetCanvas = (w: number, n: number, s: number) => {};
+  let togglePlay = (f: boolean) => {};
   let firstRender = true;
 
   // The p5.js setup function
@@ -170,14 +162,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
 
       // Distance calculation
       if (i !== carNumber - 1) {
-        distance[i] =
-          Math.round(carPoints[i] - (carPoints[i + 1] + CAR_WIDTH)) / 10;
+        distance[i] = carPoints[i] - (carPoints[i + 1] + CAR_WIDTH);
 
         // Distance text
         p5.fill(0);
         p5.textAlign(p5.CENTER);
         p5.text(
-          distance[i] + "m",
+          Math.round(distance[i]) / 10 + "m",
           (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
           -77
         );
@@ -221,13 +212,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         // Approximation that works well
         acceleration[i] =
           (-1 / timeHeadway) * (velocity[i - 1] - velocity[i]) +
-          (1 / timeHeadway) * (distance[i - 1] - distance[i]);
+          ((1 / timeHeadway) * (distance[i - 1] - distance[i])) / 10;
         velocity[i] = velocity[i - 1] + acceleration[i];
         carPoints[i] -= velocity[i - 1] - velocity[0];
         // carPoints[i] -= velocity[i-2] + acceleration[i-1] - velocity[0];
       }
     } else {
-      // Settings for first car
+      // Settings for the first car
       error[0] = 0;
       let v = velocity[0];
       velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
@@ -235,13 +226,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       controlU[0] = acceleration[0];
 
       for (let i = 1; i < carNumber; i++) {
-        // time = i-1
+        // Time i-1
         let e: number = error[i];
         let v: number = velocity[i];
         let a: number = acceleration[i];
         let u: number = controlU[i];
 
-        // time = i
+        // Time i
         error[i] += velocity[i - 1] - v - timeHeadway * e;
         velocity[i] += a;
         acceleration[i] +=
@@ -255,6 +246,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
 
         // TODO: implement error[i], r[i] and update carPoints[i]
         carPoints[i] -= velocity[i - 1] - velocity[0];
+
+        console.log(carPoints, distance);
+
         // Update previous values
         prevV[i] = velocity[i];
         prevU[i] = controlU[i];
@@ -293,7 +287,7 @@ const P5Canvas: React.FC = () => {
           setGraphData((car) => {
             if (car.length === 1) {
               let carList = [] as DataType[][];
-              for (let i = 0; i < carNumber; i++) {
+              for (let i = 0; i < carNumberSetting; i++) {
                 carList.push([]);
               }
               car = carList;
@@ -317,7 +311,7 @@ const P5Canvas: React.FC = () => {
         setIsPlayingState(isPlaying);
       }
     },
-    [setGraphData]
+    [carNumberSetting, setGraphData]
   );
 
   // This function resets the canvas data
@@ -329,12 +323,20 @@ const P5Canvas: React.FC = () => {
     carPoints = [];
     distance = [];
     velocity = [];
+    acceleration = [];
+    prevU = [];
+    prevV = [];
+    controlU = [];
+    error = [];
 
     // Initialize cars
     for (let i = 0; i < carNumber; i++) {
       carPoints.push(width - CAR_WIDTH / 2 - i * (carSpacing * 10 + CAR_WIDTH));
       distance.push(0);
       velocity.push(0);
+      acceleration.push(0);
+      error.push(0);
+      controlU.push(0);
       prevV.push(0);
       prevU.push(0);
     }
@@ -372,10 +374,10 @@ const P5Canvas: React.FC = () => {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
-        //Toggle the simulation
+        // Toggle the simulation
         togglePlay();
       } else if (e.key === "g") {
-        //Open the Graph Sliver
+        // Open the graph sliver
         setIsGraphSliver((isGraph) => {
           setIsSliverOpen((isSliverOpen) => {
             if (!isGraph && isSliverOpen) {
@@ -387,7 +389,7 @@ const P5Canvas: React.FC = () => {
           return true;
         });
       } else if (e.key === "s") {
-        //Open the Setting Sliver
+        // Open the setting sliver
         setIsGraphSliver((isGraph) => {
           setIsSliverOpen((isSliverOpen) => {
             if (isGraph && isSliverOpen) {
