@@ -1,34 +1,21 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import InfoIcon from "../icons/InfoIcon";
 import RotateIcon from "../icons/RotateIcon";
 import Sliver from "../sliver/Sliver";
 import { SliverContext } from "../sliver/SliverProvider";
 import P5Canvas from "../P5Canvas";
 import * as m from "../../src/paraglide/messages";
-import {
-  availableLanguageTags,
-  languageTag,
-} from "../../src/paraglide/runtime";
 import { useMobile } from "../../hooks/useMobile";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { languageTag } from "../../src/paraglide/runtime";
+import LanguageDropdown from "../LanguageDropdown";
 
 const HomePage: NextPage = () => {
   const { setIsSliverOpen, setIsGraphSliver } = useContext(SliverContext);
   const isMobilePortrait = useMobile();
   const lang = languageTag();
-  const router = useRouter();
-
-  const flagDropdownRef = useRef<HTMLDivElement>(null);
-  useClickOutside(flagDropdownRef, () => {
-    setIsFlagDropdownOpen(false);
-  });
-
-  const [isFlagDropdownOpen, setIsFlagDropdownOpen] = useState(false);
 
   return (
     <>
@@ -58,56 +45,7 @@ const HomePage: NextPage = () => {
             </div>
           </Link>
           <h1 className="text-center">{m.title()}</h1>
-          <div
-            ref={flagDropdownRef}
-            className={"relative ml-auto" + (isMobilePortrait ? " !ml-0" : "")}
-          >
-            <div
-              onClick={() => setIsFlagDropdownOpen((p) => !p)}
-              className="p-1 px-2 w-[36px] h-[36px] flex justify-center items-center text-white transition-all duration-300 rounded-md cursor-pointer select-none bg-slate-800 hover:bg-slate-300 hover:text-slate-800"
-            >
-              <Image
-                className="h-8 w-10"
-                src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/${
-                  lang === "en" ? "us" : lang
-                }.svg`}
-                width={30}
-                height={20}
-                alt={lang}
-              />
-            </div>
-            {isFlagDropdownOpen && (
-              <div className="flex flex-col absolute top-[120%] left-0 rounded-md bg-slate-800 shadow-xl">
-                {availableLanguageTags.map(
-                  (tag) =>
-                    tag !== lang && (
-                      <div
-                        key={tag}
-                        onClick={async () => {
-                          if (tag === "en") {
-                            await router.push("/");
-                          } else {
-                            await router.push("/" + tag);
-                          }
-                          router.reload();
-                        }}
-                        className="w-full hover:bg-slate-300 transition-all duration-300 px-2 rounded-[0.30rem] cursor-pointer"
-                      >
-                        <Image
-                          className="h-8 w-10"
-                          src={`https://raw.githubusercontent.com/hampusborgos/country-flags/main/svg/${
-                            tag === "en" ? "us" : tag
-                          }.svg`}
-                          width={30}
-                          height={20}
-                          alt={tag}
-                        />
-                      </div>
-                    )
-                )}
-              </div>
-            )}
-          </div>
+          <LanguageDropdown />
         </nav>
 
         {isMobilePortrait ? (
