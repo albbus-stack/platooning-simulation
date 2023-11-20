@@ -234,8 +234,6 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         // Time i-1 (previous time): ei, vi, ai, ui
         let e = error[i];
         let a = -1 * acceleration[i];
-        //let h: number = timeHeadway/TS;
-        timeHeadway = 0.5;
 
         // Time i (actual time difference): Δei, Δvi, Δai, Δui
         error[i] -= prevV[i - 1] - prevV[i] - timeHeadway * a;
@@ -243,11 +241,11 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         acceleration[i] -= (prevU[i] - a) / tau;
         controlU[i] -= (kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) / timeHeadway - kd * a;
 
-        // All values Δei, Δvi, Δai, Δui <- *= TS
         /*
+        // All values Δei, Δvi, Δai, Δui <- *= TS
         error[i] *= TS;
         velocity[i] *= TS;
-        acceleration[i] *= TS / 10;
+        acceleration[i] *= TS;
         controlU[i] *= TS;
         */
 
@@ -418,10 +416,10 @@ const P5Canvas: React.FC = () => {
     document.addEventListener("keydown", onKeyDown);
 
     return () => {
+      // when setting are changed the simulation is stopped
       document.removeEventListener("keydown", onKeyDown);
       isPlaying = false;
       setIsPlayingState(isPlaying);
-      setIsSliverOpen(false);
     };
   }, [setIsSliverOpen, setIsGraphSliver, togglePlay]);
 
