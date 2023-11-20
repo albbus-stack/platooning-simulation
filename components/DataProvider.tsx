@@ -38,7 +38,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   // Default values
   const [carNumber, setCarNumber] = useState(6);
   const [carSpacing, setCarSpacing] = useState(5.0);
-  const [timeHeadway, setTimeHeadway] = useState(1.25);
+  const [timeHeadway, setTimeHeadway] = useState(1.25); //if platooningEquations is false
+  //const [timeHeadway, setTimeHeadway] = useState(0.5); //if platooningEquations is true
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
     [0, 1, 2, 3, 4].map((i) => {
       return {
