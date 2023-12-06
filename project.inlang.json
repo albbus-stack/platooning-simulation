@@ -1,0 +1,26 @@
+{
+    "$schema": "https://inlang.com/schema/project-settings",
+    "sourceLanguageTag": "en",
+    "languageTags": [
+      "en",
+      "it",
+      "es",
+      "fr",
+      "de",
+      "dk",
+      "nl",
+      "pt",
+      "ru",
+      "sa",
+      "in",
+      "cn",
+      "jp",
+      "kr"
+    ],
+    "modules": [
+      "./node_modules/@inlang/plugin-message-format/dist/index.js"
+    ],
+    "plugin.inlang.messageFormat": {
+      "pathPattern": "./translations/{languageTag}.json"
+    }
+}

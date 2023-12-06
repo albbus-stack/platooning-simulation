@@ -14,6 +14,8 @@ import {
 } from "chart.js";
 import React from "react";
 
+import * as m from "../../src/paraglide/messages";
+
 // Register the chart.js plugins
 ChartJS.register(
   CategoryScale,
@@ -42,9 +44,9 @@ const GraphSliver: React.FC = () => {
           {graphData.map((_, i) => {
             if (i !== graphData.length - 1 || i === 0)
               return (
-                <option key={i} value={i}>{`Distance ${i + 1}-${
-                  i + 2
-                }`}</option>
+                <option key={i} value={i}>{`${
+                  m.distance().charAt(0).toUpperCase() + m.distance().slice(1)
+                } ${i + 1}-${i + 2}`}</option>
               );
           })}
         </select>
@@ -72,13 +74,13 @@ const GraphSliver: React.FC = () => {
                 x: {
                   title: {
                     display: true,
-                    text: "time (s)",
+                    text: m.time() + " (s)",
                   },
                 },
                 y: {
                   title: {
                     display: true,
-                    text: "distance (m)",
+                    text: m.distance() + " (m)",
                   },
                 },
               },
@@ -94,7 +96,9 @@ const GraphSliver: React.FC = () => {
           onKeyDown={(e) => e.preventDefault()}
         >
           {graphData.map((_, i) => (
-            <option key={i} value={i}>{`Velocity ${i + 1}`}</option>
+            <option key={i} value={i}>{`${
+              m.velocity().charAt(0).toUpperCase() + m.velocity().slice(1)
+            } ${i + 1}`}</option>
           ))}
         </select>
         <div className="w-full h-full">
@@ -121,13 +125,13 @@ const GraphSliver: React.FC = () => {
                 x: {
                   title: {
                     display: true,
-                    text: "time (s)",
+                    text: m.time() + " (s)",
                   },
                 },
                 y: {
                   title: {
                     display: true,
-                    text: "velocity (m/s)",
+                    text: m.velocity() + " (m/s)",
                   },
                 },
               },

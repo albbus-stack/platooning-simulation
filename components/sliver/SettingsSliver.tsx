@@ -13,6 +13,8 @@ import {
   Tooltip,
 } from "chart.js";
 
+import * as m from "../../src/paraglide/messages";
+
 // @ts-ignore
 import * as DragPlugin from "chartjs-plugin-dragdata";
 
@@ -46,7 +48,7 @@ const SettingsSliver = () => {
     <>
       <section className="flex flex-col items-center justify-center w-full h-full gap-10 text-lg">
         <div className="flex flex-row items-center w-full gap-10 px-20">
-          <p className="w-28">Car number</p>
+          <p className="w-28 text-center">{m.carNumber()}</p>
           <input
             type="range"
             min="2"
@@ -59,7 +61,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-20">
-          <p className="w-28">Car spacing</p>
+          <p className="w-28 text-center">{m.carSpacing()}</p>
           <input
             type="range"
             step="0.1"
@@ -69,15 +71,18 @@ const SettingsSliver = () => {
             onChange={(e) => setCarSpacing(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
-          <p className="w-10 font-bold text-center">{carSpacing}<span className="ml-1">m</span></p>
+          <p className="w-10 font-bold text-center">
+            {carSpacing}
+            <span className="ml-1">m</span>
+          </p>
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-20">
-          <p className="w-28">Time headway</p>
+          <p className="w-28 text-center">{m.timeHeadway()}</p>
           <input
             type="range"
-            step="0.01"
-            min="1.01"
+            step="0.05"
+            min="0.1"
             max="2"
             value={timeHeadway}
             onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
@@ -86,9 +91,9 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{timeHeadway}</p>
         </div>
       </section>
-      
+
       <section className="flex flex-col items-center justify-center w-full h-full gap-2 py-5">
-        <h2 className="text-lg">Leading car velocity</h2>
+        <h2 className="text-lg">{m.leadingCarVelocity()}</h2>
         <Line
           data={{
             labels: leadingCarChart
@@ -150,13 +155,13 @@ const SettingsSliver = () => {
               x: {
                 title: {
                   display: true,
-                  text: "time (s)",
+                  text: m.time() + " (s)",
                 },
               },
               y: {
                 title: {
                   display: true,
-                  text: "velocity (m/s)",
+                  text: m.velocity() + " (m/s)",
                 },
                 beginAtZero: true,
                 max: MAX_VELOCITY,
