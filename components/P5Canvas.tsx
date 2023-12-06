@@ -73,7 +73,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       p5.createCanvas(window.innerWidth, window.innerHeight);
       resetCanvas(p5.width, carNumber, carSpacing);
       // for debugging
-      p5.frameRate(5);
+      //p5.frameRate(5);
     }
   };
 
@@ -224,8 +224,11 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       prevU[0] = controlU[0];
       error[0] = 0;
       let v0 = velocity[0];
-      velocity[0] = leadingCarChart[leadingCarChartIndex].velocity;
-      acceleration[0] = (velocity[0] - v0) / TS;
+      acceleration[0] = (leadingCarChart[leadingCarChartIndex+1 % leadingCarChart.length].velocity - leadingCarChart[leadingCarChartIndex].velocity);
+      velocity[0] += acceleration[0]/TS;
+      //acceleration[0] = 0.01;
+      //velocity[0] = velocity[0] + acceleration[0];
+
       controlU[0] = acceleration[0];
       const standstillDistance = carSpacing * 10 + CAR_WIDTH;
 
@@ -236,18 +239,16 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         let a = -1 * acceleration[i];
 
         // Time i (actual time difference): Δei, Δvi, Δai, Δui
-        error[i] -= prevV[i - 1] - prevV[i] - timeHeadway * a;
-        velocity[i] -= a;
-        acceleration[i] -= (prevU[i] - a) / tau;
-        controlU[i] -= (kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) / timeHeadway - kd * a;
+        error[i] += prevV[i - 1] - prevV[i] - timeHeadway * a;
+        velocity[i] += a;
+        acceleration[i] += (prevU[i] - a) / tau;
+        controlU[i] += (kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) / timeHeadway - kd * a;
 
-        /*
         // All values Δei, Δvi, Δai, Δui <- *= TS
-        error[i] *= TS;
-        velocity[i] *= TS;
-        acceleration[i] *= TS;
-        controlU[i] *= TS;
-        */
+        error[i] /= TS;
+        velocity[i] /= TS;
+        acceleration[i] /= TS;
+        controlU[i] /= TS;
 
         // TODO: implement carPoints[i] // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
         let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
@@ -343,11 +344,11 @@ const P5Canvas: React.FC = () => {
     for (let i = 0; i < carNumber; i++) {
       carPoints.push(offset - i * desiredDistance);
       distance.push(0);
-      velocity.push(0);
+      velocity.push(leadingCarChart[0].velocity);
       acceleration.push(0);
       error.push(0);
       controlU.push(0);
-      prevV.push(0);
+      prevV.push(leadingCarChart[0].velocity);
       prevU.push(0);
     }
 
