@@ -44,7 +44,9 @@ let prevU: number[] = [];
 let tau: number = 0.1;
 let kp: number = 0.2;
 let kd: number = 0.7;
-const TS: number = 60;
+
+// Rendering frequency
+const FS: number = 60;
 
 // Timing variables
 let timeTick = -1;
@@ -211,7 +213,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     acceleration[0] =
       leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length]
         .velocity - leadingCarChart[leadingCarChartIndex].velocity;
-    velocity[0] += acceleration[0] / TS;
+    velocity[0] += acceleration[0] / FS;
 
     controlU[0] = acceleration[0];
     const standstillDistance = carSpacing * 10 + CAR_WIDTH;
@@ -232,10 +234,10 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         kd * a;
 
       // All values Δei, Δvi, Δai, Δui <- *= TS
-      error[i] /= TS;
-      velocity[i] /= TS;
-      acceleration[i] /= TS;
-      controlU[i] /= TS;
+      error[i] /= FS;
+      velocity[i] /= FS;
+      acceleration[i] /= FS;
+      controlU[i] /= FS;
 
       // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
