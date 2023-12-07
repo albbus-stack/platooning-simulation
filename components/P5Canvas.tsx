@@ -200,68 +200,69 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     if (p5.frameCount % 60 === 0 && p5.frameCount !== 0) {
       leadingCarChartIndex++;
     }
-    if (leadingCarChartIndex === leadingCarChart.length - 1) {
+    if (leadingCarChartIndex === leadingCarChart.length) {
       leadingCarChartIndex = 0;
     }
 
-    let platooningEquations: boolean = true;
+    // Settings for the first car
+    prevV[0] = velocity[0];
+    prevU[0] = controlU[0];
+    error[0] = 0;
+    acceleration[0] =
+      leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length]
+        .velocity - leadingCarChart[leadingCarChartIndex].velocity;
+    velocity[0] += acceleration[0] / TS;
 
-    if (!platooningEquations) {
-      // FIXME: This is a hacky way to approximate the platooning equations
-      // Update car velocities and positions
-      velocity[0] = leadingCarChart[leadingCarChartIndex].velocity / 10;
-      for (let i = 1; i < carNumber; i++) {
-        // Approximation that works well
-        acceleration[i] =
-            (-1 / timeHeadway) * (velocity[i - 1] - velocity[i]) +
-            ((1 / timeHeadway) * (distance[i - 1] - distance[i])) / 10;
-        velocity[i] = velocity[i - 1] + acceleration[i];
-        carPoints[i] -= velocity[i - 1] - velocity[0];
-      }
-    } else {
-      // Settings for the first car
-      prevV[0] = velocity[0];
-      prevU[0] = controlU[0];
-      error[0] = 0;
-      let v0 = velocity[0];
-      acceleration[0] = (leadingCarChart[leadingCarChartIndex+1 % leadingCarChart.length].velocity - leadingCarChart[leadingCarChartIndex].velocity);
-      velocity[0] += acceleration[0]/TS;
-      //acceleration[0] = 0.01;
-      //velocity[0] = velocity[0] + acceleration[0];
+    controlU[0] = acceleration[0];
+    const standstillDistance = carSpacing * 10 + CAR_WIDTH;
 
-      controlU[0] = acceleration[0];
-      const standstillDistance = carSpacing * 10 + CAR_WIDTH;
+    // Update other cars settings
+    for (let i = 1; i < carNumber; i++) {
+      // Time i-1 (previous time): ei, vi, ai, ui
+      let e = error[i];
+      let a = -1 * acceleration[i];
 
-      // Update other cars settings
-      for (let i = 1; i < carNumber; i++) {
-        // Time i-1 (previous time): ei, vi, ai, ui
-        let e = error[i];
-        let a = -1 * acceleration[i];
+      // Time i (actual time difference): Δei, Δvi, Δai, Δui
+      error[i] += prevV[i - 1] - prevV[i] - timeHeadway * a;
+      velocity[i] += a;
+      acceleration[i] += (prevU[i] - a) / tau;
+      controlU[i] +=
+        (kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) /
+          timeHeadway -
+        kd * a;
 
-        // Time i (actual time difference): Δei, Δvi, Δai, Δui
-        error[i] += prevV[i - 1] - prevV[i] - timeHeadway * a;
-        velocity[i] += a;
-        acceleration[i] += (prevU[i] - a) / tau;
-        controlU[i] += (kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) / timeHeadway - kd * a;
+      // All values Δei, Δvi, Δai, Δui <- *= TS
+      error[i] /= TS;
+      velocity[i] /= TS;
+      acceleration[i] /= TS;
+      controlU[i] /= TS;
 
-        // All values Δei, Δvi, Δai, Δui <- *= TS
-        error[i] /= TS;
-        velocity[i] /= TS;
-        acceleration[i] /= TS;
-        controlU[i] /= TS;
+      // TODO: implement carPoints[i] // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
+      let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
+      let d: number = error[i] + desiredDistance;
+      carPoints[i] = carPoints[i - 1] - d;
+      console.log("d: ", d, " of car ", i);
 
-        // TODO: implement carPoints[i] // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
-        let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
-        let d: number = error[i] + desiredDistance;
-        carPoints[i] = carPoints[i-1] - d;
-        console.log("d: ", d, " of car ", i);
-
-        // Update previous values
-        prevV[i] = velocity[i];
-        prevU[i] = controlU[i];
-      }
-      console.log("error: ", error, "\nvelocity: ", velocity, "\nacceleration: ", acceleration, "\ncontrolU: ", controlU, "\ncarPoints: ", carPoints, "\ndistance: ", distance);
+      // Update previous values
+      prevV[i] = velocity[i];
+      prevU[i] = controlU[i];
     }
+
+    // console.log(
+    //   "error: ",
+    //   error,
+    //   "\nvelocity: ",
+    //   velocity,
+    //   "\nacceleration: ",
+    //   acceleration,
+    //   "\ncontrolU: ",
+    //   controlU,
+    //   "\ncarPoints: ",
+    //   carPoints,
+    //   "\ndistance: ",
+    //   distance
+    // );
+
     oscillationY += 0.1;
   };
 };
