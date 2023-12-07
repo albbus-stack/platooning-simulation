@@ -237,11 +237,11 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       acceleration[i] /= TS;
       controlU[i] /= TS;
 
-      // TODO: implement carPoints[i] // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
+      // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
       carPoints[i] = carPoints[i - 1] - d;
-      console.log("d: ", d, " of car ", i);
+      //console.log("d: ", d, " of car ", i);
 
       // Update previous values
       prevV[i] = velocity[i];
@@ -307,8 +307,8 @@ const P5Canvas: React.FC = () => {
               return [
                 ...prev,
                 {
-                  distance: distance[i],
-                  velocity: velocity[i],
+                  distance: distance[i] / 10,
+                  velocity: velocity[i] / 10,
                   time: timeTick,
                 },
               ];
