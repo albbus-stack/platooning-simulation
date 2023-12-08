@@ -40,13 +40,19 @@ const SettingsSliver = () => {
     setCarSpacing,
     timeHeadway,
     setTimeHeadway,
+    tau,
+    setTau,
+    kp,
+    setKp,
+    kd,
+    setKd,
     leadingCarChart,
     setLeadingCarChart,
   } = useContext(DataContext);
 
   return (
     <>
-      <section className="flex flex-col items-center justify-center w-full h-full gap-10 text-lg">
+      <section className="flex flex-col items-center justify-center w-full h-full gap-5 text-lg">
         <div className="flex flex-row items-center w-full gap-10 px-20">
           <p className="w-28 text-center">{m.carNumber()}</p>
           <input
@@ -81,14 +87,56 @@ const SettingsSliver = () => {
           <p className="w-28 text-center">{m.timeHeadway()}</p>
           <input
             type="range"
-            step="0.05"
-            min="0.1"
+            step="0.01"
+            min="0.01"
             max="2"
             value={timeHeadway}
             onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
           <p className="w-10 font-bold text-center">{timeHeadway}</p>
+        </div>
+
+        <div className="flex flex-row items-center w-full gap-10 px-20">
+          <p className="w-28 text-center">{"Tau"}</p>
+          <input
+            type="range"
+            step="0.01"
+            min="0.01"
+            max="2"
+            value={tau}
+            onChange={(e) => setTau(parseFloat(e.target.value))}
+            className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
+          />
+          <p className="w-10 font-bold text-center">{tau}</p>
+        </div>
+
+        <div className="flex flex-row items-center w-full gap-10 px-20">
+          <p className="w-28 text-center">{"Kp"}</p>
+          <input
+            type="range"
+            step="0.01"
+            min="0.01"
+            max="2"
+            value={kp}
+            onChange={(e) => setKp(parseFloat(e.target.value))}
+            className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
+          />
+          <p className="w-10 font-bold text-center">{kp}</p>
+        </div>
+
+        <div className="flex flex-row items-center w-full gap-10 px-20">
+          <p className="w-28 text-center">{"Kd"}</p>
+          <input
+            type="range"
+            step="0.01"
+            min="0.01"
+            max="2"
+            value={kd}
+            onChange={(e) => setKd(parseFloat(e.target.value))}
+            className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
+          />
+          <p className="w-10 font-bold text-center">{kd}</p>
         </div>
       </section>
 

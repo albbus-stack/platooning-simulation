@@ -9,6 +9,9 @@ type SimulationSketchProps = SketchProps & {
   carSpacing: number;
   carNumber: number;
   timeHeadway: number;
+  tau: number;
+  kp: number;
+  kd: number;
   leadingCarChart: GraphPoints[];
   sliverHeight: number;
   resetCanvas: (width: number, carNumber: number, carSpacing: number) => void;
@@ -40,11 +43,6 @@ let prevV: number[] = [];
 // Previous control at time t-1
 let prevU: number[] = [];
 
-// Control constants
-let tau: number = 0.1;
-let kp: number = 0.2;
-let kd: number = 0.7;
-
 // Rendering frequency
 const FS: number = 60;
 
@@ -61,8 +59,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
   let sliverHeight = 0;
   let carNumber = 0;
   let carSpacing = 0;
-  let timeHeadway = 0;
   let leadingCarChart = [{} as { time: number; velocity: number }];
+
+  // Control variables
+  let timeHeadway = 0;
+  let tau = 0.1;
+  let kp = 0.2;
+  let kd = 0.7;
 
   // Initialize with mock function
   let resetCanvas = (w: number, n: number, s: number) => {};
@@ -85,6 +88,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       carSpacing !== props.carSpacing ||
       carNumber !== props.carNumber ||
       timeHeadway !== props.timeHeadway ||
+      tau !== props.tau ||
+      kp !== props.kp ||
+      kd !== props.kd ||
       leadingCarChart !== props.leadingCarChart
     ) {
       props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
@@ -92,6 +98,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     carSpacing = props.carSpacing;
     carNumber = props.carNumber;
     timeHeadway = props.timeHeadway;
+    tau = props.tau;
+    kp = props.kp;
+    kd = props.kd;
     leadingCarChart = props.leadingCarChart;
 
     // Assign the correct functions before running the actual setup
@@ -275,6 +284,9 @@ const P5Canvas: React.FC = () => {
     setGraphData,
     carSpacing: carSpacingSetting,
     timeHeadway,
+    tau,
+    kp,
+    kd,
     leadingCarChart,
   } = useContext(DataContext);
   const { height, setIsSliverOpen, isSliverOpen, setIsGraphSliver } =
@@ -438,6 +450,9 @@ const P5Canvas: React.FC = () => {
           carSpacing={carSpacingSetting}
           carNumber={carNumberSetting}
           timeHeadway={timeHeadway}
+          tau={tau}
+          kp={kp}
+          kd={kd}
           leadingCarChart={leadingCarChart}
           sliverHeight={sliverHeight}
           resetCanvas={resetCanvas}

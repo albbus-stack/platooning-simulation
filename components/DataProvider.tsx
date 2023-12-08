@@ -1,4 +1,9 @@
-import React, { createContext, Dispatch, SetStateAction, useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useState,
+} from "react";
 
 export interface DataType {
   distance: number;
@@ -20,6 +25,12 @@ export const DataContext = createContext({
   setCarSpacing: (() => {}) as Dispatch<SetStateAction<number>>,
   timeHeadway: 0,
   setTimeHeadway: (() => {}) as Dispatch<SetStateAction<number>>,
+  tau: 0,
+  setTau: (() => {}) as Dispatch<SetStateAction<number>>,
+  kp: 0,
+  setKp: (() => {}) as Dispatch<SetStateAction<number>>,
+  kd: 0,
+  setKd: (() => {}) as Dispatch<SetStateAction<number>>,
   leadingCarChart: [{}] as GraphPoints[],
   setLeadingCarChart: (() => {}) as Dispatch<SetStateAction<GraphPoints[]>>,
 });
@@ -39,6 +50,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [carNumber, setCarNumber] = useState(6);
   const [carSpacing, setCarSpacing] = useState(5.0);
   const [timeHeadway, setTimeHeadway] = useState(0.5);
+  const [tau, setTau] = useState(0.1);
+  const [kp, setKp] = useState(0.2);
+  const [kd, setKd] = useState(0.7);
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
     [0, 1, 2, 3, 4].map((i) => {
       return {
@@ -61,6 +75,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setTimeHeadway,
         leadingCarChart,
         setLeadingCarChart,
+        tau,
+        setTau,
+        kp,
+        setKp,
+        kd,
+        setKd,
       }}
     >
       {children}
