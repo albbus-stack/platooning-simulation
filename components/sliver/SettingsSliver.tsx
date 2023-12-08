@@ -17,6 +17,7 @@ import * as m from "../../src/paraglide/messages";
 
 // @ts-ignore
 import * as DragPlugin from "chartjs-plugin-dragdata";
+import { SliverContext } from "./SliverProvider";
 
 // Register the chart.js plugins
 ChartJS.register(
@@ -50,9 +51,19 @@ const SettingsSliver = () => {
     setLeadingCarChart,
   } = useContext(DataContext);
 
+  const { size } = useContext(SliverContext);
+
+  const computedGap =
+    size === "S" ? "gap-2" : size === "M" ? "gap-5" : "gap-10";
+
   return (
     <>
-      <section className="flex flex-col items-center justify-center w-full h-full gap-5 text-lg">
+      <section
+        className={
+          "flex flex-col items-center justify-center w-full h-full text-lg " +
+          computedGap
+        }
+      >
         <div className="flex flex-row items-center w-full gap-10 px-20">
           <p className="w-28 text-center">{m.carNumber()}</p>
           <input
