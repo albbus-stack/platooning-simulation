@@ -4,6 +4,8 @@ import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
 import { SliverContext } from "./SliverProvider";
 import XIcon from "../icons/XIcon";
+import DownloadIcon from "../icons/DownloadIcon";
+import { DataContext } from "../DataProvider";
 
 const Sliver: React.FC = () => {
   const {
@@ -15,6 +17,31 @@ const Sliver: React.FC = () => {
     setIsSliverOpen,
     isGraphSliver,
   } = useContext(SliverContext);
+
+  const { graphData } = useContext(DataContext);
+
+  const downloadGraphDataCSV = () => {
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      "car,time(s),distance(m),velocity(m/s)\n";
+
+    graphData.forEach((car, carIndex) => {
+      car.forEach((dataPoint) => {
+        const { time, distance, velocity } = dataPoint;
+        csvContent += `${carIndex},${time},${distance},${velocity}\n`;
+      });
+    });
+
+    const encodedUri = encodeURI(csvContent);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "graphData.csv");
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <aside
@@ -56,12 +83,28 @@ const Sliver: React.FC = () => {
                 }}
               />
             </div>
-            <button
-              className="flex items-center justify-center w-10 pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
-              onClick={() => setIsSliverOpen(false)}
-            >
-              <XIcon />
-            </button>
+            <div className="flex flex-row gap-5">
+              {isGraphSliver && (
+                <div className="relative group/btn">
+                  <div className="top-[-100%] -translate-y-[60%] left-[50%] translate-x-[-50%] w-20 text-center hidden z-20 group-hover/btn:inline-block absolute px-3 py-2 text-sm font-medium text-white duration-300 rounded-lg shadow-sm opacity-80 bg-gray-700">
+                    <span className="">Download CSV</span>
+                    <div className="absolute bottom-[-3px] left-[50%] -translate-x-[50%] w-5 h-5 rotate-45 bg-gray-700 z-[-1]" />
+                  </div>
+                  <button
+                    className="flex items-center justify-center w-10 h-full pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 group-hover/btn:text-slate-500 group-hover/btn:bg-slate-300"
+                    onClick={() => downloadGraphDataCSV()}
+                  >
+                    <DownloadIcon />
+                  </button>
+                </div>
+              )}
+              <button
+                className="flex items-center justify-center w-10 pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
+                onClick={() => setIsSliverOpen(false)}
+              >
+                <XIcon />
+              </button>
+            </div>
           </nav>
         </>
       )}
