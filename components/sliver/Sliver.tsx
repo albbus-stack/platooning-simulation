@@ -149,7 +149,6 @@ const Sliver: React.FC = () => {
                 />
               )}
               <SliverIconButton
-                label="Close"
                 icon={<XIcon />}
                 onClick={() => setIsSliverOpen(false)}
               />
