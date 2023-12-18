@@ -53,7 +53,7 @@ const SettingsSliver = () => {
 
   const { size } = useContext(SliverContext);
 
-  const computedGap = size === "S" ? "gap-2" : size === "M" ? "gap-5" : "gap-8";
+  const computedGap = size === "S" ? "gap-0" : size === "M" ? "gap-2" : "gap-5";
 
   return (
     <>
