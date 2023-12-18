@@ -345,22 +345,16 @@ const P5Canvas: React.FC = () => {
         intervalRef = setInterval(() => {
           timeTick++;
           setGraphData((car) => {
-            if (car.length === 1) {
-              let carList = [] as DataType[][];
-              for (let i = 0; i < carNumberSetting; i++) {
-                carList.push([]);
-              }
-              car = carList;
-              return car;
-            }
-
             return car.map((prev, i) => {
               return [
                 ...prev,
                 {
-                  distance: distance[i] / 10,
-                  velocity: velocity[i] / 10,
                   time: timeTick,
+                  distance: distance[i] / 10,
+                  // Relative velocity
+                  velocity: velocity[i] / 10,
+                  // Absolute velocity
+                  // velocity: (velocity[i] + i === 0 ? 0 : velocity[0]) / 10,
                 },
               ];
             });
