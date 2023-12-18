@@ -24,6 +24,8 @@ const CAR_WIDTH = 100;
 const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
+const FRAME_RATE = 30;
+const UPDATE_INTERVAL = 1000;
 
 // Simulation variables
 let roadMarkerX = 0;
@@ -80,7 +82,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       p5.createCanvas(window.innerWidth, window.innerHeight);
       resetCanvas(p5.width, carNumber, carSpacing);
       // for debugging
-      p5.frameRate(30);
+      p5.frameRate(FRAME_RATE);
     }
   };
 
@@ -363,7 +365,7 @@ const P5Canvas: React.FC = () => {
               ];
             });
           });
-        }, 1000);
+        }, UPDATE_INTERVAL);
 
         isPlaying = true;
         setIsPlayingState(isPlaying);
@@ -434,12 +436,24 @@ const P5Canvas: React.FC = () => {
         time: number;
       }[][];
       for (let i = 0; i < carNumber; i++) {
-        carList.push([]);
+        carList.push([
+          {
+            distance:
+              i === carNumber
+                ? 0
+                : (Math.abs(carPoints[i + 1] - carPoints[i]) - CAR_WIDTH) / 10,
+            velocity: 0,
+            time: 0,
+          },
+        ]);
       }
       return carList;
     });
 
-    timeTick = -1;
+    timeTick = 0;
+    clearInterval(intervalRef);
+    isPlaying = false;
+    setIsPlayingState(isPlaying);
   };
 
   // This takes care of pausing when the page is not visible
