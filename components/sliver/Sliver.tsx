@@ -48,6 +48,7 @@ const Sliver: React.FC = () => {
       style={{
         height: height,
         transform: isSliverOpen ? "translateY(0)" : "translateY(100%)",
+        opacity: isSliverOpen ? 1 : 0,
       }}
       className="fixed bottom-0 left-0 z-30 flex flex-col justify-center w-full p-4 border-t-2 border-black bg-slate-300 align-center"
     >
@@ -91,7 +92,7 @@ const Sliver: React.FC = () => {
                     <div className="absolute bottom-[-3px] left-[50%] -translate-x-[50%] w-5 h-5 rotate-45 bg-gray-700 z-[-1]" />
                   </div>
                   <button
-                    className="flex items-center justify-center w-10 h-full pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 group-hover/btn:text-slate-500 group-hover/btn:bg-slate-300"
+                    className="flex items-center justify-center bg-[#e2e8ff] w-10 h-full pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 group-hover/btn:text-slate-500 group-hover/btn:bg-slate-300"
                     onClick={() => downloadGraphDataCSV()}
                   >
                     <DownloadIcon />
@@ -99,7 +100,7 @@ const Sliver: React.FC = () => {
                 </div>
               )}
               <button
-                className="flex items-center justify-center w-10 pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
+                className="flex items-center justify-center bg-[#e2e8ff] w-10 pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
                 onClick={() => setIsSliverOpen(false)}
               >
                 <XIcon />

@@ -39,7 +39,7 @@ const LanguageDropdown = () => {
         />
       </div>
       {isFlagDropdownOpen && (
-        <div className="flex flex-col absolute top-[120%] left-0 rounded-md bg-slate-800 shadow-xl">
+        <div className="flex flex-col absolute top-[120%] left-0 rounded-md bg-slate-800 shadow-xl z-50">
           {availableLanguageTags.map(
             (tag) =>
               tag !== lang && (

@@ -15,7 +15,7 @@ const SliverButton: React.FC<SliverButtonProps> = ({
   return (
     <button
       className={
-        "border border-slate-800 border-b-0 font-mono mr-4 p-1 hover:text-slate-500 hover:bg-slate-300 transition-all duration-300 rounded-md rounded-b-none w-10 pb-1 " +
+        "border border-slate-800 bg-[#e2e8ff] border-b-0 font-mono mr-4 p-1 hover:text-slate-500 hover:bg-slate-300 transition-all duration-300 rounded-md rounded-b-none w-10 pb-1 " +
         (size === label ? "bg-slate-300 text-black hover:text-black" : "")
       }
       onClick={onClick}

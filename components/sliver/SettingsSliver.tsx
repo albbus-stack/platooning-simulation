@@ -53,8 +53,7 @@ const SettingsSliver = () => {
 
   const { size } = useContext(SliverContext);
 
-  const computedGap =
-    size === "S" ? "gap-2" : size === "M" ? "gap-5" : "gap-10";
+  const computedGap = size === "S" ? "gap-2" : size === "M" ? "gap-5" : "gap-8";
 
   return (
     <>
@@ -64,7 +63,7 @@ const SettingsSliver = () => {
           computedGap
         }
       >
-        <div className="flex flex-row items-center w-full gap-10 px-20">
+        <div className="flex flex-row items-center w-full gap-10 px-10">
           <p className="w-28 text-center">{m.carNumber()}</p>
           <input
             type="range"
@@ -77,7 +76,7 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{carNumber}</p>
         </div>
 
-        <div className="flex flex-row items-center w-full gap-10 px-20">
+        <div className="flex flex-row items-center w-full gap-10 px-10">
           <p className="w-28 text-center">{m.carSpacing()}</p>
           <input
             type="range"
@@ -94,7 +93,7 @@ const SettingsSliver = () => {
           </p>
         </div>
 
-        <div className="flex flex-row items-center w-full gap-10 px-20">
+        <div className="flex flex-row items-center w-full gap-10 px-10">
           <p className="w-28 text-center">{m.timeHeadway()}</p>
           <input
             type="range"
@@ -108,7 +107,7 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{timeHeadway}</p>
         </div>
 
-        <div className="flex flex-row items-center w-full gap-10 px-20">
+        <div className="flex flex-row items-center w-full gap-10 px-10">
           <p className="w-28 text-center">{"Tau"}</p>
           <input
             type="range"
@@ -122,7 +121,7 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{tau}</p>
         </div>
 
-        <div className="flex flex-row items-center w-full gap-10 px-20">
+        <div className="flex flex-row items-center w-full gap-10 px-10">
           <p className="w-28 text-center">{"Kp"}</p>
           <input
             type="range"
@@ -136,7 +135,7 @@ const SettingsSliver = () => {
           <p className="w-10 font-bold text-center">{kp}</p>
         </div>
 
-        <div className="flex flex-row items-center w-full gap-10 px-20">
+        <div className="flex flex-row items-center w-full gap-10 px-10">
           <p className="w-28 text-center">{"Kd"}</p>
           <input
             type="range"
@@ -194,11 +193,6 @@ const SettingsSliver = () => {
               },
               dragData: {
                 round: 0,
-                onDragStart: function (_, __, index) {
-                  if (index === 5) {
-                    return false;
-                  }
-                },
                 onDragEnd: function (_, __, index, value) {
                   if (index !== 5) {
                     setLeadingCarChart((prev) => {

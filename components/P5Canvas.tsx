@@ -14,6 +14,7 @@ type SimulationSketchProps = SketchProps & {
   kd: number;
   leadingCarChart: GraphPoints[];
   sliverHeight: number;
+  browserBox: number;
   resetCanvas: (width: number, carNumber: number, carSpacing: number) => void;
   togglePlay: (isFailed: boolean) => void;
 };
@@ -57,6 +58,7 @@ let isPlaying = false;
 const sketch: Sketch<SimulationSketchProps> = (p5) => {
   // Tracking variables
   let sliverHeight = 0;
+  let browserBox = 0;
   let carNumber = 0;
   let carSpacing = 0;
   let leadingCarChart = [{} as { time: number; velocity: number }];
@@ -116,12 +118,19 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     }
 
     // Resize the canvas if the sliver height changes
-    if (sliverHeight !== props.sliverHeight)
+    if (
+      sliverHeight !== props.sliverHeight ||
+      browserBox !== props.browserBox
+    ) {
       p5.resizeCanvas(
         window.innerWidth,
         window.innerHeight - props.sliverHeight
       );
+      if (browserBox !== props.browserBox)
+        props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
+    }
     sliverHeight = props.sliverHeight;
+    browserBox = props.browserBox;
   };
 
   // The p5.js draw function
@@ -265,9 +274,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
           carPoints[j] += maxStep;
         }
       } else if (d - prevDistance > maxStep) {
-        d = prevDistance + maxStep;
-        for (let j = i; j < carNumber; j++) {
-          carPoints[j] -= maxStep;
+        if (leadingCarChart[leadingCarChartIndex].velocity !== 0) {
+          d = prevDistance + maxStep;
+          for (let j = i; j < carNumber; j++) {
+            carPoints[j] -= maxStep;
+          }
+        } else {
+          d = prevDistance;
         }
       }
 
@@ -314,6 +327,7 @@ const P5Canvas: React.FC = () => {
     useContext(SliverContext);
 
   const sliverHeight = isSliverOpen ? height : 0;
+  const [browserBox, setBrowserBox] = useState(0);
 
   const [isPlayingState, setIsPlayingState] = useState(isPlaying);
 
@@ -355,7 +369,17 @@ const P5Canvas: React.FC = () => {
         setIsPlayingState(isPlaying);
       }
     },
-    [carNumberSetting, setGraphData]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      carNumberSetting,
+      carSpacingSetting,
+      setGraphData,
+      timeHeadway,
+      tau,
+      kp,
+      kd,
+      leadingCarChart,
+    ]
   );
 
   // This function resets the canvas data
@@ -383,7 +407,7 @@ const P5Canvas: React.FC = () => {
       } else {
         let initDistance = desiredDistance;
         while (Math.abs(initDistance - desiredDistance) <= 5)
-          initDistance = Math.random() * (20 - 2) + 2;
+          initDistance = Math.random() * (15 - 1) + 1;
         initDistance *= 10;
         initDistance += CAR_WIDTH;
         carPoints.push(carPoints[i - 1] - initDistance);
@@ -460,11 +484,17 @@ const P5Canvas: React.FC = () => {
       }
     };
 
+    const handleResize = () => {
+      setBrowserBox(window.innerHeight + window.innerWidth);
+    };
+
     document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       // when setting are changed the simulation is stopped
       document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", handleResize);
       isPlaying = false;
       setIsPlayingState(isPlaying);
     };
@@ -486,6 +516,7 @@ const P5Canvas: React.FC = () => {
           kd={kd}
           leadingCarChart={leadingCarChart}
           sliverHeight={sliverHeight}
+          browserBox={browserBox}
           resetCanvas={resetCanvas}
           togglePlay={togglePlay}
         />
