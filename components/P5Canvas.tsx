@@ -78,7 +78,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       p5.createCanvas(window.innerWidth, window.innerHeight);
       resetCanvas(p5.width, carNumber, carSpacing);
       // for debugging
-      //p5.frameRate(30);
+      p5.frameRate(1);
     }
   };
 
@@ -91,17 +91,21 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       tau !== props.tau ||
       kp !== props.kp ||
       kd !== props.kd ||
-      leadingCarChart !== props.leadingCarChart
+      JSON.stringify(leadingCarChart) !== JSON.stringify(props.leadingCarChart)
     ) {
       props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
+      //console.log("resetCanvas");
     }
+    //console.log("leadingCarChart: ", JSON.stringify(leadingCarChart), "\nprops: ", JSON.stringify(props.leadingCarChart))
     carSpacing = props.carSpacing;
     carNumber = props.carNumber;
     timeHeadway = props.timeHeadway;
     tau = props.tau;
     kp = props.kp;
     kd = props.kd;
-    leadingCarChart = props.leadingCarChart;
+    leadingCarChart = props.leadingCarChart.map((point) => {
+      return {...point};
+    });
 
     // Assign the correct functions before running the actual setup
     resetCanvas = props.resetCanvas;
@@ -226,6 +230,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
 
     controlU[0] = acceleration[0];
     const standstillDistance = carSpacing * 10 + CAR_WIDTH;
+    const prevCarPoints = [...carPoints];
 
     // Update other cars settings
     for (let i = 1; i < carNumber; i++) {
@@ -248,10 +253,10 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       acceleration[i] /= FS;
       controlU[i] /= FS;
 
-      // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway) - v0 (reference velocity)
+      // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
-      carPoints[i] = carPoints[i - 1] - d;
+      carPoints[i] = prevCarPoints[i - 1] - d;
       //console.log("d: ", d, " of car ", i);
 
       // Update previous values
@@ -358,7 +363,17 @@ const P5Canvas: React.FC = () => {
 
     // Initialize cars
     for (let i = 0; i < carNumber; i++) {
-      carPoints.push(offset - i * desiredDistance);
+      if (i === 0) {
+        carPoints.push(offset);
+      } else {
+        let initDistance = desiredDistance;
+        while (Math.abs(initDistance - desiredDistance) <= 5)
+          initDistance = Math.random() * (20 - 2) + 2;
+        initDistance *= 10;
+        initDistance += CAR_WIDTH;
+        carPoints.push(carPoints[i - 1] - initDistance);
+      }
+
       distance.push(0);
       velocity.push(leadingCarChart[0].velocity);
       acceleration.push(0);
