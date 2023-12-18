@@ -352,7 +352,8 @@ const P5Canvas: React.FC = () => {
                   time: timeTick,
                   distance: distance[i] / 10,
                   // Relative velocity
-                  velocity: velocity[i] / 10,
+                  velocity:
+                    (i === 0 ? Math.abs(velocity[i]) : velocity[i]) / 10,
                   // Absolute velocity
                   // velocity: (velocity[i] + i === 0 ? 0 : velocity[0]) / 10,
                 },
