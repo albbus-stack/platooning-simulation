@@ -4,6 +4,8 @@ import { SliverContext } from "./sliver/SliverProvider";
 import { DataContext, DataType, GraphPoints } from "./DataProvider";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { type Sketch, type SketchProps } from "@p5-wrapper/react";
+import PauseButton from "./icons/PauseIcon";
+import PlayButton from "./icons/PlayIcon";
 
 type SimulationSketchProps = SketchProps & {
   carSpacing: number;
@@ -355,7 +357,7 @@ const P5Canvas: React.FC = () => {
                   velocity:
                     (i === 0 ? Math.abs(velocity[i]) : velocity[i]) / 10,
                   // Absolute velocity
-                  // velocity: (velocity[i] + i === 0 ? 0 : velocity[0]) / 10,
+                  // velocity: (velocity[i] + i === 0 ? 0 : Math.abs(velocity[0])) / 10,
                 },
               ];
             });
@@ -460,36 +462,11 @@ const P5Canvas: React.FC = () => {
     }
   };
 
-  // This effect takes care of the keyboard shortcuts
+  // This effect takes care of the play/pause keyboard shortcut
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
-        // Toggle the simulation
         togglePlay();
-      } else if (e.key === "g") {
-        // Open the graph sliver
-        setIsGraphSliver((isGraph) => {
-          setIsSliverOpen((isSliverOpen) => {
-            if (!isGraph && isSliverOpen) {
-              return true;
-            } else {
-              return !isSliverOpen;
-            }
-          });
-          return true;
-        });
-      } else if (e.key === "s") {
-        // Open the setting sliver
-        setIsGraphSliver((isGraph) => {
-          setIsSliverOpen((isSliverOpen) => {
-            if (isGraph && isSliverOpen) {
-              return true;
-            } else {
-              return !isSliverOpen;
-            }
-          });
-          return false;
-        });
       }
     };
 
@@ -501,13 +478,13 @@ const P5Canvas: React.FC = () => {
     window.addEventListener("resize", handleResize);
 
     return () => {
-      // when setting are changed the simulation is stopped
+      // When setting are changed the simulation is stopped
       document.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("resize", handleResize);
       isPlaying = false;
       setIsPlayingState(isPlaying);
     };
-  }, [setIsSliverOpen, setIsGraphSliver, togglePlay]);
+  }, [togglePlay]);
 
   return (
     <PageVisibility onChange={onPageVisibilityChange}>
@@ -531,44 +508,6 @@ const P5Canvas: React.FC = () => {
         />
       </>
     </PageVisibility>
-  );
-};
-
-const PauseButton = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      className="w-7 h-7"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-      />
-    </svg>
-  );
-};
-
-const PlayButton = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      className="w-7 h-7"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.75 5.25v13.5m-7.5-13.5v13.5"
-      />
-    </svg>
   );
 };
 

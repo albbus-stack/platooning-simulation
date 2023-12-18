@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import GraphSliver from "./GraphSliver";
 import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
@@ -15,6 +15,7 @@ const Sliver: React.FC = () => {
     size,
     isSliverOpen,
     setIsSliverOpen,
+    setIsGraphSliver,
     isGraphSliver,
   } = useContext(SliverContext);
 
@@ -42,6 +43,43 @@ const Sliver: React.FC = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  // This effect takes care of the graph/settings sliver keyboard shourtcuts
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "g") {
+        // Open the graph sliver
+        setIsGraphSliver((isGraph) => {
+          setIsSliverOpen((isSliverOpen) => {
+            if (!isGraph && isSliverOpen) {
+              return true;
+            } else {
+              return !isSliverOpen;
+            }
+          });
+          return true;
+        });
+      } else if (e.key === "s") {
+        // Open the setting sliver
+        setIsGraphSliver((isGraph) => {
+          setIsSliverOpen((isSliverOpen) => {
+            if (isGraph && isSliverOpen) {
+              return true;
+            } else {
+              return !isSliverOpen;
+            }
+          });
+          return false;
+        });
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [setIsSliverOpen, setIsGraphSliver]);
 
   return (
     <aside
