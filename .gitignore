@@ -40,4 +40,9 @@ yarn-error.log*
 next-env.d.ts
 
 # Translations
-/translations/other-translations/
+/translations/other-translations
+translations/other-translations/gr.json
+translations/other-translations/il.json
+translations/other-translations/pl.json
+translations/other-translations/tr.json
+translations/other-translations/ua.json
