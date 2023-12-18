@@ -78,7 +78,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       p5.createCanvas(window.innerWidth, window.innerHeight);
       resetCanvas(p5.width, carNumber, carSpacing);
       // for debugging
-      //p5.frameRate(5);
+      //p5.frameRate(30);
     }
   };
 
@@ -259,20 +259,21 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       prevU[i] = controlU[i];
     }
 
-    // console.log(
-    //   "error: ",
-    //   error,
-    //   "\nvelocity: ",
-    //   velocity,
-    //   "\nacceleration: ",
-    //   acceleration,
-    //   "\ncontrolU: ",
-    //   controlU,
-    //   "\ncarPoints: ",
-    //   carPoints,
-    //   "\ndistance: ",
-    //   distance
-    // );
+    // for debugging
+    console.log(
+       "error: ",
+       error,
+       "\nvelocity: ",
+       velocity,
+       "\nacceleration: ",
+       acceleration,
+       "\ncontrolU: ",
+       controlU,
+       "\ncarPoints: ",
+       carPoints,
+       "\ndistance: ",
+       distance
+     );
 
     oscillationY += 0.1;
   };
