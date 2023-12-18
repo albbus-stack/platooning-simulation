@@ -52,11 +52,11 @@ const HomePage: NextPage = () => {
           <div className="flex flex-col items-center justify-center w-full h-full gap-8 px-8 text-lg text-slate-800">
             <RotateIcon />
             <p className="text-lg text-center">
-              {m.mobileAlert1()} <b className="text-bold">desktop</b>{" "}
-              {m.mobileAlert2()} <b className="text-bold">laptop</b>. <br />
-              <br />
-              {m.mobileAlert3()} <b className="text-bold">{m.mobileAlert4()}</b>{" "}
-              {m.mobileAlert5()}
+              {m.mobileAlert1()} <b className="text-bold">{m.mobileAlert2()}</b>{" "}
+              {m.mobileAlert3()} <b className="text-bold">{m.mobileAlert4()}</b>. <br/>
+              <br/>
+              {m.mobileAlert5()} <b className="text-bold">{m.mobileAlert6()}</b>{" "}
+              {m.mobileAlert7()}
             </p>
           </div>
         ) : (
