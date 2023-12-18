@@ -6,6 +6,10 @@ import { SliverContext } from "./SliverProvider";
 import XIcon from "../icons/XIcon";
 import DownloadIcon from "../icons/DownloadIcon";
 import { DataContext } from "../DataProvider";
+import * as m from "../../src/paraglide/messages";
+import SettingsIcon from "../icons/SettingsIcon";
+import GraphsIcon from "../icons/GraphsIcon";
+import SliverIconButton from "./SliverIconButton";
 
 const Sliver: React.FC = () => {
   const {
@@ -47,6 +51,7 @@ const Sliver: React.FC = () => {
   // This effect takes care of the graph/settings sliver keyboard shourtcuts
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
       if (e.key === "g") {
         // Open the graph sliver
         setIsGraphSliver((isGraph) => {
@@ -79,7 +84,7 @@ const Sliver: React.FC = () => {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [setIsSliverOpen, setIsGraphSliver]);
+  }, [setIsSliverOpen, setIsGraphSliver, isGraphSliver]);
 
   return (
     <aside
@@ -124,25 +129,30 @@ const Sliver: React.FC = () => {
             </div>
             <div className="flex flex-row gap-5">
               {isGraphSliver && (
-                <div className="relative group/btn">
-                  <div className="top-[-100%] -translate-y-[60%] left-[50%] translate-x-[-50%] w-20 text-center hidden z-20 group-hover/btn:inline-block absolute px-3 py-2 text-sm font-medium text-white duration-300 rounded-lg shadow-sm opacity-80 bg-gray-700">
-                    <span className="">Download CSV</span>
-                    <div className="absolute bottom-[-3px] left-[50%] -translate-x-[50%] w-5 h-5 rotate-45 bg-gray-700 z-[-1]" />
-                  </div>
-                  <button
-                    className="flex items-center justify-center bg-[#e2e8ff] w-10 h-full pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 group-hover/btn:text-slate-500 group-hover/btn:bg-slate-300"
-                    onClick={() => downloadGraphDataCSV()}
-                  >
-                    <DownloadIcon />
-                  </button>
-                </div>
+                <SliverIconButton
+                  label="Download CSV"
+                  icon={<DownloadIcon />}
+                  onClick={() => downloadGraphDataCSV()}
+                />
               )}
-              <button
-                className="flex items-center justify-center bg-[#e2e8ff] w-10 pt-[.1rem] font-bold transition-all duration-300 border border-b-0 rounded-md rounded-b-none border-slate-800 hover:text-slate-500 hover:bg-slate-300"
+              {isGraphSliver ? (
+                <SliverIconButton
+                  label={m.settings()}
+                  icon={<SettingsIcon />}
+                  onClick={() => setIsGraphSliver((prev) => !prev)}
+                />
+              ) : (
+                <SliverIconButton
+                  label={m.graphs()}
+                  icon={<GraphsIcon />}
+                  onClick={() => setIsGraphSliver((prev) => !prev)}
+                />
+              )}
+              <SliverIconButton
+                label="Close"
+                icon={<XIcon />}
                 onClick={() => setIsSliverOpen(false)}
-              >
-                <XIcon />
-              </button>
+              />
             </div>
           </nav>
         </>

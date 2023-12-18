@@ -465,6 +465,7 @@ const P5Canvas: React.FC = () => {
   // This effect takes care of the play/pause keyboard shortcut
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
       if (e.code === "Space") {
         togglePlay();
       }
