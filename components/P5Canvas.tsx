@@ -78,7 +78,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       p5.createCanvas(window.innerWidth, window.innerHeight);
       resetCanvas(p5.width, carNumber, carSpacing);
       // for debugging
-      p5.frameRate(1);
+      p5.frameRate(30);
     }
   };
 
@@ -104,7 +104,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     kp = props.kp;
     kd = props.kd;
     leadingCarChart = props.leadingCarChart.map((point) => {
-      return {...point};
+      return { ...point };
     });
 
     // Assign the correct functions before running the actual setup
@@ -230,7 +230,6 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
 
     controlU[0] = acceleration[0];
     const standstillDistance = carSpacing * 10 + CAR_WIDTH;
-    const prevCarPoints = [...carPoints];
 
     // Update other cars settings
     for (let i = 1; i < carNumber; i++) {
@@ -256,7 +255,23 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
-      carPoints[i] = prevCarPoints[i - 1] - d;
+
+      let maxStep = 1;
+      let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
+
+      if (prevDistance - d > maxStep) {
+        d = prevDistance - maxStep;
+        for (let j = i; j < carNumber; j++) {
+          carPoints[j] += maxStep;
+        }
+      } else if (d - prevDistance > maxStep) {
+        d = prevDistance + maxStep;
+        for (let j = i; j < carNumber; j++) {
+          carPoints[j] -= maxStep;
+        }
+      }
+
+      carPoints[i] = carPoints[i - 1] - d;
       //console.log("d: ", d, " of car ", i);
 
       // Update previous values
@@ -266,19 +281,19 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
 
     // for debugging
     console.log(
-       "error: ",
-       error,
-       "\nvelocity: ",
-       velocity,
-       "\nacceleration: ",
-       acceleration,
-       "\ncontrolU: ",
-       controlU,
-       "\ncarPoints: ",
-       carPoints,
-       "\ndistance: ",
-       distance
-     );
+      "error: ",
+      error,
+      "\nvelocity: ",
+      velocity,
+      "\nacceleration: ",
+      acceleration,
+      "\ncontrolU: ",
+      controlU,
+      "\ncarPoints: ",
+      carPoints,
+      "\ndistance: ",
+      distance
+    );
 
     oscillationY += 0.1;
   };
