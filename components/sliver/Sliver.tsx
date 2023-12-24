@@ -52,30 +52,66 @@ const Sliver: React.FC = () => {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (e.key === "g") {
-        // Open the graph sliver
-        setIsGraphSliver((isGraph) => {
-          setIsSliverOpen((isSliverOpen) => {
-            if (!isGraph && isSliverOpen) {
-              return true;
-            } else {
-              return !isSliverOpen;
-            }
+      switch (e.key) {
+        case "g":
+          // Open the graph sliver
+          setIsGraphSliver((isGraph) => {
+            setIsSliverOpen((isSliverOpen) => {
+              if (!isGraph && isSliverOpen) {
+                return true;
+              } else {
+                return !isSliverOpen;
+              }
+            });
+            return true;
           });
-          return true;
-        });
-      } else if (e.key === "s") {
-        // Open the setting sliver
-        setIsGraphSliver((isGraph) => {
-          setIsSliverOpen((isSliverOpen) => {
-            if (isGraph && isSliverOpen) {
-              return true;
-            } else {
-              return !isSliverOpen;
-            }
+          break;
+        case "s":
+          // Open the setting sliver
+          setIsGraphSliver((isGraph) => {
+            setIsSliverOpen((isSliverOpen) => {
+              if (isGraph && isSliverOpen) {
+                return true;
+              } else {
+                return !isSliverOpen;
+              }
+            });
+            return false;
           });
-          return false;
-        });
+          break;
+        case "i":
+          // Open the info page
+          window.location.href = "/about";
+          break;
+        case "d":
+          // Download the graph data
+          if (isGraphSliver && isSliverOpen) {
+            downloadGraphDataCSV();
+          }
+          break;
+        case "x":
+          // Close the sliver
+          setIsSliverOpen(false);
+          break;
+          /*
+        //FIX: This is not working: the sliver changes size from S to L and from L to S, but not from M to S or from S to M
+        case "Enter":
+          // Toggle the sliver
+          setIsSliverOpen((prev) => !prev);
+          break;
+        case "ArrowUp":
+          if (isSliverOpen) {
+            // Increase the sliver size
+            setHeightFromSize(size === "M" ? "L" : size === "S" ? "M" : "L");
+          }
+          break;
+        case "ArrowDown":
+          if (isSliverOpen) {
+            // Decrease the sliver size
+            setHeightFromSize(size === "M" ? "S" : size === "L" ? "M" : "S");
+          }
+          break;
+           */
       }
     };
 
