@@ -248,24 +248,20 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     for (let i = 1; i < carNumber; i++) {
       // Time i-1 (previous time): ei, vi, ai, ui
       let e = error[i];
-      let a = -1 * acceleration[i];
+      let a = acceleration[i];
 
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
-      error[i] += prevV[i - 1] - prevV[i] - timeHeadway * a;
-      velocity[i] += a;
-      acceleration[i] += (prevU[i] - a) / tau;
+      error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * a) / FS;
+      velocity[i] += a / FS;
+      acceleration[i] += ((prevU[i] - a) / tau)/FS;
       controlU[i] +=
-        (kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) /
+          ((kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) /
           timeHeadway -
-        kd * a;
+        kd * a)/FS;
 
       // All values Δei, Δvi, Δai, Δui <- *= TS
-      error[i] /= FS;
-      velocity[i] /= FS;
-      acceleration[i] /= FS;
-      controlU[i] /= FS;
 
-      // di = ei + ri(standstill distace) + vi*th(velocity of i vehicle * timeHeadway)
+      // di = ei + ri(standstill distance) + vi*th(velocity of i vehicle * timeHeadway)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 

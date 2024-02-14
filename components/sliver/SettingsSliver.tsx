@@ -126,7 +126,7 @@ const SettingsSliver = () => {
           <input
             type="range"
             step="0.01"
-            min="0.01"
+            min="0"
             max="2"
             value={kp}
             onChange={(e) => setKp(parseFloat(e.target.value))}
@@ -140,7 +140,7 @@ const SettingsSliver = () => {
           <input
             type="range"
             step="0.01"
-            min="0.01"
+            min="0"
             max="2"
             value={kd}
             onChange={(e) => setKd(parseFloat(e.target.value))}
