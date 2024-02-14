@@ -27,6 +27,7 @@ const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
 const FRAME_RATE = 30;
+const VELOCITY_DELAY = FRAME_RATE / 2;
 const UPDATE_INTERVAL = 1000;
 
 // Simulation variables
@@ -49,7 +50,7 @@ let prevV: number[] = [];
 let prevU: number[] = [];
 
 // Rendering frequency
-const FS: number = 60;
+const FS: number = FRAME_RATE;
 
 // Timing variables
 let timeTick = -1;
@@ -225,7 +226,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     if (!isPlaying) return;
 
     // Cycle through the leading car chart points once every second
-    if (p5.frameCount % 60 === 0 && p5.frameCount !== 0) {
+    if (p5.frameCount % FRAME_RATE === 0 && p5.frameCount !== 0) {
       leadingCarChartIndex++;
     }
     if (leadingCarChartIndex === leadingCarChart.length) {
@@ -247,17 +248,17 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     // Update other cars settings
     for (let i = 1; i < carNumber; i++) {
       // Time i-1 (previous time): ei, vi, ai, ui
-      let e = error[i];
-      let a = acceleration[i];
+      let prevE = error[i];
+      let prevA = acceleration[i];
 
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
-      error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * a) / FS;
-      velocity[i] += a / FS;
-      acceleration[i] += ((prevU[i] - a) / tau)/FS;
+      error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * prevA) / FS;
+      velocity[i] += prevA / FS;
+      acceleration[i] += ((prevU[i] - prevA) / tau)/FS;
       controlU[i] +=
-          ((kp * e - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) /
+          ((kp * prevE - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) /
           timeHeadway -
-        kd * a)/FS;
+        kd * prevA)/FS;
 
       // All values Δei, Δvi, Δai, Δui <- *= TS
 
@@ -287,9 +288,11 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       carPoints[i] = carPoints[i - 1] - d;
       //console.log("d: ", d, " of car ", i);
 
-      // Update previous values
-      prevV[i] = velocity[i];
-      prevU[i] = controlU[i];
+      // Update previous values but not always, introducing a small delay
+      if (p5.frameCount % VELOCITY_DELAY === 0) {
+        prevV[i] = velocity[i];
+        prevU[i] = controlU[i];
+      }
     }
 
     // for debugging
