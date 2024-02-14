@@ -27,5 +27,6 @@
   "leadingCarVelocity": "선도 차량 속도",
   "timeHeadway": "시간 간격",
   "carNumber": "차량 번호",
-  "carSpacing": "차량 간격"
+  "carSpacing": "차량 간격",
+  "delay": "지연"
 }

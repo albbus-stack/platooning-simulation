@@ -18,6 +18,7 @@ import * as m from "../../src/paraglide/messages";
 // @ts-ignore
 import * as DragPlugin from "chartjs-plugin-dragdata";
 import { SliverContext } from "./SliverProvider";
+import { FRAME_RATE } from "../P5Canvas";
 
 // Register the chart.js plugins
 ChartJS.register(
@@ -47,6 +48,8 @@ const SettingsSliver = () => {
     setKp,
     kd,
     setKd,
+    velocityFrameDelay,
+    setVelocityFrameDelay,
     leadingCarChart,
     setLeadingCarChart,
   } = useContext(DataContext);
@@ -64,7 +67,7 @@ const SettingsSliver = () => {
         }
       >
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="w-28 text-center">{m.carNumber()}</p>
+          <p className="text-center w-28">{m.carNumber()}</p>
           <input
             type="range"
             min="2"
@@ -77,7 +80,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="w-28 text-center">{m.carSpacing()}</p>
+          <p className="text-center w-28">{m.carSpacing()}</p>
           <input
             type="range"
             step="0.1"
@@ -94,7 +97,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="w-28 text-center">{m.timeHeadway()}</p>
+          <p className="text-center w-28">{m.timeHeadway()}</p>
           <input
             type="range"
             step="0.01"
@@ -108,7 +111,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="w-28 text-center">{"Tau"}</p>
+          <p className="text-center w-28">{"Tau"}</p>
           <input
             type="range"
             step="0.01"
@@ -122,7 +125,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="w-28 text-center">{"Kp"}</p>
+          <p className="text-center w-28">{"Kp"}</p>
           <input
             type="range"
             step="0.01"
@@ -136,7 +139,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="w-28 text-center">{"Kd"}</p>
+          <p className="text-center w-28">{"Kd"}</p>
           <input
             type="range"
             step="0.01"
@@ -147,6 +150,22 @@ const SettingsSliver = () => {
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
           <p className="w-10 font-bold text-center">{kd}</p>
+        </div>
+
+        <div className="flex flex-row items-center w-full gap-10 px-10">
+          <p className="text-center w-28">{m.delay()}</p>
+          <input
+            type="range"
+            step="5"
+            min="1"
+            max="121"
+            value={velocityFrameDelay}
+            onChange={(e) => setVelocityFrameDelay(parseInt(e.target.value))}
+            className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
+          />
+          <p className="w-10 font-bold text-center">
+            {(velocityFrameDelay / FRAME_RATE).toFixed(1)}s
+          </p>
         </div>
       </section>
 

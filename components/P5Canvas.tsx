@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import PageVisibility from "react-page-visibility";
 import { SliverContext } from "./sliver/SliverProvider";
-import { DataContext, DataType, GraphPoints } from "./DataProvider";
+import { DataContext, GraphPoints } from "./DataProvider";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { type Sketch, type SketchProps } from "@p5-wrapper/react";
 import PauseButton from "./icons/PauseIcon";
@@ -15,6 +15,7 @@ type SimulationSketchProps = SketchProps & {
   tau: number;
   kp: number;
   kd: number;
+  velocityFrameDelay: number;
   leadingCarChart: GraphPoints[];
   sliverHeight: number;
   browserBox: number;
@@ -27,8 +28,8 @@ const CAR_WIDTH = 100;
 const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
-const FRAME_RATE = 60;
-const VELOCITY_DELAY = FRAME_RATE / 2;
+export const FRAME_RATE = 60;
+export const VELOCITY_DELAY = FRAME_RATE / 2;
 const UPDATE_INTERVAL = FRAME_RATE * 4;
 
 // Simulation variables
@@ -67,6 +68,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
   let browserBox = 0;
   let carNumber = 0;
   let carSpacing = 0;
+  let velocityFrameDelay = 0;
   let leadingCarChart = [{} as { time: number; velocity: number }];
 
   // Control variables
@@ -98,6 +100,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       tau !== props.tau ||
       kp !== props.kp ||
       kd !== props.kd ||
+      velocityFrameDelay !== props.velocityFrameDelay ||
       JSON.stringify(leadingCarChart) !== JSON.stringify(props.leadingCarChart)
     ) {
       props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
@@ -107,6 +110,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     carSpacing = props.carSpacing;
     carNumber = props.carNumber;
     timeHeadway = props.timeHeadway;
+    velocityFrameDelay = props.velocityFrameDelay;
     tau = props.tau;
     kp = props.kp;
     kd = props.kd;
@@ -271,7 +275,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
-      let maxStep = 1;
+      let maxStep = 0.75;
       let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
 
       if (prevDistance - d > maxStep) {
@@ -294,7 +298,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       //console.log("d: ", d, " of car ", i);
 
       // Update previous values but not always, introducing a small delay
-      if (p5.frameCount % VELOCITY_DELAY === 0) {
+      if (p5.frameCount % velocityFrameDelay === 0) {
         prevV[i] = velocity[i];
         prevU[i] = controlU[i];
       }
@@ -329,10 +333,10 @@ const P5Canvas: React.FC = () => {
     tau,
     kp,
     kd,
+    velocityFrameDelay,
     leadingCarChart,
   } = useContext(DataContext);
-  const { height, setIsSliverOpen, isSliverOpen, setIsGraphSliver } =
-    useContext(SliverContext);
+  const { height, isSliverOpen } = useContext(SliverContext);
 
   const sliverHeight = isSliverOpen ? height : 0;
   const [browserBox, setBrowserBox] = useState(0);
@@ -513,6 +517,7 @@ const P5Canvas: React.FC = () => {
           tau={tau}
           kp={kp}
           kd={kd}
+          velocityFrameDelay={velocityFrameDelay}
           leadingCarChart={leadingCarChart}
           sliverHeight={sliverHeight}
           browserBox={browserBox}

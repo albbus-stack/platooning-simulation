@@ -4,6 +4,7 @@ import React, {
   SetStateAction,
   useState,
 } from "react";
+import { VELOCITY_DELAY } from "./P5Canvas";
 
 export interface DataType {
   distance: number;
@@ -31,6 +32,8 @@ export const DataContext = createContext({
   setKp: (() => {}) as Dispatch<SetStateAction<number>>,
   kd: 0,
   setKd: (() => {}) as Dispatch<SetStateAction<number>>,
+  velocityFrameDelay: 0,
+  setVelocityFrameDelay: (() => {}) as Dispatch<SetStateAction<number>>,
   leadingCarChart: [{}] as GraphPoints[],
   setLeadingCarChart: (() => {}) as Dispatch<SetStateAction<GraphPoints[]>>,
 });
@@ -53,6 +56,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [tau, setTau] = useState(0.1);
   const [kp, setKp] = useState(0.2);
   const [kd, setKd] = useState(0.7);
+  const [velocityFrameDelay, setVelocityFrameDelay] = useState(VELOCITY_DELAY);
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
     [0, 1, 2, 3, 4].map((i) => {
       return {
@@ -81,6 +85,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setKp,
         kd,
         setKd,
+        velocityFrameDelay,
+        setVelocityFrameDelay,
       }}
     >
       {children}

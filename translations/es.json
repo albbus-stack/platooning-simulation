@@ -27,5 +27,6 @@
   "leadingCarVelocity": "Velocidad del automóvil líder",
   "timeHeadway": "Intervalo de tiempo",
   "carNumber": "Número de automóvil",
-  "carSpacing": "Espaciado entre automóviles"
+  "carSpacing": "Espaciado entre automóviles",
+  "delay": "Retraso"
 }
