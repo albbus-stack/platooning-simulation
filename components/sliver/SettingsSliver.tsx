@@ -67,7 +67,7 @@ const SettingsSliver = () => {
         }
       >
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="text-center w-28">{m.carNumber()}</p>
+          <p className="text-center w-28 leading-[1.25rem]">{m.carNumber()}</p>
           <input
             type="range"
             min="2"
@@ -80,7 +80,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="text-center w-28">{m.carSpacing()}</p>
+          <p className="text-center w-28 leading-[1.25rem]">{m.carSpacing()}</p>
           <input
             type="range"
             step="0.1"
@@ -97,7 +97,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="text-center w-28">{m.timeHeadway()}</p>
+          <p className="text-center w-28 leading-[1.25rem]">{m.timeHeadway()}</p>
           <input
             type="range"
             step="0.01"
@@ -153,7 +153,7 @@ const SettingsSliver = () => {
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="text-center w-28">{m.delay()}</p>
+          <p className="text-center w-28 leading-[1.25rem]">{m.delay()}</p>
           <input
             type="range"
             step="5"
