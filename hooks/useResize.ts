@@ -51,14 +51,11 @@ const useResize = (): ResizeReturnProps => {
           newHeight >= (window.innerHeight / 5) * 2 &&
           newHeight <= (window.innerHeight / 8) * 5
         ) {
-          console.log(newHeight);
           setHeight(newHeight);
           if (newHeight > (window.innerHeight / 9) * 4) {
             if (newHeight >= (window.innerHeight / 5) * 3) {
               setSize("L");
-              console.log("l");
             } else {
-              console.log("m", (window.innerHeight / 9) * 5, newHeight);
               setSize("M");
             }
           } else {

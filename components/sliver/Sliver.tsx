@@ -33,7 +33,6 @@ const Sliver: React.FC = () => {
     graphData.forEach((car, carIndex) => {
       car.forEach((dataPoint) => {
         const { time, distance, velocity } = dataPoint;
-        console.log(distance.toString() === "NaN");
         csvContent += `${carIndex},${time},${
           distance.toString() === "NaN" ? 0 : distance
         },${velocity}\n`;
