@@ -104,9 +104,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       JSON.stringify(leadingCarChart) !== JSON.stringify(props.leadingCarChart)
     ) {
       props.resetCanvas(p5.width, props.carNumber, props.carSpacing);
-      //console.log("resetCanvas");
     }
-    //console.log("leadingCarChart: ", JSON.stringify(leadingCarChart), "\nprops: ", JSON.stringify(props.leadingCarChart))
     carSpacing = props.carSpacing;
     carNumber = props.carNumber;
     timeHeadway = props.timeHeadway;
@@ -269,9 +267,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
           kd * prevA) /
         FS;
 
-      // All values Δei, Δvi, Δai, Δui <- *= TS
-
-      // di = ei + ri(standstill distance) + vi*th(velocity of i vehicle * timeHeadway)
+      // di = ei + ri (standstill distance) + vi * th (velocity of i vehicle * timeHeadway)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
@@ -294,15 +290,17 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         }
       }
 
+      // Update the distance between cars
       carPoints[i] = carPoints[i - 1] - d;
-      //console.log("d: ", d, " of car ", i);
 
-      // Update previous values but not always, introducing a small delay
+      // Update previous values but not always, introducing a delay
       if (p5.frameCount % velocityFrameDelay === 0) {
         prevV[i] = velocity[i];
         prevU[i] = controlU[i];
       }
     }
+
+    oscillationY += 0.1;
 
     // for debugging
     // console.log(
@@ -319,8 +317,6 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     //   "\ndistance: ",
     //   distance
     // );
-
-    oscillationY += 0.1;
   };
 };
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import GraphSliver from "./GraphSliver";
 import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
@@ -25,7 +25,7 @@ const Sliver: React.FC = () => {
 
   const { graphData } = useContext(DataContext);
 
-  const downloadGraphDataCSV = () => {
+  const downloadGraphDataCSV = useCallback(() => {
     let csvContent =
       "data:text/csv;charset=utf-8," +
       "car,time(s),distance(m),velocity(m/s)\n";
@@ -33,7 +33,10 @@ const Sliver: React.FC = () => {
     graphData.forEach((car, carIndex) => {
       car.forEach((dataPoint) => {
         const { time, distance, velocity } = dataPoint;
-        csvContent += `${carIndex},${time},${distance},${velocity}\n`;
+        console.log(distance.toString() === "NaN");
+        csvContent += `${carIndex},${time},${
+          distance.toString() === "NaN" ? 0 : distance
+        },${velocity}\n`;
       });
     });
 
@@ -46,7 +49,7 @@ const Sliver: React.FC = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, [graphData]);
 
   // This effect takes care of the graph/settings sliver keyboard shourtcuts
   useEffect(() => {
@@ -93,7 +96,7 @@ const Sliver: React.FC = () => {
           // Close the sliver
           setIsSliverOpen(false);
           break;
-          /*
+        /*
         //FIX: This is not working: the sliver changes size from S to L and from L to S, but not from M to S or from S to M
         case "Enter":
           // Toggle the sliver
@@ -120,7 +123,13 @@ const Sliver: React.FC = () => {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [setIsSliverOpen, setIsGraphSliver, isGraphSliver]);
+  }, [
+    setIsSliverOpen,
+    setIsGraphSliver,
+    isGraphSliver,
+    isSliverOpen,
+    downloadGraphDataCSV,
+  ]);
 
   return (
     <aside
