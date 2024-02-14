@@ -6,6 +6,7 @@ import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { type Sketch, type SketchProps } from "@p5-wrapper/react";
 import PauseButton from "./icons/PauseIcon";
 import PlayButton from "./icons/PlayIcon";
+import ResetIcon from "./icons/ResetIcon";
 
 type SimulationSketchProps = SketchProps & {
   carSpacing: number;
@@ -26,9 +27,9 @@ const CAR_WIDTH = 100;
 const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
-const FRAME_RATE = 30;
+const FRAME_RATE = 60;
 const VELOCITY_DELAY = FRAME_RATE / 2;
-const UPDATE_INTERVAL = 1000;
+const UPDATE_INTERVAL = FRAME_RATE * 4;
 
 // Simulation variables
 let roadMarkerX = 0;
@@ -84,7 +85,6 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     if (!firstRender) {
       p5.createCanvas(window.innerWidth, window.innerHeight);
       resetCanvas(p5.width, carNumber, carSpacing);
-      // for debugging
       p5.frameRate(FRAME_RATE);
     }
   };
@@ -254,11 +254,16 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
       error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * prevA) / FS;
       velocity[i] += prevA / FS;
-      acceleration[i] += ((prevU[i] - prevA) / tau)/FS;
+      acceleration[i] += (prevU[i] - prevA) / tau / FS;
       controlU[i] +=
-          ((kp * prevE - kd * prevV[i] - prevU[i] + kd * prevV[i - 1] + prevU[i - 1]) /
+        ((kp * prevE -
+          kd * prevV[i] -
+          prevU[i] +
+          kd * prevV[i - 1] +
+          prevU[i - 1]) /
           timeHeadway -
-        kd * prevA)/FS;
+          kd * prevA) /
+        FS;
 
       // All values Δei, Δvi, Δai, Δui <- *= TS
 
@@ -296,20 +301,20 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     }
 
     // for debugging
-    console.log(
-      "error: ",
-      error,
-      "\nvelocity: ",
-      velocity,
-      "\nacceleration: ",
-      acceleration,
-      "\ncontrolU: ",
-      controlU,
-      "\ncarPoints: ",
-      carPoints,
-      "\ndistance: ",
-      distance
-    );
+    // console.log(
+    //   "error: ",
+    //   error,
+    //   "\nvelocity: ",
+    //   velocity,
+    //   "\nacceleration: ",
+    //   acceleration,
+    //   "\ncontrolU: ",
+    //   controlU,
+    //   "\ncarPoints: ",
+    //   carPoints,
+    //   "\ndistance: ",
+    //   distance
+    // );
 
     oscillationY += 0.1;
   };
@@ -491,6 +496,14 @@ const P5Canvas: React.FC = () => {
       <>
         <div className="p5-button" onClick={() => togglePlay()}>
           {!isPlayingState ? <PauseButton /> : <PlayButton />}
+        </div>
+        <div
+          className="p5-button !left-[4.4rem]"
+          onClick={() =>
+            resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting)
+          }
+        >
+          <ResetIcon />
         </div>
         <NextReactP5Wrapper
           sketch={sketch}

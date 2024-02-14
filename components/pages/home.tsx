@@ -30,7 +30,7 @@ const HomePage: NextPage = () => {
       <main className="flex flex-col items-center w-full h-screen overflow-hidden bg-slate-200">
         <nav
           className={
-            "absolute flex w-[calc(100%-6rem)] flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[4.5rem] text-slate-800" +
+            "absolute flex w-[calc(100%-9rem)] flex-row gap-4 items-center text-lg tracking-wider select-none top-5 left-[7.5rem] text-slate-800" +
             (isMobilePortrait
               ? " w-full relative flex-col justify-center flex top-0 !left-0 mt-10 gap-5 px-5 self-center"
               : "")
@@ -53,8 +53,9 @@ const HomePage: NextPage = () => {
             <RotateIcon />
             <p className="text-lg text-center">
               {m.mobileAlert1()} <b className="text-bold">{m.mobileAlert2()}</b>{" "}
-              {m.mobileAlert3()} <b className="text-bold">{m.mobileAlert4()}</b>. <br/>
-              <br/>
+              {m.mobileAlert3()} <b className="text-bold">{m.mobileAlert4()}</b>
+              . <br />
+              <br />
               {m.mobileAlert5()} <b className="text-bold">{m.mobileAlert6()}</b>{" "}
               {m.mobileAlert7()}
             </p>
