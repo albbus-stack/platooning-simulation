@@ -29,7 +29,7 @@ const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
 export const FRAME_RATE = 60;
-export const VELOCITY_DELAY = FRAME_RATE / 2;
+export const VELOCITY_DELAY = FRAME_RATE / 6;
 const UPDATE_INTERVAL = FRAME_RATE * 4;
 
 // Simulation variables
@@ -300,7 +300,12 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       }
     }
 
-    oscillationY += 0.1;
+    // Update the oscillation value
+    if (prevV[0] < velocity[0]) {
+      oscillationY += 0.2;
+    } else {
+      oscillationY += 0.1;
+    }
 
     // for debugging
     // console.log(
