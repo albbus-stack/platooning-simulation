@@ -303,6 +303,8 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     // Update the oscillation value
     if (prevV[0] < velocity[0]) {
       oscillationY += 0.2;
+    } else if (prevV[0] === velocity[0]) {
+      oscillationY += 0.15;
     } else {
       oscillationY += 0.1;
     }
