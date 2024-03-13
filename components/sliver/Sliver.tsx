@@ -107,13 +107,9 @@ const Sliver: React.FC = () => {
           // Increase the sliver size
           if (isSliverOpen) {
             if (size === "M") {
-              setTimeout(() => {
-                setHeightFromSize("L");
-                }, 20);
+              setHeightFromSize("L");
             } else if (size === "S") {
-              setTimeout(() => {
-                setHeightFromSize("M");
-                }, 20);
+              setHeightFromSize("M");
             }
           } else {
             setIsSliverOpen(true);
@@ -127,11 +123,9 @@ const Sliver: React.FC = () => {
             if (size === "S") {
               setIsSliverOpen(false);
             } else if (size === "M") {
-              setTimeout(() => {
-                setHeightFromSize("S");}, 20);
+              setHeightFromSize("S");
             } else if (size === "L") {
-              setTimeout(() => {
-                setHeightFromSize("M");}, 20);
+              setHeightFromSize("M");
             }
           }
           break;

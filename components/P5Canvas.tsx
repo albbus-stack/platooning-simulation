@@ -477,8 +477,10 @@ const P5Canvas: React.FC = () => {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
-      if (e.code === "Space") {
+      if (e.key === " ") {
         togglePlay();
+      } else if (e.key === "R" || e.key === "r") {
+        resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
       }
     };
 
