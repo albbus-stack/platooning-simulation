@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect} from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import GraphSliver from "./GraphSliver";
 import SettingsSliver from "./SettingsSliver";
 import SliverButton from "./SliverButton";
@@ -52,112 +52,109 @@ const Sliver: React.FC = () => {
 
   // This effect takes care of the graph/settings sliver keyboard shortcuts
   useEffect(() => {
-        const onKeyDown = (e: KeyboardEvent) => {
-          e.preventDefault();
-          switch (e.key) {
-            case "g":
-              // Open the graph sliver
-              setIsGraphSliver((isGraph) => {
-                setIsSliverOpen((isSliverOpen) => {
-                  if (!isGraph && isSliverOpen) {
-                    return true;
-                  } else {
-                    return !isSliverOpen;
-                  }
-                });
+    const onKeyDown = (e: KeyboardEvent) => {
+      e.preventDefault();
+      switch (e.key) {
+        case "g": case "G":
+          // Open the graph sliver
+          setIsGraphSliver((isGraph) => {
+            setIsSliverOpen((isSliverOpen) => {
+              if (!isGraph && isSliverOpen) {
                 return true;
-              });
-              break;
-
-            case "s":
-              // Open the setting sliver
-              setIsGraphSliver((isGraph) => {
-                setIsSliverOpen((isSliverOpen) => {
-                  if (isGraph && isSliverOpen) {
-                    return true;
-                  } else {
-                    return !isSliverOpen;
-                  }
-                });
-                return false;
-              });
-              break;
-
-            case "i":
-              // Open the info page
-              window.location.href += "/about";
-              break;
-
-            case "d":
-              // Download the graph data
-              if (isGraphSliver && isSliverOpen) {
-                downloadGraphDataCSV();
-              }
-              break;
-
-            case "Escape":
-              // Close the sliver
-              setIsSliverOpen(false);
-              break;
-
-            case "Enter":
-              // Toggle last sliver
-              setIsSliverOpen((prev) => !prev);
-              break;
-
-            case "ArrowUp":
-              // Increase the sliver size
-              if (isSliverOpen) {
-                if (size === "M") {
-                  setTimeout(() => {
-                    setHeightFromSize("L");
-                  }, 20);
-                } else if (size === "S") {
-                  setTimeout(() => {
-                    setHeightFromSize("M");
-                  }, 20);
-                }
               } else {
-                setIsSliverOpen(true);
-                setHeightFromSize("S");
+                return !isSliverOpen;
               }
-              break;
-
-            case "ArrowDown":
-              // Decrease the sliver size
-              if (isSliverOpen) {
-                if (size === "S") {
-                  setIsSliverOpen(false);
-                } else if (size === "M") {
-                  setTimeout(() => {
-                    setHeightFromSize("S");
-                  }, 20);
-                } else if (size === "L") {
-                  setTimeout(() => {
-                    setHeightFromSize("M");
-                  }, 20);
-                }
+            });
+            return true;
+          });
+          break;
+        case "s": case "S":// Open the setting sliver
+          setIsGraphSliver((isGraph) => {
+            setIsSliverOpen((isSliverOpen) => {
+              if (isGraph && isSliverOpen) {
+                return true;
+              } else {
+                return !isSliverOpen;
               }
-              break;
+            });
+            return false;
+          });
+          break;
 
-            /*
-            case "ArrowLeft", "ArrowRight":
-              // Switch between Graph and Setting Sliver
-              if (isSliverOpen){
+        case "i": case "I":
+          // Open the info page
+          window.location.href += "/about";
+          break;
 
-              }
-              break;
-
-             */
+        case "d": case "D":
+          // Download the graph data
+          if (isGraphSliver && isSliverOpen) {
+            downloadGraphDataCSV();
           }
-        };
+          break;
 
-        document.addEventListener("keydown", onKeyDown);
+        case "Escape":
+          // Close the sliver
+          setIsSliverOpen(false);
+          break;
 
-        return () => {
-          document.removeEventListener("keydown", onKeyDown);
-        };
-      },
+        case "Enter":
+          // Toggle last sliver
+          setIsSliverOpen((prev) => !prev);
+          break;
+
+        case "ArrowUp":
+          // Increase the sliver size
+          if (isSliverOpen) {
+            if (size === "M") {
+              setTimeout(() => {
+                setHeightFromSize("L");
+                }, 20);
+            } else if (size === "S") {
+              setTimeout(() => {
+                setHeightFromSize("M");
+                }, 20);
+            }
+          } else {
+            setIsSliverOpen(true);
+            setHeightFromSize("S");
+          }
+          break;
+
+        case "ArrowDown":
+          // Decrease the sliver size
+          if (isSliverOpen) {
+            if (size === "S") {
+              setIsSliverOpen(false);
+            } else if (size === "M") {
+              setTimeout(() => {
+                setHeightFromSize("S");}, 20);
+            } else if (size === "L") {
+              setTimeout(() => {
+                setHeightFromSize("M");}, 20);
+            }
+          }
+          break;
+
+        case "ArrowLeft": case "ArrowRight":
+          // Switch between Graph and Setting Sliver
+          if (isSliverOpen) {
+            if (isGraphSliver) {
+              setIsGraphSliver(false);
+            } else {
+              setIsGraphSliver(true);
+            }
+          }
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+    },
       [
         size,
         setHeightFromSize,
