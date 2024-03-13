@@ -41,3 +41,7 @@ next-env.d.ts
 
 # Translations
 /translations/unused-translations
+
+# Favicon
+/public/new-favicon
+/public/old-favicon
