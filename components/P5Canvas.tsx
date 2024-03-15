@@ -481,6 +481,9 @@ const P5Canvas: React.FC = () => {
         togglePlay();
       } else if (e.key === "R" || e.key === "r") {
         resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
+      } else if (e.key === "E" || e.key === "e") {
+        // EXPERIMENT
+        
       }
     };
 
