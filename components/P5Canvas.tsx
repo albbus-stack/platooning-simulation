@@ -489,24 +489,17 @@ const P5Canvas: React.FC = () => {
       } else if (e.key === "E" || e.key === "e") {
         // EXPERIMENT
         console.log("Experiment");
-        const iterations = 5;
-        const intervalMilliseconds = 20000; // ogni 20 secondi
-        let counter = 0;
-
+        const cycleNumber = 2; // 2 cicli
+        const cycleInterval = 5000; // 5 secondi
         togglePlay();
-        const intervalId = setInterval(() => {
-          if (counter === 0) return;
-
-          togglePlay();
-          downloadGraphDataCSV(graphData);
-          resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
-          togglePlay();
-          counter++;
-        }, intervalMilliseconds);
-
         setTimeout(() => {
-          clearInterval(intervalId); // ferma l'intervallo
-        }, intervalMilliseconds * (iterations+1));
+          togglePlay();
+          setGraphData((prev) => {
+            downloadGraphDataCSV(prev);
+            return prev
+          });
+          resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
+        }, cycleNumber * cycleInterval);
       }
     };
 
