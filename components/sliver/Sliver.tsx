@@ -11,22 +11,21 @@ import SettingsIcon from "../icons/SettingsIcon";
 import GraphsIcon from "../icons/GraphsIcon";
 import SliverIconButton from "./SliverIconButton";
 
-export const downloadGraphDataCSV = (gD:
-    {
-      distance: number;
-      velocity: number;
-      time: number;
-    }[][],
+export const downloadGraphDataCSV = (
+  gD: {
+    distance: number;
+    velocity: number;
+    time: number;
+  }[][]
 ) => {
   let csvContent =
-      "data:text/csv;charset=utf-8," +
-      "car,time(s),distance(m),velocity(m/s)\n";
+    "data:text/csv;charset=utf-8," + "car,time(s),distance(m),velocity(m/s)\n";
 
   gD.forEach((car, carIndex) => {
     car.forEach((dataPoint) => {
-      const {time, distance, velocity} = dataPoint;
+      const { time, distance, velocity } = dataPoint;
       csvContent += `${carIndex},${time},${
-          distance.toString() === "NaN" ? 0 : distance
+        distance.toString() === "NaN" ? 0 : distance
       },${velocity}\n`;
     });
   });
@@ -40,7 +39,7 @@ export const downloadGraphDataCSV = (gD:
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-}
+};
 
 const Sliver: React.FC = () => {
   const {
@@ -61,7 +60,8 @@ const Sliver: React.FC = () => {
     const onKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
       switch (e.key) {
-        case "g": case "G":
+        case "g":
+        case "G":
           // Open the graph sliver
           setIsGraphSliver((isGraph) => {
             setIsSliverOpen((isSliverOpen) => {
@@ -74,7 +74,8 @@ const Sliver: React.FC = () => {
             return true;
           });
           break;
-        case "s": case "S":// Open the setting sliver
+        case "s":
+        case "S": // Open the setting sliver
           setIsGraphSliver((isGraph) => {
             setIsSliverOpen((isSliverOpen) => {
               if (isGraph && isSliverOpen) {
@@ -87,12 +88,14 @@ const Sliver: React.FC = () => {
           });
           break;
 
-        case "i": case "I":
+        case "i":
+        case "I":
           // Open the info page
           window.location.href += "/about";
           break;
 
-        case "d": case "D":
+        case "d":
+        case "D":
           // Download the graph data
           if (isGraphSliver && isSliverOpen) {
             downloadGraphDataCSV(graphData);
@@ -136,7 +139,8 @@ const Sliver: React.FC = () => {
           }
           break;
 
-        case "ArrowLeft": case "ArrowRight":
+        case "ArrowLeft":
+        case "ArrowRight":
           // Switch between Graph and Setting Sliver
           if (isSliverOpen) {
             if (isGraphSliver) {
@@ -154,16 +158,15 @@ const Sliver: React.FC = () => {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-    },
-      [
-        size,
-        setHeightFromSize,
-        setIsSliverOpen,
-        setIsGraphSliver,
-        isGraphSliver,
-        isSliverOpen,
-        downloadGraphDataCSV,
-      ]);
+  }, [
+    size,
+    setHeightFromSize,
+    setIsSliverOpen,
+    setIsGraphSliver,
+    isGraphSliver,
+    isSliverOpen,
+    downloadGraphDataCSV,
+  ]);
 
   return (
     <aside

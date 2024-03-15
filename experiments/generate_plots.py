@@ -37,13 +37,17 @@ def plot_and_save_combined(car_data, index):
     plot_and_save(f'{output_directory}/velocity_{index}.png', car_data, 'velocity')
 
 if __name__ == "__main__":
-    # Get all the filenames in the current directory of csv files
     path = os.getcwd()
     files = os.listdir(path)
-    # Filter the files to get only the csv files
-    csv_files = [f for f in files if f.endswith('.csv')]
-    # Iterate through the csv files and plot the graphs
-    for file in csv_files:
-        index = csv_files.index(file)
-        car_data = parse_csv(file)
-        plot_and_save_combined(car_data, index)
+    dirs = [d for d in files if os.path.isdir(d)]
+
+    for d in dirs:
+        os.chdir(d)
+
+        csv_files = [f for f in os.listdir(os.getcwd()) if f.endswith('.csv')]
+        for file in csv_files:
+            index = csv_files.index(file)
+            car_data = parse_csv(file)
+            plot_and_save_combined(car_data, file.split('.')[0])
+
+        os.chdir('..')
