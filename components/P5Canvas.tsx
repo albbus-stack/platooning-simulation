@@ -178,20 +178,20 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       // Car illustration
       p5.fill(0);
       p5.rect(
-        carPoints[i],
-        -25 + Math.sin(oscillationY + i) * 1.5,
-        CAR_WIDTH,
-        50,
-        5
+          carPoints[i],
+          -25 + Math.sin(oscillationY + i) * 1.5,
+          CAR_WIDTH,
+          50,
+          5
       );
 
       // Car number
       p5.textAlign(p5.CENTER);
       p5.fill(255);
       p5.text(
-        i + 1,
-        carPoints[i] + CAR_WIDTH / 2,
-        5 + Math.sin(oscillationY + i) * 1.5
+          i + 1,
+          carPoints[i] + CAR_WIDTH / 2,
+          5 + Math.sin(oscillationY + i) * 1.5
       );
 
       // Distance calculation
@@ -202,9 +202,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         p5.fill(0);
         p5.textAlign(p5.CENTER);
         p5.text(
-          Math.round(distance[i]) / 10 + "m",
-          (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
-          -77
+            Math.round(distance[i]) / 10 + "m",
+            (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
+            -77
         );
 
         // The simulation fails if the distance between two cars is negative
@@ -215,10 +215,10 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         // Distance indicators
         p5.fill(0);
         p5.line(
-          carPoints[i + 1] + CAR_WIDTH,
-          -70,
-          carPoints[i + 1] + CAR_WIDTH,
-          -50
+            carPoints[i + 1] + CAR_WIDTH,
+            -70,
+            carPoints[i + 1] + CAR_WIDTH,
+            -50
         );
         p5.line(carPoints[i], -70, carPoints[i], -50);
         p5.line(carPoints[i + 1] + CAR_WIDTH, -60, carPoints[i], -60);
@@ -241,8 +241,8 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     prevU[0] = controlU[0];
     error[0] = 0;
     acceleration[0] =
-      leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length]
-        .velocity - leadingCarChart[leadingCarChartIndex].velocity;
+        leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length]
+            .velocity - leadingCarChart[leadingCarChartIndex].velocity;
     velocity[0] += acceleration[0] / FS;
 
     controlU[0] = acceleration[0];
@@ -259,14 +259,14 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       velocity[i] += prevA / FS;
       acceleration[i] += (prevU[i] - prevA) / tau / FS;
       controlU[i] +=
-        ((kp * prevE -
-          kd * prevV[i] -
-          prevU[i] +
-          kd * prevV[i - 1] +
-          prevU[i - 1]) /
-          timeHeadway -
-          kd * prevA) /
-        FS;
+          ((kp * prevE -
+                  kd * prevV[i] -
+                  prevU[i] +
+                  kd * prevV[i - 1] +
+                  prevU[i - 1]) /
+              timeHeadway -
+              kd * prevA) /
+          FS;
 
       // di = ei + ri (standstill distance) + vi * th (velocity of i vehicle * timeHeadway)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
@@ -302,7 +302,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     }
 
     // Update the oscillation value
-    if (prevV[0] < velocity[0]) {
+    if (velocity[0] === 0) {
+      oscillationY = 0;
+    } else if (prevV[0] < velocity[0]) {
       oscillationY += 0.2;
     } else if (prevV[0] === velocity[0]) {
       oscillationY += 0.15;
@@ -417,13 +419,17 @@ const P5Canvas: React.FC = () => {
       if (i === 0) {
         carPoints.push(offset);
       } else {
+        // SIMULATION
         /*
         let initDistance = desiredDistance;
         while (Math.abs(initDistance - desiredDistance) <= 5)
           initDistance = Math.random() * (15 - 1) + 1;
         initDistance *= 10;
         */
-        let initDistance = 150;
+        // EXPERIMENT
+        ///*
+        let initDistance = carSpacing * 10 + 10;
+        //*/
         initDistance += CAR_WIDTH;
         carPoints.push(carPoints[i - 1] - initDistance);
       }
