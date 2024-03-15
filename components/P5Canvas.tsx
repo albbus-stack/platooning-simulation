@@ -7,6 +7,7 @@ import { type Sketch, type SketchProps } from "@p5-wrapper/react";
 import PauseButton from "./icons/PauseIcon";
 import PlayButton from "./icons/PlayIcon";
 import ResetIcon from "./icons/ResetIcon";
+import {downloadGraphDataCSV} from "./sliver/Sliver";
 
 type SimulationSketchProps = SketchProps & {
   carSpacing: number;
@@ -338,6 +339,7 @@ const P5Canvas: React.FC = () => {
     kd,
     velocityFrameDelay,
     leadingCarChart,
+      graphData
   } = useContext(DataContext);
   const { height, isSliverOpen } = useContext(SliverContext);
 
@@ -415,10 +417,13 @@ const P5Canvas: React.FC = () => {
       if (i === 0) {
         carPoints.push(offset);
       } else {
+        /*
         let initDistance = desiredDistance;
         while (Math.abs(initDistance - desiredDistance) <= 5)
           initDistance = Math.random() * (15 - 1) + 1;
         initDistance *= 10;
+        */
+        let initDistance = 150;
         initDistance += CAR_WIDTH;
         carPoints.push(carPoints[i - 1] - initDistance);
       }
@@ -476,14 +481,32 @@ const P5Canvas: React.FC = () => {
   // This effect takes care of the play/pause keyboard shortcut
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      e.preventDefault();
+      //e.preventDefault();
       if (e.key === " ") {
         togglePlay();
       } else if (e.key === "R" || e.key === "r") {
         resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
       } else if (e.key === "E" || e.key === "e") {
         // EXPERIMENT
-        
+        console.log("Experiment");
+        const iterations = 5;
+        const intervalMilliseconds = 20000; // ogni 20 secondi
+        let counter = 0;
+
+        togglePlay();
+        const intervalId = setInterval(() => {
+          if (counter === 0) return;
+
+          togglePlay();
+          downloadGraphDataCSV(graphData);
+          resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
+          togglePlay();
+          counter++;
+        }, intervalMilliseconds);
+
+        setTimeout(() => {
+          clearInterval(intervalId); // ferma l'intervallo
+        }, intervalMilliseconds * (iterations+1));
       }
     };
 
