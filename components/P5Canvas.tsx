@@ -426,6 +426,7 @@ const P5Canvas: React.FC = () => {
           initDistance = Math.random() * (15 - 1) + 1;
         initDistance *= 10;
         */
+
         // EXPERIMENT
         ///*
         let initDistance = carSpacing * 10 + 10;
