@@ -58,12 +58,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [kd, setKd] = useState(0.7);
   const [velocityFrameDelay, setVelocityFrameDelay] = useState(VELOCITY_DELAY);
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
-    [0, 1, 2, 3, 4].map((i) => {
-      return {
-        time: i,
-        velocity: i * 2 + 2,
-      };
-    })
+      [0, 10, 15, 25, 35].map((velocity, time) => {
+          return {
+              time,
+              velocity,
+          };
+      })
   );
 
   return (
