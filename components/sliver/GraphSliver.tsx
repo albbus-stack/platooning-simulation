@@ -107,7 +107,7 @@ const GraphSliver: React.FC = () => {
               labels: graphData[velocityChartIndex].map((d) => d.time),
               datasets: [
                 {
-                  data: graphData[velocityChartIndex].map((d) => d.velocity),
+                  data: graphData[velocityChartIndex].map((d) => d.velocity * 10),
                   fill: false,
                   borderColor: "rgb(63, 73, 87)",
                   tension: 0.4,

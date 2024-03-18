@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     for d in dirs:
         os.chdir(d)
-
+        
         csv_files = [f for f in os.listdir(os.getcwd()) if f.endswith('.csv')]
         for file in csv_files:
             index = csv_files.index(file)
