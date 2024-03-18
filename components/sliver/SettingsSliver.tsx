@@ -32,7 +32,7 @@ ChartJS.register(
   DragPlugin
 );
 
-const MAX_VELOCITY = 20;
+const MAX_VELOCITY = 35;
 
 const SettingsSliver = () => {
   const {
@@ -174,8 +174,8 @@ const SettingsSliver = () => {
         <Line
           data={{
             labels: leadingCarChart
-              .map((entry) => entry.time)
-              .concat(leadingCarChart[leadingCarChart.length - 1].time + 1),
+              .map((entry) => entry.time * 10)
+                .concat((leadingCarChart[leadingCarChart.length - 1].time + 1) * 10),
             datasets: [
               {
                 data: leadingCarChart

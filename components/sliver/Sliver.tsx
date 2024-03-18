@@ -11,6 +11,36 @@ import SettingsIcon from "../icons/SettingsIcon";
 import GraphsIcon from "../icons/GraphsIcon";
 import SliverIconButton from "./SliverIconButton";
 
+export const downloadGraphDataCSV = (
+  gD: {
+    distance: number;
+    velocity: number;
+    time: number;
+  }[][]
+) => {
+  let csvContent =
+    "data:text/csv;charset=utf-8," + "car,time(s),distance(m),velocity(m/s)\n";
+
+  gD.forEach((car, carIndex) => {
+    car.forEach((dataPoint) => {
+      const { time, distance, velocity } = dataPoint;
+      csvContent += `${carIndex},${time},${
+        distance.toString() === "NaN" ? 0 : distance
+      },${velocity}\n`;
+    });
+  });
+
+  const encodedUri = encodeURI(csvContent);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "graphData.csv");
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 const Sliver: React.FC = () => {
   const {
     height,
@@ -25,37 +55,13 @@ const Sliver: React.FC = () => {
 
   const { graphData } = useContext(DataContext);
 
-  const downloadGraphDataCSV = useCallback(() => {
-    let csvContent =
-      "data:text/csv;charset=utf-8," +
-      "car,time(s),distance(m),velocity(m/s)\n";
-
-    graphData.forEach((car, carIndex) => {
-      car.forEach((dataPoint) => {
-        const { time, distance, velocity } = dataPoint;
-        csvContent += `${carIndex},${time},${
-          distance.toString() === "NaN" ? 0 : distance
-        },${velocity}\n`;
-      });
-    });
-
-    const encodedUri = encodeURI(csvContent);
-
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "graphData.csv");
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, [graphData]);
-
   // This effect takes care of the graph/settings sliver keyboard shortcuts
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       e.preventDefault();
       switch (e.key) {
-        case "g": case "G":
+        case "g":
+        case "G":
           // Open the graph sliver
           setIsGraphSliver((isGraph) => {
             setIsSliverOpen((isSliverOpen) => {
@@ -68,7 +74,8 @@ const Sliver: React.FC = () => {
             return true;
           });
           break;
-        case "s": case "S":// Open the setting sliver
+        case "s":
+        case "S": // Open the setting sliver
           setIsGraphSliver((isGraph) => {
             setIsSliverOpen((isSliverOpen) => {
               if (isGraph && isSliverOpen) {
@@ -81,15 +88,17 @@ const Sliver: React.FC = () => {
           });
           break;
 
-        case "i": case "I":
+        case "i":
+        case "I":
           // Open the info page
           window.location.href += "/about";
           break;
 
-        case "d": case "D":
+        case "d":
+        case "D":
           // Download the graph data
           if (isGraphSliver && isSliverOpen) {
-            downloadGraphDataCSV();
+            downloadGraphDataCSV(graphData);
           }
           break;
 
@@ -130,7 +139,8 @@ const Sliver: React.FC = () => {
           }
           break;
 
-        case "ArrowLeft": case "ArrowRight":
+        case "ArrowLeft":
+        case "ArrowRight":
           // Switch between Graph and Setting Sliver
           if (isSliverOpen) {
             if (isGraphSliver) {
@@ -148,16 +158,15 @@ const Sliver: React.FC = () => {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-    },
-      [
-        size,
-        setHeightFromSize,
-        setIsSliverOpen,
-        setIsGraphSliver,
-        isGraphSliver,
-        isSliverOpen,
-        downloadGraphDataCSV,
-      ]);
+  }, [
+    size,
+    setHeightFromSize,
+    setIsSliverOpen,
+    setIsGraphSliver,
+    isGraphSliver,
+    isSliverOpen,
+    downloadGraphDataCSV,
+  ]);
 
   return (
     <aside
@@ -205,7 +214,7 @@ const Sliver: React.FC = () => {
                 <SliverIconButton
                   label="Download CSV"
                   icon={<DownloadIcon />}
-                  onClick={() => downloadGraphDataCSV()}
+                  onClick={() => downloadGraphDataCSV(graphData)}
                 />
               )}
               {isGraphSliver ? (
