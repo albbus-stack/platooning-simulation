@@ -1,0 +1,44 @@
+\begin{tsCode}{Funzione draw() in P5Canvas.tsx}
+// Setup for the first car
+prevV[0] = velocity[0];
+prevU[0] = controlU[0];
+acceleration[0] = leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length].velocity - leadingCarChart[leadingCarChartIndex].velocity;
+velocity[0] += acceleration[0] / FS;
+controlU[0] = acceleration[0];
+error[0] = 0;
+
+const standstillDistance = carSpacing * 10 + CAR_WIDTH;
+
+// Update other cars values
+for (let i = 1; i < carNumber; i++) {
+  // Time i-1 (previous time)
+  const prevE = error[i];
+  const prevA = acceleration[i];
+
+  // Time i (actual time). Divide Δei, Δvi, Δai, Δui by the simulation frequency 
+  error[i] += (prevV[i-1] - prevV[i] - timeHeadway * prevA) / FS;
+  velocity[i] += prevA / FS;
+  acceleration[i] += ((prevU[i] - prevA) / tau) / FS;
+  controlU[i] += ((kp * prevE - kd * prevV[i] - prevU[i] + kd * prevV[i-1] + prevU[i-1]) / timeHeadway - kd * prevA) / FS;
+
+  // di = ei + ri(standstill distace) vi*th(velocity of i vehicle * timeHeadway)
+  const desiredDistance = standstillDistance + velocity[i] * timeHeadway;
+  let d: number = error[i] + desiredDistance;
+
+  // Limit the distance step & update car positions
+  const maxStep = 1;
+  const prevDistance = Math.abs(carPoints[i] - carPoints[i-1]);
+
+  if (prevDistance - d > maxStep) {
+    d = prevDistance - maxStep;
+    for (let j = i; j < carNumber; j++) {
+      carPoints[j] += maxStep;
+    }
+  }
+  carPoints[i] = carPoints[i - 1] - d;
+
+  // Update previous velocity & control values
+  prevV[i] = velocity[i];
+  prevU[i] = controlU[i];
+}
+\end{tsCode}
