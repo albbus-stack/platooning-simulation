@@ -57,6 +57,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [kp, setKp] = useState(0.2);
   const [kd, setKd] = useState(0.7);
   const [velocityFrameDelay, setVelocityFrameDelay] = useState(VELOCITY_DELAY);
+  // SIMULATION
+  // /*
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
       [0, 10, 15, 25, 35].map((velocity, time) => {
           return {
@@ -65,6 +67,19 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           };
       })
   );
+  // */
+
+  // EXPERIMENT
+  /*
+  const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
+      [0, 1, 2, 3, 4].map((velocity, time) => {
+          return {
+              time: i,
+              velocity: i * 2 + 2,
+          };
+      })
+  );
+   */
 
   return (
     <DataContext.Provider

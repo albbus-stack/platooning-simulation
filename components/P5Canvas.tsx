@@ -420,17 +420,18 @@ const P5Canvas: React.FC = () => {
         carPoints.push(offset);
       } else {
         // SIMULATION
-        /*
+        // /*
         let initDistance = desiredDistance;
         while (Math.abs(initDistance - desiredDistance) <= 5)
           initDistance = Math.random() * (15 - 1) + 1;
         initDistance *= 10;
-        */
+        // */
 
         // EXPERIMENT
-        ///*
+        /*
         let initDistance = carSpacing * 10 + 10;
-        //*/
+        */
+        
         initDistance += CAR_WIDTH;
         carPoints.push(carPoints[i - 1] - initDistance);
       }
