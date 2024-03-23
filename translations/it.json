@@ -28,5 +28,7 @@
   "timeHeadway": "Tempo di separazione",
   "carNumber": "Numero di auto",
   "carSpacing": "Spazio tra le auto",
-  "delay": "Ritardo"
+  "delay": "Ritardo",
+  "thesis": "Tesi",
+  "presentation": "Presentazione"
 }

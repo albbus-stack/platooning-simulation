@@ -28,5 +28,7 @@
   "timeHeadway": "时间间隔",
   "carNumber": "车辆编号",
   "carSpacing": "车辆间距",
-  "delay": "延迟"
+  "delay": "延迟",
+  "thesis": "论文",
+  "presentation": "演示"
 }

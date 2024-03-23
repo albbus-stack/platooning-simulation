@@ -28,5 +28,7 @@
   "timeHeadway": "Tidsinterval",
   "carNumber": "Bilnummer",
   "carSpacing": "Bilafstand",
-  "delay": "Forsinkelse"
+  "delay": "Forsinkelse",
+  "thesis": "Speciale",
+  "presentation": "Præsentation"
 }

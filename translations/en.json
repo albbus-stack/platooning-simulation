@@ -28,5 +28,7 @@
   "timeHeadway": "Time headway",
   "carNumber": "Car number",
   "carSpacing": "Car spacing",
-  "delay": "Delay"
+  "delay": "Delay",
+  "thesis": "Thesis",
+  "presentation": "Presentation"
 }

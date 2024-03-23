@@ -28,5 +28,7 @@
   "timeHeadway": "Tijdshoofdweg",
   "carNumber": "Autonummer",
   "carSpacing": "Afstand tussen auto's",
-  "delay": "Vertraging"
+  "delay": "Vertraging",
+  "thesis": "Scriptie",
+  "presentation": "Presentatie"
 }

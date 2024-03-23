@@ -55,7 +55,7 @@ const AboutPage: NextPage = () => {
             {m.howSettings()}
           </h1>
           <p className="text-lg text-slate-800">{m.howSettingsParagraph()}</p>
-          <h1 className="mt-2 text-2xl font-bold">Thesis</h1>
+          <h1 className="mt-2 text-2xl font-bold">{m.thesis()}</h1>
           <embed
             src="/pdf/thesis.pdf"
             type="application/pdf"
@@ -63,7 +63,7 @@ const AboutPage: NextPage = () => {
             height="700px"
             className="mb-5"
           />
-          <h1 className="text-2xl font-bold">Presentation</h1>
+          <h1 className="text-2xl font-bold">{m.presentation()}</h1>
           <embed
             src="/pdf/presentation.pdf"
             type="application/pdf"

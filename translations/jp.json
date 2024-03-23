@@ -28,5 +28,7 @@
   "timeHeadway": "時間ヘッドウェイ",
   "carNumber": "車両番号",
   "carSpacing": "車間距離",
-  "delay": "遅延"
+  "delay": "遅延",
+  "thesis": "論文",
+  "presentation": "プレゼンテーション"
 }
