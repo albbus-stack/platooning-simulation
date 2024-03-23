@@ -28,7 +28,12 @@ const AboutPage: NextPage = () => {
           <h1>{m.aboutTitle()}</h1>
         </nav>
 
-        <section className="flex flex-col gap-5 px-10 pt-8 pb-16 md:px-16">
+        <section
+          className={
+            "flex flex-col gap-5 px-10 pt-8 pb-16 md:px-16 " +
+            (lang === "sa" ? "text-right" : "")
+          }
+        >
           <h1 className="text-2xl font-bold text-slate-800">
             {m.whatIsThis()}
           </h1>
