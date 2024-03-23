@@ -25,6 +25,7 @@ const HomePage: NextPage = () => {
           name="description"
           content="A platooning simulation made using react and p5.js"
         />
+        <meta name="language" content={lang} />
       </Head>
 
       <main className="flex flex-col items-center w-full h-screen overflow-hidden bg-slate-200">

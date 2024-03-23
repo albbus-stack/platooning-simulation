@@ -16,6 +16,7 @@ const AboutPage: NextPage = () => {
           name="description"
           content="The about page for this platooning simulation project"
         />
+        <meta name="language" content={lang} />
       </Head>
 
       <main className="w-full bg-slate-200">

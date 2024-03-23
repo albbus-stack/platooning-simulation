@@ -90,14 +90,13 @@ const SettingsSliver = () => {
             onChange={(e) => setCarSpacing(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
-          <p className="w-10 font-bold text-center">
-            {carSpacing}
-            <span className="ml-1">m</span>
-          </p>
+          <p className="w-10 font-bold text-center">{carSpacing}m</p>
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
-          <p className="text-center w-28 leading-[1.25rem]">{m.timeHeadway()}</p>
+          <p className="text-center w-28 leading-[1.25rem]">
+            {m.timeHeadway()}
+          </p>
           <input
             type="range"
             step="0.01"
@@ -107,7 +106,7 @@ const SettingsSliver = () => {
             onChange={(e) => setTimeHeadway(parseFloat(e.target.value))}
             className="w-1/2 p-1 transition-colors duration-300 cursor-pointer accent-slate-800 hover:accent-slate-700"
           />
-          <p className="w-10 font-bold text-center">{timeHeadway}</p>
+          <p className="w-10 font-bold text-center">{timeHeadway}s</p>
         </div>
 
         <div className="flex flex-row items-center w-full gap-10 px-10">
@@ -175,7 +174,9 @@ const SettingsSliver = () => {
           data={{
             labels: leadingCarChart
               .map((entry) => entry.time * 10)
-                .concat((leadingCarChart[leadingCarChart.length - 1].time + 1) * 10),
+              .concat(
+                (leadingCarChart[leadingCarChart.length - 1].time + 1) * 10
+              ),
             datasets: [
               {
                 data: leadingCarChart
