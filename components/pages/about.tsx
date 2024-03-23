@@ -30,7 +30,7 @@ const AboutPage: NextPage = () => {
         </nav>
 
         <section
-          dir="rtl"
+          dir={lang === "sa" ? "rtl" : undefined}
           className="flex flex-col gap-5 px-10 pt-8 pb-16 md:px-16"
         >
           <h1 className="text-2xl font-bold text-slate-800">
