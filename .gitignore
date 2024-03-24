@@ -45,4 +45,6 @@ next-env.d.ts
 # Favicon
 /public/new-favicon
 /public/old-favicon
+
+#Doc
 /doc/thesis/*/Tesi_Platooning_Marra_Paolini
