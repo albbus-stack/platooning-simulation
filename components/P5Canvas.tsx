@@ -7,7 +7,7 @@ import { type Sketch, type SketchProps } from "@p5-wrapper/react";
 import PauseButton from "./icons/PauseIcon";
 import PlayButton from "./icons/PlayIcon";
 import ResetIcon from "./icons/ResetIcon";
-import {downloadGraphDataCSV} from "./sliver/Sliver";
+import { downloadGraphDataCSV } from "./sliver/Sliver";
 
 type SimulationSketchProps = SketchProps & {
   carSpacing: number;
@@ -29,7 +29,7 @@ const CAR_WIDTH = 100;
 const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
-export const FRAME_RATE = 60;
+export const FRAME_RATE = 30;
 export const VELOCITY_DELAY = FRAME_RATE / 6;
 const UPDATE_INTERVAL = FRAME_RATE * 4;
 
@@ -178,20 +178,20 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       // Car illustration
       p5.fill(0);
       p5.rect(
-          carPoints[i],
-          -25 + Math.sin(oscillationY + i) * 1.5,
-          CAR_WIDTH,
-          50,
-          5
+        carPoints[i],
+        -25 + Math.sin(oscillationY + i) * 1.5,
+        CAR_WIDTH,
+        50,
+        5
       );
 
       // Car number
       p5.textAlign(p5.CENTER);
       p5.fill(255);
       p5.text(
-          i + 1,
-          carPoints[i] + CAR_WIDTH / 2,
-          5 + Math.sin(oscillationY + i) * 1.5
+        i + 1,
+        carPoints[i] + CAR_WIDTH / 2,
+        5 + Math.sin(oscillationY + i) * 1.5
       );
 
       // Distance calculation
@@ -202,9 +202,9 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         p5.fill(0);
         p5.textAlign(p5.CENTER);
         p5.text(
-            Math.round(distance[i]) / 10 + "m",
-            (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
-            -77
+          Math.round(distance[i]) / 10 + "m",
+          (carPoints[i + 1] + CAR_WIDTH + carPoints[i]) / 2,
+          -77
         );
 
         // The simulation fails if the distance between two cars is negative
@@ -215,10 +215,10 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
         // Distance indicators
         p5.fill(0);
         p5.line(
-            carPoints[i + 1] + CAR_WIDTH,
-            -70,
-            carPoints[i + 1] + CAR_WIDTH,
-            -50
+          carPoints[i + 1] + CAR_WIDTH,
+          -70,
+          carPoints[i + 1] + CAR_WIDTH,
+          -50
         );
         p5.line(carPoints[i], -70, carPoints[i], -50);
         p5.line(carPoints[i + 1] + CAR_WIDTH, -60, carPoints[i], -60);
@@ -241,8 +241,8 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     prevU[0] = controlU[0];
     error[0] = 0;
     acceleration[0] =
-        leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length]
-            .velocity - leadingCarChart[leadingCarChartIndex].velocity;
+      leadingCarChart[(leadingCarChartIndex + 1) % leadingCarChart.length]
+        .velocity - leadingCarChart[leadingCarChartIndex].velocity;
     velocity[0] += acceleration[0] / FS;
 
     controlU[0] = acceleration[0];
@@ -259,14 +259,14 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       velocity[i] += prevA / FS;
       acceleration[i] += (prevU[i] - prevA) / tau / FS;
       controlU[i] +=
-          ((kp * prevE -
-                  kd * prevV[i] -
-                  prevU[i] +
-                  kd * prevV[i - 1] +
-                  prevU[i - 1]) /
-              timeHeadway -
-              kd * prevA) /
-          FS;
+        ((kp * prevE -
+          kd * prevV[i] -
+          prevU[i] +
+          kd * prevV[i - 1] +
+          prevU[i - 1]) /
+          timeHeadway -
+          kd * prevA) /
+        FS;
 
       // di = ei + ri (standstill distance) + vi * th (velocity of i vehicle * timeHeadway)
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
@@ -341,7 +341,7 @@ const P5Canvas: React.FC = () => {
     kd,
     velocityFrameDelay,
     leadingCarChart,
-      graphData
+    graphData,
   } = useContext(DataContext);
   const { height, isSliverOpen } = useContext(SliverContext);
 
@@ -431,7 +431,7 @@ const P5Canvas: React.FC = () => {
         /*
         let initDistance = carSpacing * 10 + 10;
         */
-        
+
         initDistance += CAR_WIDTH;
         carPoints.push(carPoints[i - 1] - initDistance);
       }
@@ -441,7 +441,7 @@ const P5Canvas: React.FC = () => {
       acceleration.push(0);
       error.push(0);
       controlU.push(0);
-      prevV.push(leadingCarChart[0].velocity);
+      prevV.push(0);
       prevU.push(0);
     }
 
@@ -504,7 +504,7 @@ const P5Canvas: React.FC = () => {
           togglePlay();
           setGraphData((prev) => {
             downloadGraphDataCSV(prev);
-            return prev
+            return prev;
           });
           resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
         }, cycleNumber * cycleInterval);

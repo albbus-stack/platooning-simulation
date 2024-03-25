@@ -26,7 +26,7 @@ export const downloadGraphDataCSV = (
       const { time, distance, velocity } = dataPoint;
       csvContent += `${carIndex},${time},${
         distance.toString() === "NaN" ? 0 : distance
-      },${velocity}\n`;
+      },${velocity * 10}\n`;
     });
   });
 
