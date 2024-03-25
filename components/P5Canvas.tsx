@@ -29,7 +29,7 @@ const CAR_WIDTH = 100;
 const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
-export const FRAME_RATE = 30;
+export const FRAME_RATE = 60;
 export const VELOCITY_DELAY = FRAME_RATE / 6;
 const UPDATE_INTERVAL = FRAME_RATE * 4;
 
