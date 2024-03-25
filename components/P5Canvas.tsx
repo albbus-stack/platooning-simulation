@@ -274,6 +274,12 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
       error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * prevA) / FS;
       velocity[i] += prevA / FS;
+      console.log("v car ", i, " = ", velocity[i], " m/s")
+      if (velocity[i] > 50) {
+        velocity[i] = 50;
+      } else if (velocity[i] < 10) {
+        velocity[i] = 10;
+      }
       acceleration[i] += (prevU[i] - prevA) / tau / FS;
       controlU[i] +=
         ((kp * prevE -
@@ -289,7 +295,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
-      let maxStep = 0.25;
+      let maxStep = 0.75;
       let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
 
       if (prevDistance - d > maxStep) {
@@ -514,7 +520,7 @@ const P5Canvas: React.FC = () => {
       } else if (e.key === "E" || e.key === "e") {
         // EXPERIMENT
         const cycleNumber = 2;
-        const cycleInterval = 5000;
+        const cycleInterval = 5000;  // 1cycle=5s
         togglePlay();
         setTimeout(() => {
           togglePlay();
