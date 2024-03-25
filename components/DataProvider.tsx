@@ -60,12 +60,13 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   // SIMULATION
   // /*
   const [leadingCarChart, setLeadingCarChart] = useState<GraphPoints[]>(
-      [0, 10, 15, 25, 35].map((velocity, time) => {
-          return {
-              time,
-              velocity,
-          };
-      })
+    // [0, 10, 15, 25, 35].map((velocity, time) => {
+    [2, 4, 6, 8, 10].map((velocity, time) => {
+      return {
+        time,
+        velocity,
+      };
+    })
   );
   // */
 

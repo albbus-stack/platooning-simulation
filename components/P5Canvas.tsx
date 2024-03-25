@@ -32,6 +32,7 @@ const SCALE_FACTOR = 0.9;
 export const FRAME_RATE = 60;
 export const VELOCITY_DELAY = FRAME_RATE / 6;
 const UPDATE_INTERVAL = FRAME_RATE * 4;
+const FS = FRAME_RATE;
 
 // Simulation variables
 let roadMarkerX = 0;
@@ -52,9 +53,6 @@ let prevV: number[] = [];
 // Previous control at time t-1
 let prevU: number[] = [];
 
-// Rendering frequency
-const FS: number = FRAME_RATE;
-
 // Timing variables
 let timeTick = -1;
 let intervalRef: NodeJS.Timeout;
@@ -62,6 +60,9 @@ let leadingCarChartIndex = 0;
 
 // Play/Pause variables
 let isPlaying = false;
+let isReset = true;
+let isLastFrame = false;
+let lastFrameCount: number | undefined = undefined;
 
 const sketch: Sketch<SimulationSketchProps> = (p5) => {
   // Tracking variables
@@ -226,10 +227,26 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     }
 
     // Don't compute any dynamic value if the simulation is paused or if the simulation failed
-    if (!isPlaying) return;
+    if (!isPlaying) {
+      if (isLastFrame) {
+        isLastFrame = false;
+        lastFrameCount = p5.frameCount;
+      }
+      if (isReset) {
+        lastFrameCount = undefined;
+        p5.frameCount = 0;
+      }
+      return;
+    }
+
+    // Resume the simulation from the last known frame
+    if (lastFrameCount !== undefined) {
+      p5.frameCount = lastFrameCount;
+      lastFrameCount = undefined;
+    }
 
     // Cycle through the leading car chart points once every second
-    if (p5.frameCount % FRAME_RATE === 0 && p5.frameCount !== 0) {
+    if (p5.frameCount % FRAME_RATE === 0) {
       leadingCarChartIndex++;
     }
     if (leadingCarChartIndex === leadingCarChart.length) {
@@ -272,7 +289,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
-      let maxStep = 0.75;
+      let maxStep = 0.25;
       let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
 
       if (prevDistance - d > maxStep) {
@@ -341,7 +358,6 @@ const P5Canvas: React.FC = () => {
     kd,
     velocityFrameDelay,
     leadingCarChart,
-    graphData,
   } = useContext(DataContext);
   const { height, isSliverOpen } = useContext(SliverContext);
 
@@ -357,6 +373,7 @@ const P5Canvas: React.FC = () => {
         clearInterval(intervalRef);
         isPlaying = false;
         setIsPlayingState(isPlaying);
+        isLastFrame = true;
       } else if (!isFailed) {
         // This is the interval that updates the graph data
         intervalRef = setInterval(() => {
@@ -371,8 +388,6 @@ const P5Canvas: React.FC = () => {
                   // Relative velocity
                   velocity:
                     (i === 0 ? Math.abs(velocity[i]) : velocity[i]) / 10,
-                  // Absolute velocity
-                  // velocity: (velocity[i] + i === 0 ? 0 : Math.abs(velocity[0])) / 10,
                 },
               ];
             });
@@ -380,6 +395,7 @@ const P5Canvas: React.FC = () => {
         }, UPDATE_INTERVAL);
 
         isPlaying = true;
+        isReset = false;
         setIsPlayingState(isPlaying);
       }
     },
@@ -393,6 +409,7 @@ const P5Canvas: React.FC = () => {
       kp,
       kd,
       leadingCarChart,
+      velocityFrameDelay,
     ]
   );
 
@@ -410,6 +427,8 @@ const P5Canvas: React.FC = () => {
     prevV = [];
     controlU = [];
     error = [];
+    isReset = true;
+    leadingCarChartIndex = 0;
 
     const desiredDistance = carSpacing * 10 + CAR_WIDTH;
     const offset = width - CAR_WIDTH / 2;
@@ -420,17 +439,15 @@ const P5Canvas: React.FC = () => {
         carPoints.push(offset);
       } else {
         // SIMULATION
-        // /*
+        /*
         let initDistance = desiredDistance;
         while (Math.abs(initDistance - desiredDistance) <= 5)
           initDistance = Math.random() * (15 - 1) + 1;
         initDistance *= 10;
-        // */
+        */
 
         // EXPERIMENT
-        /*
         let initDistance = carSpacing * 10 + 10;
-        */
 
         initDistance += CAR_WIDTH;
         carPoints.push(carPoints[i - 1] - initDistance);
@@ -496,9 +513,8 @@ const P5Canvas: React.FC = () => {
         resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
       } else if (e.key === "E" || e.key === "e") {
         // EXPERIMENT
-        console.log("Experiment");
-        const cycleNumber = 2; // 2 cicli
-        const cycleInterval = 5000; // 5 secondi
+        const cycleNumber = 2;
+        const cycleInterval = 5000;
         togglePlay();
         setTimeout(() => {
           togglePlay();
@@ -535,9 +551,9 @@ const P5Canvas: React.FC = () => {
         </div>
         <div
           className="p5-button !left-[4.4rem]"
-          onClick={() =>
-            resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting)
-          }
+          onClick={() => {
+            resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
+          }}
         >
           <ResetIcon />
         </div>
