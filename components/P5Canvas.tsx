@@ -273,7 +273,13 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
 
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
       error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * prevA) / FS;
-      velocity[i] += prevA / FS;
+      if (prevA / FS > 0.05) {
+        velocity[i] += 0.05;
+      } else if (prevA / FS < -0.05) {
+        velocity[i] -= 0.05;
+      } else {
+        velocity[i] += prevA / FS;
+      }
 
       if (velocity[i] > 50) {
         velocity[i] = 50;
@@ -296,7 +302,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
-      let maxStep = 0.25;
+      let maxStep = 0.05;
       let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
 
       if (prevDistance - d > maxStep) {
