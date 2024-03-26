@@ -302,15 +302,17 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
-      let maxStep = 0.05;
+      let maxStep = 0.25;
       let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
 
       if (prevDistance - d > maxStep) {
+        console.log(d, prevDistance);
         d = prevDistance - maxStep;
         for (let j = i; j < carNumber; j++) {
           carPoints[j] += maxStep;
         }
       } else if (d - prevDistance > maxStep) {
+        console.log(d, prevDistance);
         if (leadingCarChart[leadingCarChartIndex].velocity !== 0) {
           d = prevDistance + maxStep;
           for (let j = i; j < carNumber; j++) {
