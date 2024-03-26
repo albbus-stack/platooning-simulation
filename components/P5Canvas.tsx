@@ -29,9 +29,9 @@ const CAR_WIDTH = 100;
 const ROAD_WIDTH = 150;
 const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
-export const FRAME_RATE = 60;
+export const FRAME_RATE = 30;
 export const VELOCITY_DELAY = FRAME_RATE / 6;
-const UPDATE_INTERVAL = FRAME_RATE * 4;
+const UPDATE_INTERVAL = FRAME_RATE * 8;
 const FS = FRAME_RATE;
 
 // Simulation variables
@@ -234,7 +234,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       }
       if (isReset) {
         lastFrameCount = undefined;
-        p5.frameCount = 0;
+        p5.frameCount = -1;
       }
       return;
     }
@@ -246,7 +246,7 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
     }
 
     // Cycle through the leading car chart points once every second
-    if (p5.frameCount % FRAME_RATE === 0) {
+    if (p5.frameCount % FRAME_RATE === 0 && p5.frameCount !== 0) {
       leadingCarChartIndex++;
     }
     if (leadingCarChartIndex === leadingCarChart.length) {
@@ -274,8 +274,8 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       const maxAcceleration: number = 5;
       if (prevA > maxAcceleration) {
         prevA = maxAcceleration;
-      } else if (prevA < maxAcceleration * (-1)) {
-        prevA = maxAcceleration * (-1);
+      } else if (prevA < maxAcceleration * -1) {
+        prevA = maxAcceleration * -1;
       }
 
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
@@ -303,17 +303,15 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let desiredDistance = standstillDistance + velocity[i] * timeHeadway;
       let d: number = error[i] + desiredDistance;
 
-      let maxStep = 0.25;
+      let maxStep = 0.75;
       let prevDistance = Math.abs(carPoints[i] - carPoints[i - 1]);
 
       if (prevDistance - d > maxStep) {
-        console.log(d, prevDistance);
         d = prevDistance - maxStep;
         for (let j = i; j < carNumber; j++) {
           carPoints[j] += maxStep;
         }
       } else if (d - prevDistance > maxStep) {
-        console.log(d, prevDistance);
         if (leadingCarChart[leadingCarChartIndex].velocity !== 0) {
           d = prevDistance + maxStep;
           for (let j = i; j < carNumber; j++) {
@@ -419,7 +417,6 @@ const P5Canvas: React.FC = () => {
     [
       carNumberSetting,
       carSpacingSetting,
-      setGraphData,
       timeHeadway,
       tau,
       kp,
@@ -539,7 +536,7 @@ const P5Canvas: React.FC = () => {
             return prev;
           });
           resetCanvas(window.innerWidth, carNumberSetting, carSpacingSetting);
-        }, cycleNumber * cycleInterval);
+        }, cycleNumber * cycleInterval + UPDATE_INTERVAL * 2);
       }
     };
 

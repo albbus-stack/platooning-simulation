@@ -155,7 +155,7 @@ const SettingsSliver = () => {
           <p className="text-center w-28 leading-[1.25rem]">{m.delay()}</p>
           <input
             type="range"
-            step="5"
+            step="0"
             min="1"
             max="121"
             value={velocityFrameDelay}

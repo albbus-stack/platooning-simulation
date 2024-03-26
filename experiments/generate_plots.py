@@ -21,7 +21,7 @@ def plot_and_save(output_filename, data, ylabel):
         if ylabel == 'distance' and car_index == len(data.items()) - 1:
             continue
         if ylabel == 'velocity':
-            plt.plot(car_data['time'][1:], car_data[ylabel][1:], marker='o', linestyle='-', label=f'Auto {car_index + 1}')
+            plt.plot(list(map((lambda x: x - 1),car_data['time'][1:])), car_data[ylabel][1:], marker='o', linestyle='-', label=f'Auto {car_index + 1}')
         else:
             plt.plot(car_data['time'], car_data[ylabel], marker='o', linestyle='-', label=f'Distanza {car_index + 1}-{car_index + 2}')
     plt.xlabel('Tempo (s)')
