@@ -173,9 +173,10 @@ const SettingsSliver = () => {
         <Line
           data={{
             labels: leadingCarChart
-              .map((entry) => entry.time * 10)
+              .map((entry) => (entry.time * 10) / 2)
               .concat(
-                (leadingCarChart[leadingCarChart.length - 1].time + 1) * 10
+                ((leadingCarChart[leadingCarChart.length - 1].time + 1) * 10) /
+                  2
               ),
             datasets: [
               {
