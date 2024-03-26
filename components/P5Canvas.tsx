@@ -271,15 +271,16 @@ const sketch: Sketch<SimulationSketchProps> = (p5) => {
       let prevE = error[i];
       let prevA = acceleration[i];
 
+      const maxAcceleration: number = 5;
+      if (prevA > maxAcceleration) {
+        prevA = maxAcceleration;
+      } else if (prevA < maxAcceleration * (-1)) {
+        prevA = maxAcceleration * (-1);
+      }
+
       // Time i (actual time difference): Δei, Δvi, Δai, Δui
       error[i] += (prevV[i - 1] - prevV[i] - timeHeadway * prevA) / FS;
-      if (prevA / FS > 0.05) {
-        velocity[i] += 0.05;
-      } else if (prevA / FS < -0.05) {
-        velocity[i] -= 0.05;
-      } else {
-        velocity[i] += prevA / FS;
-      }
+      velocity[i] += prevA / FS;
 
       if (velocity[i] > 50) {
         velocity[i] = 50;
