@@ -48,3 +48,4 @@ next-env.d.ts
 
 #Doc
 /doc/thesis/*/Tesi_Platooning_Marra_Paolini
+experiments/generate_plot_script
