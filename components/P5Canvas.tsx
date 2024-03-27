@@ -31,7 +31,7 @@ const ROAD_MARKER_WIDTH = 15;
 const SCALE_FACTOR = 0.9;
 export const FRAME_RATE = 30;
 export const VELOCITY_DELAY = FRAME_RATE / 6;
-const UPDATE_INTERVAL = FRAME_RATE * 8;
+const UPDATE_INTERVAL = 250;
 const FS = FRAME_RATE;
 
 // Simulation variables
