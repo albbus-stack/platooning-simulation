@@ -46,6 +46,9 @@ next-env.d.ts
 /public/new-favicon
 /public/old-favicon
 
-#Doc
-/doc/thesis/*/Tesi_Platooning_Marra_Paolini
+# Script
 experiments/generate_plot_script
+
+# Doc
+/doc/thesis/*/Tesi_Platooning_Marra_Paolini
+/doc/presentation/*/Presentazione Tesi
