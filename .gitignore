@@ -50,7 +50,10 @@ next-env.d.ts
 experiments/generate_plot_script
 
 # Doc
-/doc/thesis/*/Tesi_Platooning_Marra_Paolini
-/doc/thesis/*/Tesi_Platooning_Marra_Paolini_pdf
-/doc/thesis/*/Tesi_Platooning_Marra_Paolini_print
-/doc/presentation/*/Presentazione_Tesi
+/doc/thesis/Tesi_Platooning_Marra_Del_Buono_Paolini
+/doc/thesis/**/Tesi_Platooning_Marra_Paolini
+/doc/thesis/**/Tesi_Platooning_Marra_Paolini_pdf
+/doc/thesis/**/Tesi_Platooning_Marra_Paolini_print
+/doc/presentation/**/Presentazione_Tesi
+/doc/frontespizio/Frontespizio_Unifi
+/doc/**/old_versions
